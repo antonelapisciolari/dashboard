@@ -26,8 +26,8 @@ if st.session_state['authentication_status']:
         st.title('Tutor Dashboard')
         sd.showTutors()
     # Logout button in sidebar
-    authenticator.logout()
-
+    with st.sidebar:
+            authenticator.logout("Logout", "sidebar") 
 elif st.session_state['authentication_status'] is False:
     st.error('Username/password is incorrect')
 
