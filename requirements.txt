@@ -7,4 +7,3 @@ plotly
 streamlit-cookies-manager
 google-auth
 streamlit-authenticator
-ServiceAccountCredentials
