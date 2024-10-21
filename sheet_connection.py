@@ -13,7 +13,7 @@ def get_google_sheet(sheet_id, sheet_number):
     try:
         # Set up Google Sheets API credentials
         scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name('googleCredentials.json', scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
         client = gspread.authorize(creds)
 
         # Open the Google Sheets file by its ID, not by name
