@@ -2,6 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import logging
 import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -11,21 +12,19 @@ def get_google_sheet(sheet_id, sheet_number):
     Connects to a Google Sheet using service account credentials and returns the sheet.
     """
     try:
-        # Set up Google Sheets API credentials
-        scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-        creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
-        client = gspread.authorize(creds)
+        url=f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?usp=sharing"
+        # Create a connection object using Streamlit's GSheets connection
+        conn = st.connection("gsheets", type=GSheetsConnection)
+        # Read the data from the specified sheet
+        df = conn.read(spreadsheet=url)  # This will return the data as a pandas DataFrame
 
-        # Open the Google Sheets file by its ID, not by name
-        spreadsheet = client.open_by_key(sheet_id)
+        # Check if the DataFrame is not empty
+        if df is not None and not df.empty:
+             return df 
+        else:
+            st.error("No data found.")
+            return None
 
-        # Get the first worksheet
-        worksheet = spreadsheet.get_worksheet(sheet_number)
-
-        # Get all values and display them with Streamlit
-        data = worksheet.get_all_values()
-
-        return data
     except FileNotFoundError as e:
         logging.error(f"Service account file not found: {e}")
         return None

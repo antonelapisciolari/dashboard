@@ -7,3 +7,6 @@ plotly
 streamlit-cookies-manager
 google-auth
 streamlit-authenticator
+gcsfs
+st-files-connection
+st-gsheets-connection
