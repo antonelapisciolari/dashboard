@@ -16,15 +16,15 @@ def get_current_page_name():
 
 def make_sidebar():
     with st.sidebar:
-        st.title("💎 Iberostar")
+        st.title("Menu")
         st.write("")
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard", icon="🔒")
-            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard", icon="🕵️")
-            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard", icon="🔒")
-            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard", icon="🕵️")
+            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard")
+            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard")
+            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard")
+            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard")
 
             st.write("")
             st.write("")
@@ -41,13 +41,13 @@ def make_sidebar():
 
 def make_sidebar_admin():
     with st.sidebar:
-        st.title("💎 Iberostar")
+        st.title("Menu")
         st.write("")
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard", icon="🔒")
-            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard", icon="🕵️")
+            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard")
+            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard")
 
             st.write("")
             st.write("")
@@ -61,13 +61,13 @@ def make_sidebar_admin():
             st.switch_page("streamlit_app.py")
 def make_sidebar_tutor():
     with st.sidebar:
-        st.title("💎 Iberostar")
+        st.title("Menu")
         st.write("")
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard", icon="🔒")
-            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard", icon="🕵️")
+            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard")
+            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard")
 
             st.write("")
             st.write("")
