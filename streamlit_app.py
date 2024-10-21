@@ -1,8 +1,9 @@
 import streamlit as st
+from variables import title, page_icon
 st.set_page_config(
-    page_title="FP Dual Dashboard",
-    page_icon="https://assets4.cdn.iberostar.com/assets/favicon-aed60cf99a80a69e437a1476d22eea0d083d788070b7f4ac4c6c53595cf0687c.ico",  # You can use an emoji or a URL to an icon image
-    layout="wide"  # Optional: You can set the layout as "centered" or "wide"
+    page_title=title,
+    page_icon=page_icon,  # You can use an emoji or a URL to an icon image
+    layout="centered"  # Optional: You can set the layout as "centered" or "wide"
 )
 from time import sleep
 import json

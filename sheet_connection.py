@@ -1,29 +1,31 @@
 import gspread
-from google.oauth2.service_account import Credentials
+from oauth2client.service_account import ServiceAccountCredentials
 import logging
 import streamlit as st
+
 logging.basicConfig(level=logging.DEBUG)
 
 @st.cache_data  # Cache the result to avoid reloading each time
-def get_google_sheet(sheet_id):
+def get_google_sheet(sheet_id, sheet_number):
     """
     Connects to a Google Sheet using service account credentials and returns the sheet.
     """
     try:
-        # Define the scope for accessing Google Sheets and Google Drive
+        # Set up Google Sheets API credentials
         scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+        creds = ServiceAccountCredentials.from_json_keyfile_name('googleCredentials.json', scope)
+        client = gspread.authorize(creds)
 
-        # Load the service account credentials file (update the path to your service account JSON)
-        credentials = Credentials.from_service_account_file(
-            'fpdual-app-e81a53220858.json', scopes=scope
-        )
+        # Open the Google Sheets file by its ID, not by name
+        spreadsheet = client.open_by_key(sheet_id)
 
-        # Authorize the client using the credentials
-        gc = gspread.authorize(credentials)
+        # Get the first worksheet
+        worksheet = spreadsheet.get_worksheet(sheet_number)
 
-        # Open the sheet using the sheet ID
-        sheet = gc.open_by_key(sheet_id).sheet1
-        return sheet
+        # Get all values and display them with Streamlit
+        data = worksheet.get_all_values()
+
+        return data
     except FileNotFoundError as e:
         logging.error(f"Service account file not found: {e}")
         return None
