@@ -10,3 +10,4 @@ streamlit-authenticator
 gcsfs
 st-files-connection
 st-gsheets-connection
+numpy==1.26.4
