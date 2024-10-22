@@ -1,7 +1,7 @@
-streamlit
+streamlit=1.37.0
 gspread
 oauth2client
-pandas
+pandas=2.2.2
 matplotlib
 plotly
 streamlit-cookies-manager
@@ -10,4 +10,4 @@ streamlit-authenticator
 gcsfs
 st-files-connection
 st-gsheets-connection
-numpy==1.26.4
+numpy==1.26.2
