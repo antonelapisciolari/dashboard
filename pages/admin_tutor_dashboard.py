@@ -1,6 +1,6 @@
 from navigation import make_sidebar_admin, make_sidebar
 import streamlit as st
-from pagesUtils import apply_page_config
+from page_utils import apply_page_config
 apply_page_config(st)
 if st.session_state.role == 'admin':
     make_sidebar_admin()
@@ -9,9 +9,9 @@ if st.session_state.role == 'superadmin':
 
 st.write(
     """
-# Progression Dashboard
+# Tutor Dashboard
 
-Alguna otra cosa q necesite el admin
+Toda info relacionada con el tutor
 
 """
 )

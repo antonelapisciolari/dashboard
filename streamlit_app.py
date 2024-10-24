@@ -30,10 +30,10 @@ if st.button("Log in", type="primary"):
         st.session_state.role = user_dict[username]['role']
         sleep(0.5)
         if st.session_state.role == 'admin':
-            st.switch_page("pages/admin_dashboard.py")
+            st.switch_page("pages/admin_tutor_dashboard.py")
         if st.session_state.role == 'superadmin':
-            st.switch_page("pages/admin_dashboard.py")    
+            st.switch_page("pages/admin_tutor_dashboard.py")    
         if st.session_state.role == 'tutor':
-            st.switch_page("pages/tutor_dashboard.py")
+            st.switch_page("pages/tutor_recursos_dashboard.py")
     else:
         st.error("Incorrect username or password")

@@ -1,5 +1,5 @@
 from navigation import make_sidebar_admin, make_sidebar
-from pagesUtils import apply_page_config
+from page_utils import apply_page_config
 import streamlit as st
 from sheet_connection import get_google_sheet
 import pandas as pd
@@ -12,7 +12,7 @@ if st.session_state.role == 'superadmin':
 
 st.write(
     """
-# Admin Dashboard
+# Recursos Tutores Dashboard
 
 
 """

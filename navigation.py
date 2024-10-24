@@ -21,10 +21,10 @@ def make_sidebar():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard")
-            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard")
-            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard")
-            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard")
+            st.page_link("pages/admin_recursos_tutor_dashboard.py", label="Recursos Dashboard")
+            st.page_link("pages/admin_tutor_dashboard.py", label="Tutor Dashboard")
+            st.page_link("pages/tutor_aprendiz_dashboard.py", label="Aprendiz Dashboard")
+            st.page_link("pages/tutor_recursos_dashboard.py", label="Recursos Dashboard")
 
             st.write("")
             st.write("")
@@ -46,8 +46,8 @@ def make_sidebar_admin():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_dashboard.py", label="Admin Dashboard")
-            st.page_link("pages/progression_dashboard.py", label="Progression Dashboard")
+            st.page_link("pages/admin_recursos_tutor_dashboard.py", label="Recursos Dashboard")
+            st.page_link("pages/admin_tutor_dashboard.py", label="Tutor Dashboard")
 
             st.write("")
             st.write("")
@@ -66,9 +66,8 @@ def make_sidebar_tutor():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/tutor_dashboard.py", label="Tutor Dashboard")
-            st.page_link("pages/aprendiz_dashboard.py", label="Aprendiz Dashboard")
-
+            st.page_link("pages/tutor_recursos_dashboard.py", label="Recursos Dashboard")
+            st.page_link("pages/tutor_aprendiz_dashboard.py", label="Aprendiz Dashboard")
             st.write("")
             st.write("")
 

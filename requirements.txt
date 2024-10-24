@@ -11,3 +11,5 @@ gcsfs
 st-files-connection
 st-gsheets-connection
 numpy==1.26.2
+streamlit_extras
+streamlit-calendar
