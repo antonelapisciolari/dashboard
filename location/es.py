@@ -1,1 +1,1 @@
-title ="FP Dual Dashboard"
+title ="FP Dual Panel"
