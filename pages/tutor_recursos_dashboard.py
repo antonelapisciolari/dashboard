@@ -4,18 +4,74 @@ from page_utils import apply_page_config
 from streamlit_extras.stylable_container import stylable_container
 from streamlit_calendar import calendar
 from datetime import datetime
-from variables import recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento
+import pandas as pd
+from sheet_connection import get_google_sheet
+from data_utils import filter_dataframe, getColumns
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, linkPreonboarding, linkPreonboarding1,linkPreonboarding2
 apply_page_config(st)
-if st.session_state.role == 'tutor':
-    make_sidebar_tutor()
-if st.session_state.role == 'superadmin':
-    make_sidebar()
+
+if "logged_in" not in st.session_state or not st.session_state.logged_in:
+    st.warning("Session expired. Redirecting to login page...")
+    st.session_state.logged_in = False 
+    st.session_state.redirected = True 
+    st.switch_page("streamlit_app.py")
+else:
+    if st.session_state.role == 'tutor':
+        make_sidebar_tutor()
+    if st.session_state.role == 'superadmin':
+        make_sidebar()
 
 
-preOnboardingLinks = ["https://example.com/link1", "https://example.com/link2"]
+preOnboardingLinks = [linkPreonboarding2, linkPreonboarding1, linkPreonboarding]
 onboardingLinks = ["https://example.com/link3", "https://example.com/link4"]
 seguimientoLinks = ["https://example.com/link5", "https://example.com/link6"]
 cierreLinks = ["https://example.com/link7", "https://example.com/link8"]
+
+#get events
+columns_to_extract = ['CANDIDATOS','FECHA INICIO', 'FECHA FIN']
+def getInfo():
+    # Use the actual Google Sheets ID here
+    sheet_id = registroAprendices
+    df = get_google_sheet(sheet_id, 0)
+    return df
+
+def getEventsByTutor(df):
+    print(st.session_state.username)
+    filters = {"CORREO TUTOR": st.session_state.username}
+    filtered_df = filter_dataframe(df, filters)
+    selected_columns_df = getColumns(filtered_df, columns_to_extract)
+    return selected_columns_df
+
+def create_events(df):
+    events = []
+    # Iterate over DataFrame rows
+    for index, row in df.iterrows():
+        # Parse dates
+        start_date = pd.to_datetime(row[columns_to_extract[1]], dayfirst=True).strftime('%Y-%m-%d')
+        end_date = pd.to_datetime(row[columns_to_extract[2]], dayfirst=True).strftime('%Y-%m-%d')
+        
+        # Create start event
+        start_event = {
+            "start": start_date,
+            "title": f"Inicio {row[columns_to_extract[0]]}",
+            "backgroundColor": amarillo
+        }
+        
+        # Create end event
+        end_event = {
+            "start": end_date,
+            "title": f"Fin {row[columns_to_extract[0]]}",
+            "backgroundColor": aquamarine
+        }
+        
+        # Add both events to the list
+        events.append(start_event)
+        events.append(end_event)
+    return events
+
+candidatosByTutor = getInfo()
+eventsCandidatos = getEventsByTutor(candidatosByTutor)
+events = create_events(eventsCandidatos)
 
 # Create the main container for the layout
 container = st.container()
@@ -56,9 +112,9 @@ with resources:
     # Pre-Onboarding Tab
     with tabs[0]:
         st.write("Links relevantes para Pre-Onboarding:")
-        for link in preOnboardingLinks:
-            st.write(f"[Pre-Onboarding Link]({link})")
-
+        st.write(f"[Checklist Aprendiz]({preOnboardingLinks[0]})")
+        st.write(f"[Datos Aprendiz]({preOnboardingLinks[0]})")
+        st.write(f"[Datos Importantes]({preOnboardingLinks[0]})")
     # Onboarding Tab
     with tabs[1]:
         st.write("Links relevantes para Onboarding:")
@@ -85,11 +141,7 @@ with st.container():
 
     # Set up events (date format: "YYYY-MM-DD")
     #consumir desde el sheet
-    events = [
-        {"start": "2024-10-25", "end":"2024-11-02", "title": "Inicio Mauricio Spalletti", "backgroundColor": "#FF6C6C",},
-        {"start": "2024-10-30", "title": "Entrega Uniforme","backgroundColor": "#4f33ff",},
-        {"start": "2024-11-01", "end":"2024-11-12", "title": "Inicio Gaston Quiroga", "backgroundColor": "#ff5733",},
-    ]
+    events = events
     today = datetime.today().strftime('%Y-%m-%d')
     calendar_options = {
         "headerToolbar": {
@@ -134,19 +186,4 @@ with st.container():
         custom_css=custom_css
     )
 
-
-# import pandas as pd
-# import streamlit as st
-# from gsheets import get_google_sheet
-
-# def show_data():
-#     sheet_id = "1rEpToDOnYMWDnGX2V2t1ciAchEbkFbvittKcMgnbJvU"
-#     sheet = get_google_sheet(sheet_id)  # Public data, no authentication required
-       
-#     if sheet:
-#         # Get the data from the Google Sheet
-#         data = pd.DataFrame(sheet.get_all_records())
-#         st.write(data)
-#     else:
-#         st.error("Failed to access Google Sheets.")
 

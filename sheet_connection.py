@@ -12,12 +12,9 @@ def get_google_sheet(sheet_id, sheet_number):
     """
     try:
         url=f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?usp=sharing"
-        # Create a connection object using Streamlit's GSheets connection
+        print(url)
         conn = st.connection("gsheets", type=GSheetsConnection)
-        # Read the data from the specified sheet
-        df = conn.read(spreadsheet=url)  # This will return the data as a pandas DataFrame
-
-        # Check if the DataFrame is not empty
+        df = conn.read(spreadsheet=url)  
         if df is not None and not df.empty:
              return df 
         else:

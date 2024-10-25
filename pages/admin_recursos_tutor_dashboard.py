@@ -4,11 +4,16 @@ import streamlit as st
 from sheet_connection import get_google_sheet
 import pandas as pd
 apply_page_config(st)
-if st.session_state.role == 'admin':
-    make_sidebar_admin()
-if st.session_state.role == 'superadmin':
-    make_sidebar()
-
+if "logged_in" not in st.session_state or not st.session_state.logged_in:
+    st.warning("Session expired. Redirecting to login page...")
+    st.session_state.logged_in = False 
+    st.session_state.redirected = True 
+    st.switch_page("streamlit_app.py")
+else:
+    if st.session_state.role == 'admin':
+        make_sidebar_admin()
+    if st.session_state.role == 'superadmin':
+        make_sidebar()
 
 st.write(
     """

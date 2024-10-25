@@ -1,12 +1,16 @@
 
 import streamlit as st
-if not st.session_state.get("language"):
-    import location.es as vars
-else: 
-    if st.session_state.language == "es":
-        import location.es as vars
-    else:
-        import location.en as vars
+import location.es as vars
+
+#main Db
+registroAprendices="1WCl-0xzjea88aFdilbcXyKoYF9_N5JkOm0co4Cez8D0"
+costeSheet = ""
+formsSheet = ""
+#branding colors 
+aquamarine="#3AA597"
+amarillo="#FECA1D"
+azul="#002855"
+
 page_icon="https://assets4.cdn.iberostar.com/assets/favicon-aed60cf99a80a69e437a1476d22eea0d083d788070b7f4ac4c6c53595cf0687c.ico"
 companyIcon="./images/logoCreciendoJuntos.png"
 title= vars.title
@@ -27,3 +31,6 @@ tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
+linkPreonboarding = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"
+linkPreonboarding1 = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"
+linkPreonboarding2 = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"

@@ -14,6 +14,11 @@
         "username": "tutor",
         "password": "tutor",
         "role": "tutor"
+      },
+      {
+        "username": "Mcycoc@Iberostar.Com",
+        "password": "tutor",
+        "role": "tutor"
       }
     ]
   }
