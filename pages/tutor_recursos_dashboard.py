@@ -4,7 +4,7 @@ from page_utils import apply_page_config
 from streamlit_extras.stylable_container import stylable_container
 from streamlit_calendar import calendar
 from datetime import datetime
-from variables import recursosUtiles
+from variables import recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento
 apply_page_config(st)
 if st.session_state.role == 'tutor':
     make_sidebar_tutor()
@@ -50,8 +50,8 @@ with resources:
             }
             """,
     ):
-        st.subheader("Documentación")
-        tabs = st.tabs(["Pre-Onboarding", "Onboarding", "Seguimiento", "Cierre"])
+        st.subheader(documentacionTitle)
+        tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre])
 
     # Pre-Onboarding Tab
     with tabs[0]:

@@ -1,2 +1,12 @@
 title ="FP Dual Panel"
+#tutor dashboard
 recursosUtiles="Recursos Útiles"
+documentacionTitle="Documentación"
+tabPreOnboarding="Pre Onboarding"
+tabOnboarding="Onboarding"
+tabOnboarding="Seguimiento"
+tabCierre="Cierre"
+tutorDashboard="Recursos Dashboard"
+aprendizDashaboard="Aprendiz Dashboard"
+adminRecursosTutorDashboard="Recursos Dashboard"
+adminTutorDashboard="Tutor Dashboard"

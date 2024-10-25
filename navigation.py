@@ -2,7 +2,7 @@ import streamlit as st
 from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
-
+from variables import adminRecursosTutorDashboard, adminTutorDashboard, aprendizDashboard,tutorDashboard
 
 def get_current_page_name():
     ctx = get_script_run_ctx()
@@ -21,10 +21,10 @@ def make_sidebar():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_recursos_tutor_dashboard.py", label="Recursos Dashboard")
-            st.page_link("pages/admin_tutor_dashboard.py", label="Tutor Dashboard")
-            st.page_link("pages/tutor_aprendiz_dashboard.py", label="Aprendiz Dashboard")
-            st.page_link("pages/tutor_recursos_dashboard.py", label="Recursos Dashboard")
+            st.page_link("pages/admin_recursos_tutor_dashboard.py", label=adminRecursosTutorDashboard)
+            st.page_link("pages/admin_tutor_dashboard.py", label=adminTutorDashboard)
+            st.page_link("pages/tutor_aprendiz_dashboard.py", label=aprendizDashboard)
+            st.page_link("pages/tutor_recursos_dashboard.py", label=tutorDashboard)
 
             st.write("")
             st.write("")
@@ -46,8 +46,8 @@ def make_sidebar_admin():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_recursos_tutor_dashboard.py", label="Recursos Dashboard")
-            st.page_link("pages/admin_tutor_dashboard.py", label="Tutor Dashboard")
+            st.page_link("pages/admin_recursos_tutor_dashboard.py", label=adminRecursosTutorDashboard)
+            st.page_link("pages/admin_tutor_dashboard.py", label=adminTutorDashboard)
 
             st.write("")
             st.write("")
@@ -66,8 +66,8 @@ def make_sidebar_tutor():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/tutor_recursos_dashboard.py", label="Recursos Dashboard")
-            st.page_link("pages/tutor_aprendiz_dashboard.py", label="Aprendiz Dashboard")
+            st.page_link("pages/tutor_aprendiz_dashboard.py", label=aprendizDashboard)
+            st.page_link("pages/tutor_recursos_dashboard.py", label=tutorDashboard)
             st.write("")
             st.write("")
 
@@ -83,3 +83,4 @@ def logout():
     st.info("Logged out successfully!")
     sleep(0.5)
     st.switch_page("streamlit_app.py")
+
