@@ -10,7 +10,7 @@ import json
 import requests
 from navigation import make_sidebar
 if 'language' not in st.session_state:
-    st.session_state.language = "en"  # Default to English
+    st.session_state.language = "es"  # Default to English
 def set_user_language():
     try:
         response = requests.get("https://ipapi.co/json/")
