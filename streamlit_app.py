@@ -7,20 +7,9 @@ st.set_page_config(
 )
 from time import sleep
 import json
-import requests
+
 from navigation import make_sidebar
-if 'language' not in st.session_state:
-    st.session_state.language = "es"  # Default to English
-def set_user_language():
-    try:
-        response = requests.get("https://ipapi.co/json/")
-        data = response.json()
-        user_country = data.get("country") 
-        st.session_state.language = "es" if user_country == "ES" else "en"
-    except:
-        st.session_state.language = "es" 
-if 'language' not in st.session_state:
-    set_user_language()
+
     
 with open("cred.json") as f:
     credentials = json.load(f)

@@ -1,9 +1,18 @@
-# variables.py
-
-
 import streamlit as st
+import requests
+
+def set_user_language():
+    if 'language' not in st.session_state:
+        try:
+            response = requests.get("https://ipapi.co/json/")
+            data = response.json()
+            user_country = data.get("country")
+            st.session_state.language = "es" if user_country == "ES" else "en"
+        except:
+            st.session_state.language = "en" 
+
 if 'language' not in st.session_state:
-    st.session_state.language = "en"  # Default to English
+    set_user_language()
 if st.session_state.language == "es":
     import location.es as vars
 else:
@@ -18,3 +27,4 @@ preOnboardingImage="https://github.com/user-attachments/assets/7dd8d62d-b5ce-44a
 onboardingImage="https://github.com/user-attachments/assets/2234162c-6c63-4ea4-9565-69206f7870fa"
 seguimientoImage="https://github.com/user-attachments/assets/e55e814d-2b7c-4b7b-a8f6-e0c6927e06ca"
 cierreImage="https://github.com/user-attachments/assets/c7609f53-4bb7-4b1b-8d1f-44bdbd24f379"
+recursosUtiles=vars.recursosUtiles

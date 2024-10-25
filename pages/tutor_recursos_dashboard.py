@@ -4,6 +4,7 @@ from page_utils import apply_page_config
 from streamlit_extras.stylable_container import stylable_container
 from streamlit_calendar import calendar
 from datetime import datetime
+from variables import recursosUtiles
 apply_page_config(st)
 if st.session_state.role == 'tutor':
     make_sidebar_tutor()
@@ -34,7 +35,7 @@ st.markdown(
     """, unsafe_allow_html=True)
 # In the 60% container, you can place some text or content
 with resources:
-    st.subheader("Recursos Útiles")
+    st.subheader(recursosUtiles)
     # Create two side-by-side containers inside col1
 
     # Add content to the first inner column
