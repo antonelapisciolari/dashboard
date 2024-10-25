@@ -8,3 +8,5 @@ def apply_page_config(st):
 
     st.logo(
         companyIcon)
+    
+

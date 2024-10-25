@@ -34,7 +34,7 @@ st.markdown(
     """, unsafe_allow_html=True)
 # In the 60% container, you can place some text or content
 with resources:
-    st.header("Datos Útiles")
+    st.subheader("Recursos Útiles")
     # Create two side-by-side containers inside col1
 
     # Add content to the first inner column
@@ -75,7 +75,10 @@ with resources:
         st.write("Links relevantes para Cierre:")
         for link in cierreLinks:
             st.write(f"[Cierre Link]({link})")
-
+with nextStep:
+    st.subheader("Información Importante")
+    st.image("./images/rolTutor.png",  use_column_width=True)
+    st.image("./images/rolAprendiz.png", use_column_width=True)
 with st.container():
     st.subheader("Próximos pasos")
 
@@ -95,6 +98,7 @@ with st.container():
         },
         "initialDate": today,
         "initialView": "dayGridMonth",
+        "locale":"ES"
     }
     custom_css = """
         .fc-toolbar-title {
