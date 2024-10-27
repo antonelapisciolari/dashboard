@@ -3,7 +3,7 @@ import json
 from streamlit_gsheets import GSheetsConnection
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from sheet_connection import get_google_sheet,save_data
+from sheet_connection import get_google_sheet
 import pandas as pd
 import pandasql as psql
 import logging
