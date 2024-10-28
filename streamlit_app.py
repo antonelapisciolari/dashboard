@@ -9,7 +9,6 @@ from variables import username, password, loginButton,loginDescription,loginMess
 from navigation import make_sidebar
 from time import sleep
 import json
-
 with open("cred.json") as f:
     credentials = json.load(f)
 make_sidebar()

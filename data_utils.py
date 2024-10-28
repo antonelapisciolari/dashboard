@@ -1,11 +1,7 @@
 
 def filter_dataframe(df, filters):
     for column, value in filters.items():
-        if column in df.columns:
-            df = df[df[column] == value]
-        else:
-            print(f"Column '{column}' does not exist in the DataFrame.")
-    
+        df = df[df[column].isin(value)]
     return df
 
 def getColumns(df, columns):

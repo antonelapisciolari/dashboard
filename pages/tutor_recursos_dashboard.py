@@ -32,7 +32,7 @@ def getInfo():
     return df
 
 def getEventsByTutor(df):
-    filters = {"CORREO TUTOR": st.session_state.username}
+    filters = {"CORREO TUTOR": [st.session_state.username]}
     filtered_df = filter_dataframe(df, filters)
     selected_columns_df = getColumns(filtered_df, columns_to_extract)
     return selected_columns_df
