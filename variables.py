@@ -11,6 +11,18 @@ aquamarine="#3AA597"
 amarillo="#FECA1D"
 azul="#002855"
 
+#login
+username=vars.username
+password=vars.password
+forgotPassword=vars.forgotPassword
+loginButton=vars.loginButton
+logoutButton=vars.logoutButton
+errorRedirection=vars.errorRedirection
+IncorrectPassword=vars.IncorrectPassword
+logoutMessage=vars.logoutMessage
+loginMessage=vars.loginMessage
+loginDescription=vars.loginDescription
+
 page_icon="https://assets4.cdn.iberostar.com/assets/favicon-aed60cf99a80a69e437a1476d22eea0d083d788070b7f4ac4c6c53595cf0687c.ico"
 companyIcon="./images/logoCreciendoJuntos.png"
 title= vars.title
@@ -31,6 +43,7 @@ tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
-linkPreonboarding = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"
-linkPreonboarding1 = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"
-linkPreonboarding2 = "https://drive.google.com/file/d/1mMCEeRFFhevZ_TMuou-WOQFlgjegTYDZ/view?ts=671b5937"
+preOnboardingLinks = ["Guía Express para el Tutor/a!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0"]
+onboardingLinks = ["Meeting Tips – ¡Primer Día del Aprendiz!", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
+seguimientoLinks = ["Meeting Tips - Seguimiento", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
+cierreLinks = ["Meeting de Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]

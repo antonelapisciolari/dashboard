@@ -2,7 +2,7 @@ import streamlit as st
 from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
-from variables import adminRecursosTutorDashboard, adminTutorDashboard, aprendizDashboard,tutorDashboard
+from variables import adminRecursosTutorDashboard, adminTutorDashboard, aprendizDashboard,tutorDashboard, logoutButton, logoutMessage
 
 def get_current_page_name():
     ctx = get_script_run_ctx()
@@ -29,7 +29,7 @@ def make_sidebar():
             st.write("")
             st.write("")
 
-            if st.button("Log out"):
+            if st.button(logoutButton):
                 logout()
 
         elif get_current_page_name() != "streamlit_app":
@@ -52,7 +52,7 @@ def make_sidebar_admin():
             st.write("")
             st.write("")
 
-            if st.button("Log out"):
+            if st.button(logoutButton):
                 logout()
 
         elif get_current_page_name() != "streamlit_app":
@@ -71,7 +71,7 @@ def make_sidebar_tutor():
             st.write("")
             st.write("")
 
-            if st.button("Log out"):
+            if st.button(logoutButton):
                 logout()
 
         elif get_current_page_name() != "streamlit_app":
@@ -80,7 +80,7 @@ def make_sidebar_tutor():
             st.switch_page("streamlit_app.py")         
 def logout():
     st.session_state.logged_in = False
-    st.info("Logged out successfully!")
+    st.info(logoutMessage)
     sleep(0.5)
     st.switch_page("streamlit_app.py")
 

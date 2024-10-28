@@ -9,3 +9,5 @@ tutorDashboard="Tools Dashboard"
 aprendizDashaboard="Apprentice Dashboard"
 adminRecursosTutorDashboard="Tools Dashboard"
 adminTutorDashboard="Tutor Dashboard"
+
+#login

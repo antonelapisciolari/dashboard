@@ -7,11 +7,12 @@ from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, linkPreonboarding, linkPreonboarding1,linkPreonboarding2
+import base64
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
-    st.warning("Session expired. Redirecting to login page...")
+    st.warning("Sesion expirada. Redirigiendo a login...")
     st.session_state.logged_in = False 
     st.session_state.redirected = True 
     st.switch_page("streamlit_app.py")
@@ -22,11 +23,6 @@ else:
         make_sidebar()
 
 
-preOnboardingLinks = [linkPreonboarding2, linkPreonboarding1, linkPreonboarding]
-onboardingLinks = ["https://example.com/link3", "https://example.com/link4"]
-seguimientoLinks = ["https://example.com/link5", "https://example.com/link6"]
-cierreLinks = ["https://example.com/link7", "https://example.com/link8"]
-
 #get events
 columns_to_extract = ['CANDIDATOS','FECHA INICIO', 'FECHA FIN']
 def getInfo():
@@ -36,7 +32,6 @@ def getInfo():
     return df
 
 def getEventsByTutor(df):
-    print(st.session_state.username)
     filters = {"CORREO TUTOR": st.session_state.username}
     filtered_df = filter_dataframe(df, filters)
     selected_columns_df = getColumns(filtered_df, columns_to_extract)
@@ -112,30 +107,41 @@ with resources:
     # Pre-Onboarding Tab
     with tabs[0]:
         st.write("Links relevantes para Pre-Onboarding:")
-        st.write(f"[Checklist Aprendiz]({preOnboardingLinks[0]})")
-        st.write(f"[Datos Aprendiz]({preOnboardingLinks[0]})")
-        st.write(f"[Datos Importantes]({preOnboardingLinks[0]})")
+        st.write(f"[{preOnboardingLinks[0]}]({preOnboardingLinks[1]})")
     # Onboarding Tab
     with tabs[1]:
         st.write("Links relevantes para Onboarding:")
-        for link in onboardingLinks:
-            st.write(f"[Onboarding Link]({link})")
+        st.write(f"[{onboardingLinks[0]}]({onboardingLinks[1]})")
 
     # Seguimiento Tab
     with tabs[2]:
         st.write("Links relevantes para Seguimiento:")
-        for link in seguimientoLinks:
-            st.write(f"[Seguimiento Link]({link})")
+        st.write(f"[{seguimientoLinks[0]}]({seguimientoLinks[1]})")
 
     # Cierre Tab
     with tabs[3]:
         st.write("Links relevantes para Cierre:")
-        for link in cierreLinks:
-            st.write(f"[Cierre Link]({link})")
+        st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
 with nextStep:
     st.subheader("Información Importante")
-    st.image("./images/rolTutor.png",  use_column_width=True)
-    st.image("./images/rolAprendiz.png", use_column_width=True)
+    rolAprendiz = open("./images/rol-aprendiz.gif", "rb")
+    contents = rolAprendiz.read()
+    data_url = base64.b64encode(contents).decode("utf-8")
+    rolAprendiz.close()
+
+    st.markdown(
+        f'<img src="data:image/gif;base64,{data_url}" alt="rol aprendiz" style="padding-bottom: 10px">',
+        unsafe_allow_html=True,
+)
+    rolTutor = open("./images/rol-tutor.gif", "rb")
+    contents = rolTutor.read()
+    data_url_tutor = base64.b64encode(contents).decode("utf-8")
+    rolTutor.close()
+
+    st.markdown(
+        f'<img src="data:image/gif;base64,{data_url_tutor}" alt="rol tutor">',
+        unsafe_allow_html=True,
+)
 with st.container():
     st.subheader("Próximos pasos")
 

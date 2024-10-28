@@ -1,9 +1,6 @@
 import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from sheet_connection import get_google_sheet
 import pandas as pd
 import pandasql as psql
 import logging
@@ -26,79 +23,95 @@ div.stButton > button:first-child {
 """, unsafe_allow_html=True)
 
 
-# Initialize session variables if they do not exist
-default_values = {'current_index': 0, 'current_question': 0,'selected_option': None, 'answer_submitted': False}
+default_values = {
+    'current_page': 0,
+    'responses': {}
+}
 for key, value in default_values.items():
     st.session_state.setdefault(key, value)
-if 'responses' not in st.session_state:
-    st.session_state.responses = {}
-# Load quiz data
 
+# Load quiz data
 with open('content/form_aprendiz.json', 'r', encoding='utf-8') as f:
     quiz_data = json.load(f)
 
-def restart_quiz():
-    st.session_state.current_index = 0
-    st.session_state.selected_option = None
-    st.session_state.answer_submitted = False
+# Define pages and their questions
+pageOneQuestions = range(0, 3)  # Questions for page 1
+pageTwoQuestions = range(3, 7)  # Questions for page 2
+pages = [pageOneQuestions, pageTwoQuestions]
 
-def submit_answer(response):
-    st.session_state.responses[quiz_data["text_form"]["questions"][st.session_state.current_index]["id"]] = response
+# Total number of questions
+total_questions = len(quiz_data["text_form"]["questions"])
 
+def submit_answer(question_id, response):
+    st.session_state.responses[question_id] = response
 def next_question():
-    st.session_state.current_index += 1
-    st.session_state.selected_option = None
-    st.session_state.answer_submitted = False
+    st.session_state.current_page += 1
+    print('next pregunta')
 
-def save_to_google_sheet(data):
-    try:    
-            conn = st.connection("gsheets", type=GSheetsConnection)
-            df = psql.load_meat()
-            df = conn.update(
-                        worksheet="formAprendiz",
-                        data=data,
-                    )
-            st.cache_data.clear()
-            st.rerun()
-
-            # Display our Spreadsheet as st.dataframe
-            st.dataframe(df.head(10))
+def create_gsheets_connection():
+    try:
+        conn = st.connection("gsheets_feedback", type=GSheetsConnection)
+        return conn
     except Exception as e:
-            st.error("Error reading/updating existing data: " + str(e))
-
+        st.error(f"Unable to connect to storage: {e}")
+        logging.error(e, stack_info=True, exc_info=True)
+        return None
+    
+def save_to_google_sheet(data):
+        logging.info(f"Submitting records")
+        responses_only = list(data.values())
+        conn = create_gsheets_connection()
+        existing_data = conn.read()
+        new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
+        
+        # Step 4: Concatenate the new row with existing data
+        updated_data = pd.concat([existing_data, new_row], ignore_index=True)
+        conn.update(
+                data=updated_data,
+                )
+        logging.info(f"Submitting successfully")
+def all_questions_answered():
+    current_page_questions = pages[st.session_state.current_page]
+    for idx in current_page_questions:
+        question_id = quiz_data["text_form"]["questions"][idx]["id"]
+        if question_id not in st.session_state.responses or not st.session_state.responses[question_id]:
+            return False
+    return True
 # Title and description
 st.title(quiz_data["text_form"]["title"])
 st.write(quiz_data["text_form"]["description"])
-# Progress bar
-st.subheader(f"Pregunta {st.session_state.current_index + 1}")
-progress_bar_value = (st.session_state.current_index + 1) / len(quiz_data["text_form"]["questions"])
+# Progress calculation
+current_question_index = sum(len(pages[i]) for i in range(st.session_state.current_page))
+progress_bar_value = current_question_index / total_questions
 st.progress(progress_bar_value)
 
-# Display the question and answer options
-question_item = quiz_data["text_form"]["questions"][st.session_state.current_index]
+# Display questions for the current page
+current_page_questions = pages[st.session_state.current_page]
+for idx in current_page_questions:
+    question_item = quiz_data["text_form"]["questions"][idx]
+    st.subheader(question_item['question'])
+    response = st.text_input(f"Respuesta", key=f"response_{idx}")
 
-st.title(f"{question_item['question']}")
+    if response:
+        submit_answer(question_item["id"], response)
 
-response = st.text_input("", label_visibility = 'hidden', value="",)
-st.markdown(""" ___""")
-# Answer selection
+col1, col2 = st.columns(2)
+with col1:
+    if st.session_state.current_page > 0:
+        st.button("Anterior", on_click=lambda: setattr(st.session_state, 'current_page', st.session_state.current_page - 1))
 
-if st.session_state.current_index < len(quiz_data["text_form"]["questions"]) - 1:
-    # "Siguiente" button to go to the next question
-    if st.button("Siguiente"):
-        if response:
-            submit_answer(response)
-            next_question()
-        else:
-            st.warning("Por favor ingresa una respuesta")
-else:
-    # On the last question, show "Completar" button to submit all responses
-    if st.button("Completar"):
-        if response:
-            submit_answer(response)
-            save_to_google_sheet(st.session_state.responses)
-            restart_quiz()  # Reset quiz after completion
-            st.success("Las respuestas se guardaron exitosamente!")
-            st.write(quiz_data["text_form"]["cierre"])
-        else:
-            st.warning("Por favor ingresa una respuesta antes de completar.")
+with col2:
+    if st.session_state.current_page < len(pages) - 1:
+        if st.button("Continuar", on_click=next_question):
+            if all_questions_answered():
+                st.session_state.current_page += 1
+            else:
+                st.warning("Por favor responde todas las preguntas en esta página antes de continuar.")
+    else:
+        if st.button("Completar"):
+            if all_questions_answered():
+                save_to_google_sheet(st.session_state.responses)
+                st.success("Las respuestas se guardaron exitosamente!")
+                st.write(quiz_data["text_form"]["cierre"])
+            else:
+                st.warning("Por favor responde todas las preguntas antes de completar.")
