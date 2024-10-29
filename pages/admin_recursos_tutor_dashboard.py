@@ -26,7 +26,7 @@ st.write(
 def show_data():
     # Use the actual Google Sheets ID here
     sheet_id = "1su5Lczuv6By0zr9HtvX82v9ExIotBGUBSsi0ha9lhpQ"
-    df = get_google_sheet(sheet_id, 0)
+    df = get_google_sheet('gsheets',sheet_id)
     if not df.empty:
             # Display the table in Streamlit
         st.dataframe(df)  # For an interactive table

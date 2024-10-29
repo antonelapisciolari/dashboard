@@ -7,6 +7,7 @@ from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
+from variables import connectionGeneral
 import base64
 from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks
 apply_page_config(st)
@@ -28,7 +29,7 @@ columns_to_extract = ['CANDIDATOS','FECHA INICIO', 'FECHA FIN']
 def getInfo():
     # Use the actual Google Sheets ID here
     sheet_id = registroAprendices
-    df = get_google_sheet(sheet_id, 0)
+    df = get_google_sheet(connectionGeneral,sheet_id)
     return df
 
 def getEventsByTutor(df):

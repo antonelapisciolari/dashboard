@@ -4,6 +4,9 @@ import location.es as vars
 
 #main Db
 registroAprendices="1WCl-0xzjea88aFdilbcXyKoYF9_N5JkOm0co4Cez8D0"
+feedbackSheets="1_d0aGSzQ4xB0FIkVikWBii3n3tF7l3it4GmNrDZw61s"
+connectionGeneral="gsheets"
+connectionFeedbacks="gsheets_feedback"
 costeSheet = ""
 formsSheet = ""
 #branding colors 
