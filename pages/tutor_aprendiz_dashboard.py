@@ -127,7 +127,7 @@ with st.container():
     feedbackPulse, feedbackCambioArea, feedback, spacer, costeContainer = st.columns([0.8,0.8, 0.8, 0.2, 1])
     with feedbackPulse:
      with st.container():
-        with st.container():
+        with st.container(key="feedback1"):
             st.markdown(
                 f"""
                     <span style="color: gray; font-size: 16px;">Pulse</span><br>
@@ -138,7 +138,7 @@ with st.container():
 
     # Second container (inside col2)
     with feedbackCambioArea:
-        with st.container():
+        with st.container(key="feedback2"):
             st.markdown(
                 f"""
                     <span style="color: gray; font-size: 16px;">Cambio de Area</span><br>
@@ -149,7 +149,7 @@ with st.container():
 
     # Third container (inside col3)
     with feedback:
-        with st.container():
+        with st.container(key="feedback3"):
             st.markdown(
                 f"""
                     <span style="color: gray; font-size: 16px;">3er Feedback</span><br>
@@ -160,16 +160,17 @@ with st.container():
 
     # Fourth container (inside col4)
     with costeContainer:
-        with st.container():
+        with st.container(key="costeContainer"):
             st.markdown(
                 f"""
                     <span style="color: gray; font-size: 16px;">Coste Salario Mensual</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">s€ 1000,00</span>
+                    <span style="color: black; font-size: 20px; font-weight: bold;">€ 1000,00</span>
                 """,
                 unsafe_allow_html=True
             )
 feedbacks= getFeebackDetails()
 feedbackPulse= feedbacks[0][feedbacks[0]['Email'].isin(df['CORREO DE CONTACTO'])]
+
 feedbackAprendiz= feedbacks[1][feedbacks[1]['Email'].isin(df['CORREO DE CONTACTO'])]
 with st.expander("Detalle de Feedbacks"):
     with st.container():
