@@ -25,7 +25,7 @@ topFilters = ['FECHA INICIO', 'CANDIDATOS', 'HOTEL', 'FPDUAL / FCT', 'FECHA FIN'
 
 def getInfo():
     sheet_id = registroAprendices
-    filters = {topFilters[3]: ['Fp Dual', 'Fct'], "CORREO TUTOR": [st.session_state.username]}
+    filters = {topFilters[3]: ['FP DUAL', 'FCT'], "CORREO TUTOR": [st.session_state.username]}
     df = get_google_sheet(connectionGeneral,sheet_id)
     dfiltered = filter_dataframe(df, filters)
     return dfiltered
