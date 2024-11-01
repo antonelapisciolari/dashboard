@@ -2,7 +2,6 @@ import logging
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 logging.basicConfig(level=logging.DEBUG)
 
 @st.cache_data  # Cache the result to avoid reloading each time

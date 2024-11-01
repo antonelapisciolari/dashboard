@@ -6,6 +6,5 @@ def apply_page_config(st):
         layout="wide"  # Optional: You can set the layout as "centered" or "wide"
     )
 
-    st.logo(
-        companyIcon)
+    st.logo(companyIcon,size="large")
     

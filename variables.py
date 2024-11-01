@@ -7,6 +7,11 @@ registroAprendices="1WCl-0xzjea88aFdilbcXyKoYF9_N5JkOm0co4Cez8D0"
 feedbackSheets="1_d0aGSzQ4xB0FIkVikWBii3n3tF7l3it4GmNrDZw61s"
 connectionGeneral="gsheets"
 connectionFeedbacks="gsheets_feedback"
+connectionUsuarios="usuarios"
+worksheetUsuarios="Usuarios"
+formularioPulse1Semana="formularioPulse1Semana"
+formAprendiz="formAprendiz"
+rotationSheet="Rotación"
 costeSheet = ""
 formsSheet = ""
 #branding colors 
@@ -29,6 +34,7 @@ IncorrectPassword=vars.IncorrectPassword
 logoutMessage=vars.logoutMessage
 loginMessage=vars.loginMessage
 loginDescription=vars.loginDescription
+noDatosDisponibles="No hay datos disponibles"
 
 page_icon="https://assets4.cdn.iberostar.com/assets/favicon-aed60cf99a80a69e437a1476d22eea0d083d788070b7f4ac4c6c53595cf0687c.ico"
 companyIcon="./images/logoCreciendoJuntos.png"

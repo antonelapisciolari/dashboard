@@ -1,35 +1,284 @@
 {
-    "users": [
-      {
-        "username": "admin",
-        "password": "admin",
-        "role": "admin"
-      },
-      {
-        "username": "superadmin",
-        "password": "superadmin",
-        "role": "superadmin"
-      },
-      {
-        "username": "tutor",
-        "password": "tutor",
-        "role": "tutor"
-      },
-      {
-        "username": "mcycoc@iberostar.com",
-        "password": "tutor",
-        "role": "tutor"
-      },
-      {
-        "username": "DALREC@IBEROSTAR.COM",
-        "password": "tutor",
-        "role": "tutor"
-      },
-      {
-        "username": "Mcyrec@Iberostar.Com",
-        "password": "tutor",
-        "role": "tutor"
-      }
-    ]
-  }
-  
+  "users": [
+    {
+      "username": "admin",
+      "password": "admin",
+      "role": "admin"
+    },
+    {
+      "username": "MCYITV@IBEROSTAR.COM",
+      "password": "MCYITV25",
+      "role": "tutor"
+    },
+    {
+      "username": "ANTONIA.LOPEZ@IBEROSTAR.COM",
+      "password": "ANTONIA.LOPEZ25",
+      "role": "tutor"
+    },
+    {
+      "username": "JUANMA.MATAMOROS@GRUPOIBEROSTAR.COM",
+      "password": "JUANMA.MATAMOROS25",
+      "role": "tutor"
+    },
+    {
+      "username": "JARITV@IBEROSTAR.COM",
+      "password": "JARITV25",
+      "role": "tutor"
+    },
+    {
+      "username": "DALREC@IBEROSTAR.COM",
+      "password": "DALREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "BCNREC@IBEROSTAR.COM",
+      "password": "BCNREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MCYREC@IBEROSTAR.COM",
+      "password": "MCYREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ISIDRO.AGUIAR@IBEROSTAR.COM",
+      "password": "ISIDRO.AGUIAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "CRIREC@IBEROSTAR.COM",
+      "password": "CRIREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "CAMREC@IBEROSTAR.COM",
+      "password": "CAMREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "GAVREC@IBEROSTAR.COM",
+      "password": "GAVREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "SABREC@IBEROSTAR.COM",
+      "password": "SABREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MAPREC@IBEROSTAR.COM",
+      "password": "MAPREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "LLTREC@IBEROSTAR.COM",
+      "password": "LLTREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "JAVIER.LEJARAZU@IBEROSTAR.COM",
+      "password": "JAVIER.LEJARAZU25",
+      "role": "tutor"
+    },
+    {
+      "username": "XFUREC@IBEROSTAR.COM",
+      "password": "XFUREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ABACOC@IBEROSTAR.COM",
+      "password": "ABACOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MCYCOC@IBEROSTAR.COM",
+      "password": "MCYCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ALCCOC@IBEROSTAR.COM",
+      "password": "ALCCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ANTCOC@IBEROSTAR.COM",
+      "password": "ANTCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "DALCOC@IBEROSTAR.COM",
+      "password": "DALCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "BOUCOC@IBEROSTAR.COM",
+      "password": "BOUCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "CRICOC@IBEROSTAR.COM",
+      "password": "CRICOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "GAVCOC@IBEROSTAR.COM",
+      "password": "GAVCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "LANCOC@IBEROSTAR.COM",
+      "password": "LANCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MABCOC@IBEROSTAR.COM",
+      "password": "MABCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "LLTCOC@IBEROSTAR.COM",
+      "password": "LLTCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "FUACOC@IBEROSTAR.COM",
+      "password": "FUACOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MURCOC@IBEROSTAR.COM",
+      "password": "MURCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "XFUCOC@IBEROSTAR.COM",
+      "password": "XFUCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "PMVCOC@IBEROSTAR.COM",
+      "password": "PMVCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "XANCOC@IBEROSTAR.COM",
+      "password": "XANCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "PDPCOC@IBEROSTAR.COM",
+      "password": "PDPCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "MCYBAR@IBEROSTAR.COM",
+      "password": "MCYBAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "SABBAR@IBEROSTAR.COM",
+      "password": "SABBAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "MIRBAR@IBEROSTAR.COM",
+      "password": "MIRBAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "PDPBAR@IBEROSTAR.COM",
+      "password": "PDPBAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "BHPRES@IBEROSTAR.COM",
+      "password": "BHPRES25",
+      "role": "tutor"
+    },
+    {
+      "username": "MAPGOB@IBEROSTAR.COM",
+      "password": "MAPGOB25",
+      "role": "tutor"
+    },
+    {
+      "username": "ABASST@IBEROSTAR.COM",
+      "password": "ABASST25",
+      "role": "tutor"
+    },
+    {
+      "username": "ALGSST@IBEROSTAR.COM",
+      "password": "ALGSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "ANPSST@IBEROSTAR.COM",
+      "password": "ANPSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "ANTSST@IBEROSTAR.COM",
+      "password": "ANTSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "BARJAR@IBEROSTAR.COM",
+      "password": "BARJAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "BHPSST@IBEROSTAR.COM",
+      "password": "BHPSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "GSPJAR@IBEROSTAR.COM",
+      "password": "GSPJAR25",
+      "role": "tutor"
+    },
+    {
+      "username": "GSPSST@IBEROSTAR.COM",
+      "password": "GSPSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "JARSST@IBEROSTAR.COM",
+      "password": "JARSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "MCYSST@IBEROSTAR.COM",
+      "password": "MCYSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "MURSST@IBEROSTAR.COM",
+      "password": "MURSST25",
+      "role": "tutor"
+    },
+    {
+      "username": "XANSS1@IBEROSTAR.COM",
+      "password": "XANSS125",
+      "role": "tutor"
+    },
+    {
+      "username": "MUREC1@IBEROSTAR.COM",
+      "password": "MUREC125",
+      "role": "tutor"
+    },
+    {
+      "username": "BLAITV@IBEROSTAR.COM",
+      "password": "BLAITV25",
+      "role": "tutor"
+    },
+    {
+      "username": "XFUSDI@IBEROSTAR.COM",
+      "password": "XFUSDI25",
+      "role": "tutor"
+    },
+    {
+      "username": "LANSDI@IBEROSTAR.COM",
+      "password": "LANSDI25",
+      "role": "tutor"
+    }
+  ]
+}

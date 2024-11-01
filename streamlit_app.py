@@ -5,7 +5,7 @@ st.set_page_config(
     layout="centered",  # Optional: You can set the layout as "centered" or "wide"
     initial_sidebar_state="collapsed"
 )
-from variables import username, password, loginButton,loginDescription,loginMessage,IncorrectPassword, forgotPassword
+from variables import username, password, loginButton,loginMessage,IncorrectPassword, forgotPassword
 from navigation import make_sidebar
 from time import sleep
 import json
