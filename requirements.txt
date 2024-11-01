@@ -15,3 +15,5 @@ streamlit_extras
 streamlit-calendar
 streamlit_javascript
 pandasql
+streamlit_carousel
+kaleido

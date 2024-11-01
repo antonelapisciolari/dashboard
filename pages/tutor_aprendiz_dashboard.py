@@ -1,12 +1,14 @@
 from navigation import make_sidebar_tutor, make_sidebar
 import streamlit as st
+import plotly.express as px
 from page_utils import apply_page_config
 from data_utils import filter_dataframe, getColumns
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, connectionFeedbacks
+from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, connectionFeedbacks,orange, celeste,teal, gris
 from datetime import datetime
+from streamlit_carousel import carousel
 
 apply_page_config(st)
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -186,6 +188,53 @@ with st.expander("Detalle de Feedbacks"):
 with st.container():
     st.write('**¿En dónde se encuentran hoy mis aprendices?**')
     graficoHotel, deptoAprendiz, tablaAprendicesHoy  = st.columns([1.2,0.8,1])
+    with graficoHotel:
+        # Define custom colors for each position
+        color_map = {
+            "ESTRUCTURA": azul,  # Blue for ESTRUCTURA
+            "RECEPCIÓN": amarillo,  # Orange for CHEF
+            "COCINA": aquamarine,  # Green for RECEPCIONISTA
+            "B&R": orange,  # Green for RECEPCIONISTA
+            "PISOS": gris,  # Green for RECEPCIONISTA
+            "SSTT": celeste,  # Green for RECEPCIONISTA
+            "ECONOMATO": teal,  # Green for RECEPCIONISTA
+        }
+
+        # Get unique hotels
+        hotels = active_candidates["HOTEL"].unique()
+        carousel_items = []
+        for hotel in hotels:
+            # Filter the data for each hotel
+            hotel_df = active_candidates[active_candidates["HOTEL"] == hotel]
+
+            # Group by position and count candidates
+            position_counts = hotel_df.groupby("POSICIÓN/DPT")["CANDIDATOS"].count().reset_index()
+            position_counts.columns = ["POSICIÓN/DPT", "CANTIDAD APRENDICES"]
+
+            # Create a bar chart using Plotly
+            fig = px.bar(
+                position_counts,
+                x="POSICIÓN/DPT",
+                y="CANTIDAD APRENDICES",
+                title=f"HOTEL {hotel}",
+                color="POSICIÓN/DPT",
+                color_discrete_map=color_map
+            )
+            fig.update_yaxes(dtick=1)
+
+            # Save the figure as an image
+            fig.write_image(f"{hotel}.png")
+
+            # Add the slide to the carousel items
+            carousel_items.append({
+                "title": "",
+                "text": "",
+                "img": f"{hotel}.png"
+            })
+
+        # Display the carousel
+        carousel(items=carousel_items)
+
     columns_to_extract = ['CANDIDATOS','FECHA INICIO','FECHA FIN','POSICIÓN/DPT']
     actualCandidatos = getColumns(active_candidates, columns_to_extract)
     actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
