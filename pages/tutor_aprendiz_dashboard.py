@@ -6,7 +6,7 @@ from data_utils import filter_dataframe, getColumns,generate_color_map
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,teal, gris, formularioPulse1Semana, formAprendiz,noDatosDisponibles
+from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, gris, formularioPulse1Semana, formAprendiz,noDatosDisponibles
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 
@@ -153,7 +153,7 @@ def getFeebackDetails():
 #feedback details 
 with st.container():
     st.write('**¿Cómo se están sintiendo en cada etapa del proceso?**')
-    feedbackPulse, feedbackCambioArea, feedback, spacer, costeContainer = st.columns([0.8,0.8, 0.8, 0.2, 1])
+    feedbackPulse, feedbackCambioArea, feedback = st.columns(3)
     with feedbackPulse:
      with st.container():
         with st.container(key="feedback1"):
@@ -187,23 +187,18 @@ with st.container():
                 unsafe_allow_html=True
             )
 
-    # Fourth container (inside col4)
-    with costeContainer:
-        with st.container(key="costeContainer"):
-            st.markdown(
-                f"""
-                    <span style="color: gray; font-size: 16px;">Coste Salario Mensual</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">€ 1000,00</span>
-                """,
-                unsafe_allow_html=True
-            )
 feedbacks= getFeebackDetails()
-feedbackPulse= feedbacks[0][feedbacks[0][columnaEmail].isin(df[columnaCorreoCandidato])]
+feedbackPulse = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
+    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
+)]
+feedbackAprendiz= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
+    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
+)]
 
-feedbackAprendiz= feedbacks[1][feedbacks[1][columnaEmail].isin(df[columnaCorreoCandidato])]
+feedback_types = ['Pulse', 'Cambio Area', '3rd Feedback'] 
 with st.expander("Detalle de Feedbacks"):
     with st.container():
-        tabs = st.tabs(['Pulse', 'Cambio Area', '3rd Feedback'])
+        tabs = st.tabs(feedback_types)
         with tabs[0]:
             if feedbackPulse is not None and not feedbackPulse.empty:
                 st.dataframe(feedbackPulse)
@@ -215,43 +210,56 @@ with st.expander("Detalle de Feedbacks"):
                 st.dataframe(feedbackAprendiz)
             else:
                 st.write(noDatosDisponibles)
-
+response_data = {
+    'Respuestas Recibidas': [2, 5, 3],  # Replace with actual values
+    'Respuestas Pendientes': [3, 2, 4],  # Replace with actual values
+    '% RESPUESTA': ['25%', '71%', '43%']  # Replace with actual values
+}
 
 with st.container():
     st.write('**Status de Respuestas**')
-    respuestasRecibidas, respuestasPendientes, respuestas, = st.columns(3)
-    with respuestasRecibidas:
-     with st.container():
-        with st.container(key="respuestas1"):
-            st.markdown(
-                f"""
-                    <span style="color: white; font-size: 16px;">Respuestas Recibidas</span><br>
-                    <span style="color:#FECA1D; font-size: 20px; font-weight: bold;">2</span>
-                """,
-                unsafe_allow_html=True
-            )
+    tabs = st.tabs(feedback_types)
+    for i, feedback in enumerate(feedback_types):
+        with tabs[i]:
+            respuestasRecibidas, respuestasPendientes, respuestas, = st.columns(3)
+            with respuestasRecibidas:
+                with st.container():
+                    with st.container():
+                        st.markdown(
+                            f"""
+                            <div class="custom-container">
+                                <span style="color: white; font-size: 16px;">Respuestas Recibidas</span><br>
+                                <span style="color:#FECA1D; font-size: 20px; font-weight: bold;">{response_data['Respuestas Recibidas'][i]}</span>
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
 
-    # Second container (inside col2)
-    with respuestasPendientes:
-        with st.container(key="respuestas2"):
-            st.markdown(
-                f"""
-                    <span style="color: white; font-size: 16px;">Respuestas Pendientes</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">3</span>
-                """,
-                unsafe_allow_html=True
-            )
+                # Second container (inside col2)
+                with respuestasPendientes:
+                    with st.container():
+                        st.markdown(
+                            f"""
+                            <div class="custom-container">
+                                <span style="color: white; font-size: 16px;">Respuestas Pendientes</span><br>
+                                <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{response_data['Respuestas Pendientes'][i]}</span>
+                                </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
 
-    # Third container (inside col3)
-    with respuestas:
-        with st.container(key="respuestas3"):
-            st.markdown(
-                f"""
-                    <span style="color: white; font-size: 16px;">% RESPUESTA</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">25%</span>
-                """,
-                unsafe_allow_html=True
-            )
+                # Third container (inside col3)
+                with respuestas:
+                    with st.container():
+                        st.markdown(
+                            f"""
+                            <div class="custom-container">
+                                <span style="color: white; font-size: 16px;">% RESPUESTA</span><br>
+                                <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{response_data['% RESPUESTA'][i]}</span>
+                                </div>
+                            """,
+                            unsafe_allow_html=True
+                    )
 
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
@@ -262,7 +270,7 @@ def getRotationInfo():
 #donde estan mis aprendices
 with st.container():
     st.write('**¿En dónde se encuentran hoy mis aprendices?**')
-    graficoHotel, deptoAprendiz, tablaAprendicesHoy  = st.columns([1.2,0.8,1])
+    graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.4])
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
             rotacion= getRotationInfo()
@@ -320,15 +328,6 @@ with st.container():
     actualCandidatos = getColumns(active_candidates, columns_to_extract)
     actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
     actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
-    with deptoAprendiz:
-        if actualCandidatos is not None and not actualCandidatos.empty:
-            fig1, ax1 = plt.subplots()
-            actualCandidatos[graficos[0]].value_counts().plot.pie(autopct='%1.1f%%', ax=ax1, colors=custom_colors)
-            ax1.set_ylabel('')
-            ax1.set_title(graficos[0])
-            st.pyplot(fig1)
-        else:
-            st.write(noDatosDisponibles)
     with tablaAprendicesHoy:
         st.write('Mis Aprendices:')
         if actualCandidatos is not None and not actualCandidatos.empty:

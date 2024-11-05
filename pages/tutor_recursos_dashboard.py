@@ -1,4 +1,4 @@
-from navigation import make_sidebar_tutor, make_sidebar
+from navigation import make_sidebar_tutor
 import streamlit as st
 from page_utils import apply_page_config
 from streamlit_extras.stylable_container import stylable_container
@@ -9,7 +9,7 @@ from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
 from variables import connectionGeneral
 import base64
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks,agendaSheets
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -20,8 +20,6 @@ if "logged_in" not in st.session_state or not st.session_state.logged_in:
 else:
     if st.session_state.role == 'tutor':
         make_sidebar_tutor()
-    if st.session_state.role == 'superadmin':
-        make_sidebar()
 
 
 #get events
@@ -145,7 +143,7 @@ with nextStep:
 )
 with st.container():
     st.subheader("Próximos pasos")
-
+    calendarioCol,space, agendaCol = st.columns([1,0.2,1])
     # Set up events (date format: "YYYY-MM-DD")
     #consumir desde el sheet
     events = events
@@ -162,14 +160,14 @@ with st.container():
     }
     custom_css = """
         .fc-toolbar-title {
-            font-size: 1.5rem;  /* Adjust the title size */
+            font-size: 1rem;  /* Adjust the title size */
         }
         .fc {
-            width: 70%;  /* Set calendar width to 70% of the container for desktop */
+            width: 40%;  /* Set calendar width to 70% of the container for desktop */
             margin: 0 auto;
         }
         .fc-view {
-            min-height: 300px;  /* Set a minimum height */
+            min-height: 200px;  /* Set a minimum height */
         }
         
         /* Responsive adjustments for smaller screens */
@@ -183,14 +181,21 @@ with st.container():
         }
     """
     # Display the subheader with the current month and year
-    st.subheader(f"Calendario")
+    with calendarioCol:
+        st.subheader(f"Calendario")
 
-    # Create a dictionary to hold events by date
-    # Display the calendar
-    selected_date = calendar(
-        events,  # Pass the event dictionary
-        options=calendar_options,
-        custom_css=custom_css
-    )
+        # Create a dictionary to hold events by date
+        # Display the calendar
+        selected_date = calendar(
+            events,  # Pass the event dictionary
+            options=calendar_options,
+            custom_css=custom_css
+        )
 
+    with agendaCol:
+        sheet_id = agendaSheets
+        df = get_google_sheet(connectionGeneral,sheet_id)
+        st.subheader(f"Agenda")
+
+        st.dataframe(df)
 

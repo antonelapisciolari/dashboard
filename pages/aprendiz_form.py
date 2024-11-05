@@ -63,7 +63,7 @@ def save_to_google_sheet(data):
         conn = create_gsheets_connection()
         existing_data = conn.read()
         new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
-        
+        print(existing_data)
         # Step 4: Concatenate the new row with existing data
         updated_data = pd.concat([existing_data, new_row], ignore_index=True)
         conn.update(

@@ -33,7 +33,7 @@ if st.button(loginButton, type="primary"):
     if username in user_dict and user_dict[username]['password'] == password:
         st.session_state.logged_in = True
         st.success(loginMessage)
-        st.session_state.username = username
+        st.session_state.username = username.upper()
         st.session_state.role = user_dict[username]['role']
         sleep(0.5)
         if st.session_state.role == 'admin':
