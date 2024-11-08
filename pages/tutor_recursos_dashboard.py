@@ -192,10 +192,4 @@ with st.container():
             custom_css=custom_css
         )
 
-    with agendaCol:
-        sheet_id = agendaSheets
-        df = get_google_sheet(connectionGeneral,sheet_id)
-        st.subheader(f"Agenda")
-
-        st.dataframe(df)
 

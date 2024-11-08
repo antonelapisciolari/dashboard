@@ -30,46 +30,45 @@ def getInfo():
     df = get_google_sheet(connectionGeneral,sheet_id)
     return df
 
-def getEventsByTutor(df):
-    filters = {"CORREO TUTOR": [st.session_state.username]}
-    filtered_df = filter_dataframe(df, filters)
-    selected_columns_df = getColumns(filtered_df, columns_to_extract)
+def getEvents(df):
+    selected_columns_df = getColumns(df, columns_to_extract)
     return selected_columns_df
 
 def create_events(df):
     events = []
     # Iterate over DataFrame rows
     for index, row in df.iterrows():
-        # Parse dates
-        start_date = pd.to_datetime(row[columns_to_extract[1]], dayfirst=True).strftime('%Y-%m-%d')
-        end_date = pd.to_datetime(row[columns_to_extract[2]], dayfirst=True).strftime('%Y-%m-%d')
+        # Parse dates and handle NaT values
+        start_date = pd.to_datetime(row[columns_to_extract[1]], dayfirst=True)
+        end_date = pd.to_datetime(row[columns_to_extract[2]], dayfirst=True)
         
-        # Create start event
-        start_event = {
-            "start": start_date,
-            "title": f"Inicio {row[columns_to_extract[0]]}",
-            "backgroundColor": amarillo
-        }
+        # Check if dates are valid and not NaT
+        if pd.notna(start_date):
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            # Create start event
+            start_event = {
+                "start": start_date_str,
+                "title": f"Inicio {row[columns_to_extract[0]]}",
+                "backgroundColor": amarillo
+            }
+            events.append(start_event)
         
-        # Create end event
-        end_event = {
-            "start": end_date,
-            "title": f"Fin {row[columns_to_extract[0]]}",
-            "backgroundColor": aquamarine
-        }
-        
-        # Add both events to the list
-        events.append(start_event)
-        events.append(end_event)
+        if pd.notna(end_date):
+            end_date_str = end_date.strftime('%Y-%m-%d')
+            # Create end event
+            end_event = {
+                "start": end_date_str,
+                "title": f"Fin {row[columns_to_extract[0]]}",
+                "backgroundColor": aquamarine
+            }
+            events.append(end_event)
+    
     return events
-
 candidatosByTutor = getInfo()
-eventsCandidatos = getEventsByTutor(candidatosByTutor)
+eventsCandidatos = getEvents(candidatosByTutor)
 events = create_events(eventsCandidatos)
-
 # Create the main container for the layout
 container = st.container()
-
 # Create two columns inside the container, one taking 60% width and the other 40%
 resources, nextStep = container.columns([3, 2])  # 60% for col1, 40% for col2
 st.markdown(

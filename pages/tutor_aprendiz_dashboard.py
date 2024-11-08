@@ -306,9 +306,11 @@ with st.container():
                     color_discrete_map=color_map,
                     category_orders={"Mes": meses_futuros},  # Ordenar los meses en el gráfico
                     title=f"Aprendices por Departamento en {hotel} (Próximos 12 meses)",
-                    labels={"Cantidad": "Número de Candidatos", "Mes": "Mes", "Departamento de Destino": "Departamento"}
+                    labels={"Cantidad": "Número de Candidatos", "Mes": "Mes", "Departamento de Destino": "Departamento"},
+                    text="Cantidad"
                 )
                 
+                fig.update_traces(textposition="outside")
                     # Save the figure as an image
                 fig.write_image(f"{hotel}.png")
 
