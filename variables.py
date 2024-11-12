@@ -61,3 +61,8 @@ preOnboardingLinks = ["Guía Express para el Tutor/a!", "https://docs.google.com
 onboardingLinks = ["Meeting Tips – ¡Primer Día del Aprendiz!", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
 seguimientoLinks = ["Meeting Tips - Seguimiento", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
 cierreLinks = ["Meeting de Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]
+
+#admin dashboard
+aprendiz_looker_url = "https://lookerstudio.google.com/embed/reporting/a240d7c8-63aa-405e-b320-4aff88c57547/page/XQXmD"
+presupuesto_looker_url="https://lookerstudio.google.com/embed/reporting/a98142e9-3679-4dc5-b4c7-a201853d976f/page/p_fq1n4ahhjd"
+aprendiz_2025_looker_url="https://lookerstudio.google.com/embed/reporting/8da6524c-03a4-4f30-9998-d2087e9c115e/page/XQXmD"

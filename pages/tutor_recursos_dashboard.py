@@ -23,17 +23,17 @@ else:
 
 
 #get events
-columns_to_extract = ['CANDIDATOS','FECHA INICIO', 'FECHA FIN']
+columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
 def getInfo():
     # Use the actual Google Sheets ID here
     sheet_id = registroAprendices
     df = get_google_sheet(connectionGeneral,sheet_id)
-    return df
-
-def getEventsByTutor(df):
     filters = {"CORREO TUTOR": [st.session_state.username]}
     filtered_df = filter_dataframe(df, filters)
-    selected_columns_df = getColumns(filtered_df, columns_to_extract)
+    return filtered_df
+    
+def getEventsByTutor(df):
+    selected_columns_df = getColumns(df, columns_to_extract)
     return selected_columns_df
 
 def create_events(df):
@@ -67,9 +67,8 @@ candidatosByTutor = getInfo()
 eventsCandidatos = getEventsByTutor(candidatosByTutor)
 events = create_events(eventsCandidatos)
 
-# Create the main container for the layout
-container = st.container()
 
+container = st.container()
 # Create two columns inside the container, one taking 60% width and the other 40%
 resources, nextStep = container.columns([3, 2])  # 60% for col1, 40% for col2
 st.markdown(
@@ -143,7 +142,6 @@ with nextStep:
 )
 with st.container():
     st.subheader("Próximos pasos")
-    calendarioCol,space, agendaCol = st.columns([1,0.2,1])
     # Set up events (date format: "YYYY-MM-DD")
     #consumir desde el sheet
     events = events
@@ -163,7 +161,7 @@ with st.container():
             font-size: 1rem;  /* Adjust the title size */
         }
         .fc {
-            width: 40%;  /* Set calendar width to 70% of the container for desktop */
+            width: 70%;  /* Set calendar width to 70% of the container for desktop */
             margin: 0 auto;
         }
         .fc-view {
@@ -171,7 +169,7 @@ with st.container():
         }
         
         /* Responsive adjustments for smaller screens */
-        @media only screen and (max-width: 768px) {
+        @media only screen andter (max-width: 768px) {
             .fc {
                 width: 100%;  /* Full width for mobile */
             }
@@ -181,15 +179,14 @@ with st.container():
         }
     """
     # Display the subheader with the current month and year
-    with calendarioCol:
-        st.subheader(f"Calendario")
+    st.subheader(f"Calendario")
 
-        # Create a dictionary to hold events by date
-        # Display the calendar
-        selected_date = calendar(
-            events,  # Pass the event dictionary
-            options=calendar_options,
-            custom_css=custom_css
-        )
+    # Create a dictionary to hold events by date
+    # Display the calendar
+    selected_date = calendar(
+        events,  # Pass the event dictionary
+        options=calendar_options,
+        custom_css=custom_css
+    )
 
 

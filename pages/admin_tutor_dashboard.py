@@ -28,19 +28,21 @@ with open("style.css") as f:
 
 #filtros de arriba
 columnaCandidatos='CANDIDATOS'
-columnaFechaInicio='FECHA INICIO'
-columnaFechaFin='FECHA FIN'
+columnaFechaInicio='FECHA INICIO real'
+columnaFechaFin='FECHA FIN real'
 columnaHotel='HOTEL'
 columnaFPDualFCT='FPDUAL / FCT'
 columnaPosicion='POSICIÓN/DPT'
 columnaEstudios='ESTUDIOS'
 columnaTutor='TUTOR'
+columnaZona='ZONA'
+columnStatus = 'STATUS'
 filtrosTutor = ["CORREO TUTOR", "MAIL TUTOR"]
 
 #feedback
 columnaEmail='Email'
 columnaCorreoCandidato='CORREO DE CONTACTO'
-topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin,columnaTutor]
+topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin,columnaTutor,columnStatus]
 
 #rotacion
 columnaMesesActivos="Meses Activos"
@@ -65,12 +67,26 @@ def getCandidatosActivos():
      return active_candidates[topFilters[1]].nunique(), active_candidates
 active_count, active_candidates = getCandidatosActivos()
 
+def calcularPorcentajesStatus(df):
+    aprendicesStatus = getColumns(df, [columnStatus])
+    total_statuses = len(aprendicesStatus)
+    finalizado_count = df[columnStatus].str.lower().eq('finalizado').sum()
+    desconocido_count = df[columnStatus].str.lower().eq('desconocido').sum()
+    baja_count = df[columnStatus].str.lower().eq('baja').sum()
+    vacío_count = df[columnStatus].eq('').sum()
+
+    # Calcular los porcentajes
+    finalizado_pct = int((finalizado_count / total_statuses) * 100)
+    desconocido_pct = int((desconocido_count / total_statuses) * 100)
+    baja_pct = int((baja_count / total_statuses) * 100)
+    vacío_pct = int((vacío_count / total_statuses) * 100)
+    return finalizado_pct, baja_pct
 #filter containers
 with st.container():
-    col1, col2, col3, col4,col5 = st.columns(5)
+    col1, col2, col3, col4,col5, col6 = st.columns(6)
     with st.container():
-        tutor_options = sorted(df[topFilters[5]].unique().tolist())
-        tutor = col1.selectbox("**TUTOR**", options=["Todos"] + tutor_options)
+       # tutor_options = sorted(df[topFilters[5]].unique().tolist())
+        tutor = col1.selectbox("**TUTOR**", options=["Todos"] + df[topFilters[5]].unique().tolist())
     with st.container():
         candidato_options = sorted(df[topFilters[1]].unique().tolist())
         candidato = col2.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
@@ -82,70 +98,94 @@ with st.container():
     with st.container():
         programa_options = sorted(df[topFilters[3]].unique().tolist())
         programa = col5.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options)
-
+    with st.container():
+        status = col6.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
 # Filter DataFrame based on selected values
 filtered_df = df[
     ((df[topFilters[5]] == tutor) | (tutor == "Todos")) &
     ((df[topFilters[1]] == candidato) | (candidato == "Todos")) &
     ((df[topFilters[2]] == hotel) | (hotel == "Todos")) &
     (df[topFilters[0]] >= pd.to_datetime(fecha_inicio)) &  
-    ((df[topFilters[3]] == programa) | (programa == "Todos"))
+    ((df[topFilters[3]] == programa) | (programa == "Todos")) &  
+    ((df[topFilters[6]] == status) | (status == "Todos"))
 ]
 
 #pie chart container and aprendiz data
-graficos = [columnaPosicion,columnaHotel,columnaEstudios]
+graficos = [columnaPosicion,columnaHotel,columnaEstudios,columnaZona]
+finalizado, baja = calcularPorcentajesStatus(df)
 with st.container():
     st.write('**¿Cómo se distribuyen mis aprendices?**')
     custom_colors = [aquamarine, amarillo, azul, orange] 
-    chartDepto, chartHotel, chartEstudio, statusAprendiz  = st.columns(4)
-    fig_size = (4, 4)
-    with chartDepto:
-        # Create the figure and axis for the bar chart
-        fig1, ax1 = plt.subplots(figsize=fig_size)
+    graficosContainer, estadisticas = st.columns([8,2])
+    with graficosContainer:
+        chartDepto, chartHotel, chartEstudio, chartZona  = st.columns(4)
+        fig_size = (4, 4)
         
-        # Plot a bar chart and apply custom colors
-        value_counts = filtered_df[graficos[0]].value_counts()
-        value_counts.plot.bar(ax=ax1, color=custom_colors)
-        
-        # Add the amounts on top of each bar
-        for index, value in enumerate(value_counts):
-            ax1.text(index, value, str(value), ha='center', va='bottom', fontsize=10)
-        
-        # Set the title and labels
-        ax1.set_ylabel("Count")
-        ax1.set_title(graficos[0])
-        
-        # Display the bar chart in Streamlit
-        st.pyplot(fig1)
-    with chartHotel:
-        fig2, ax2 = plt.subplots(figsize=fig_size)
-        value_counts = filtered_df[graficos[1]].value_counts()
-        value_counts.plot.bar(ax=ax2, color=custom_colors)
-        
+        with chartDepto:
+            # Create the figure and axis for the bar chart
+            fig1, ax1 = plt.subplots(figsize=fig_size)
+            
+            # Plot a bar chart and apply custom colors
+            value_counts = filtered_df[graficos[0]].value_counts()
+            if not value_counts.empty and value_counts.sum() > 0:
+                value_counts.plot.bar(ax=ax1, color=custom_colors)
+                
                 # Add the amounts on top of each bar
-        for index, value in enumerate(value_counts):
-            ax2.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
-
-        # Set the title and labels
-        ax1.set_ylabel("Count")
-        ax1.set_title(graficos[1])
-        st.pyplot(fig2)
+                for index, value in enumerate(value_counts):
+                    ax1.text(index, value, str(value), ha='center', va='bottom', fontsize=10)
+                
+                # Set the title and labels
+                ax1.set_ylabel("Count")
+                ax1.set_title(graficos[0])
+                
+                # Display the bar chart in Streamlit
+                st.pyplot(fig1)
         
-    with chartEstudio:
-        fig3, ax3 = plt.subplots(figsize=fig_size)
-        value_counts = filtered_df[graficos[2]].value_counts()
-        value_counts.plot.bar(ax=ax3, color=custom_colors)
+        with chartHotel:
+            fig2, ax2 = plt.subplots(figsize=fig_size)
+            value_counts = filtered_df[graficos[1]].value_counts()
+            if not value_counts.empty and value_counts.sum() > 0:
+                value_counts.plot.bar(ax=ax2, color=custom_colors)
+                
+                        # Add the amounts on top of each bar
+                for index, value in enumerate(value_counts):
+                    ax2.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+                ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right', fontsize=8)
+                # Set the title and labels
+                ax2.set_ylabel("Count")
+                ax2.set_title(graficos[1])
+                st.pyplot(fig2)
+            
+        with chartEstudio:
+            fig3, ax3 = plt.subplots(figsize=fig_size)
+            value_counts = filtered_df[graficos[2]].value_counts()
+            if not value_counts.empty and value_counts.sum() > 0:
+                value_counts.plot.bar(ax=ax3, color=custom_colors)
+                
+                        # Add the amounts on top of each bar
+                for index, value in enumerate(value_counts):
+                    ax3.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+                ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right', fontsize=8)
+                # Set the title and labels
+                ax3.set_ylabel("Count")
+                ax3.set_title(graficos[2])
+                st.pyplot(fig3)
         
-                # Add the amounts on top of each bar
-        for index, value in enumerate(value_counts):
-            ax3.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+        with chartZona:
+            fig4, ax4 = plt.subplots(figsize=fig_size)
+            value_counts = filtered_df[graficos[3]].value_counts()
+            if not value_counts.empty and value_counts.sum() > 0:
+                value_counts.plot.bar(ax=ax4, color=custom_colors)
+                
+                        # Add the amounts on top of each bar
+                for index, value in enumerate(value_counts):
+                    ax4.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
 
-        # Set the title and labels
-        ax3.set_ylabel("Count")
-        ax3.set_title(graficos[2])
-        st.pyplot(fig3)
-
-    with statusAprendiz:
+                # Set the title and labels
+                ax4.set_ylabel("Count")
+                ax4.set_title(graficos[3])
+                st.pyplot(fig4)
+    with estadisticas:
             st.markdown(
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
@@ -159,7 +199,7 @@ with st.container():
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
                     <span style="color: white; font-size: 16px;">% Bajas</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">25%</span>
+                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -168,7 +208,7 @@ with st.container():
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
                     <span style="color: white; font-size: 16px;">Tasa de Finalización</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">50%</span>
+                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -181,114 +221,47 @@ def getFeebackDetails():
 
 #feedback details 
 with st.container():
-    st.write('**¿Cómo se están sintiendo en cada etapa del proceso?**')
-    feedbackPulse, feedbackCambioArea, feedback = st.columns(3)
-    with feedbackPulse:
-     with st.container():
-        with st.container(key="feedback1"):
-            st.markdown(
-                f"""
-                    <span style="color: gray; font-size: 16px;">Pulse</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">9.6</span>
-                """,
-                unsafe_allow_html=True
-            )
-
-    # Second container (inside col2)
-    with feedbackCambioArea:
-        with st.container(key="feedback2"):
-            st.markdown(
-                f"""
-                    <span style="color: gray; font-size: 16px;">Cambio de Area</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">5.5</span>
-                """,
-                unsafe_allow_html=True
-            )
-
-    # Third container (inside col3)
-    with feedback:
-        with st.container(key="feedback3"):
-            st.markdown(
-                f"""
-                    <span style="color: gray; font-size: 16px;">3er Feedback</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">4.2</span>
-                """,
-                unsafe_allow_html=True
-            )
-
-feedbacks= getFeebackDetails()
-feedbackPulse = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackAprendiz= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-
-feedback_types = ['Pulse', 'Cambio Area', '3rd Feedback'] 
-with st.expander("Detalle de Feedbacks"):
-    with st.container():
-        tabs = st.tabs(feedback_types)
-        with tabs[0]:
-            if feedbackPulse is not None and not feedbackPulse.empty:
-                st.dataframe(feedbackPulse)
-            else:
-                st.write(noDatosDisponibles)
-
-        with tabs[1]:
-            if feedbackAprendiz is not None and not feedbackAprendiz.empty:
-                st.dataframe(feedbackAprendiz)
-            else:
-                st.write(noDatosDisponibles)
-response_data = {
-    'Respuestas Recibidas': [2, 5, 3],  # Replace with actual values
-    'Respuestas Pendientes': [3, 2, 4],  # Replace with actual values
-    '% RESPUESTA': ['25%', '71%', '43%']  # Replace with actual values
-}
-
-with st.container():
-    st.write('**Status de Respuestas**')
-    tabs = st.tabs(feedback_types)
-    for i, feedback in enumerate(feedback_types):
-        with tabs[i]:
-            respuestasRecibidas, respuestasPendientes, respuestas, = st.columns(3)
-            with respuestasRecibidas:
+        st.write('**¿Cómo se están sintiendo en cada etapa del proceso?**')
+        feedbackPulse, feedbackCambioArea, feedback = st.columns(3)
+        with feedbackPulse:
+            with st.container():
                 with st.container():
-                    with st.container():
-                        st.markdown(
-                            f"""
-                            <div class="custom-container">
-                                <span style="color: white; font-size: 16px;">Respuestas Recibidas</span><br>
-                                <span style="color:#FECA1D; font-size: 20px; font-weight: bold;">{response_data['Respuestas Recibidas'][i]}</span>
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-
-                # Second container (inside col2)
-                with respuestasPendientes:
-                    with st.container():
-                        st.markdown(
-                            f"""
-                            <div class="custom-container">
-                                <span style="color: white; font-size: 16px;">Respuestas Pendientes</span><br>
-                                <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{response_data['Respuestas Pendientes'][i]}</span>
-                                </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-
-                # Third container (inside col3)
-                with respuestas:
-                    with st.container():
-                        st.markdown(
-                            f"""
-                            <div class="custom-container">
-                                <span style="color: white; font-size: 16px;">% RESPUESTA</span><br>
-                                <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{response_data['% RESPUESTA'][i]}</span>
-                                </div>
-                            """,
-                            unsafe_allow_html=True
+                    st.markdown(
+                        f"""
+                        <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                            <span style="color: white; font-size: 16px;">Pulse</span><br>
+                            <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">6</span>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
                     )
+
+        # Second container (inside col2)
+        with feedbackCambioArea:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                        <span style="color: white; font-size: 16px;">Cambio de Area</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">2</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        # Third container (inside col3)
+        with feedback:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                        <span style="color: white; font-size: 16px;">3rd Feedback</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">3.1</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
 
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
@@ -298,7 +271,12 @@ def getRotationInfo():
 
 #donde estan mis aprendices
 with st.container():
-    st.write('**¿En dónde se encuentran hoy mis aprendices?**')
+    titulo, filtroHotel  = st.columns(2)
+    with titulo:
+        st.write('**¿En dónde se encuentran hoy mis aprendices?**')
+    with filtroHotel:
+        hotelOptions = sorted(df[topFilters[2]].unique().tolist())
+        tutor = filtroHotel.selectbox("HOTEL", options=["Todos"] + hotelOptions)
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.4])
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:

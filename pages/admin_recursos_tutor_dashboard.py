@@ -8,8 +8,7 @@ import pandas as pd
 from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
 from variables import connectionGeneral
-import base64
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -23,7 +22,7 @@ else:
 
 
 #get events
-columns_to_extract = ['CANDIDATOS','FECHA INICIO', 'FECHA FIN']
+columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
 def getInfo():
     # Use the actual Google Sheets ID here
     sheet_id = registroAprendices
@@ -67,10 +66,19 @@ def create_events(df):
 candidatosByTutor = getInfo()
 eventsCandidatos = getEvents(candidatosByTutor)
 events = create_events(eventsCandidatos)
+
+def get_presupuesto_looker_url():
+    return presupuesto_looker_url
+@st.cache_data
+def get_aprendiz_24_looker_url():
+    return aprendiz_looker_url
+@st.cache_data
+def get_aprendiz_25_looker_url():
+    return aprendiz_2025_looker_url
 # Create the main container for the layout
 container = st.container()
 # Create two columns inside the container, one taking 60% width and the other 40%
-resources, nextStep = container.columns([3, 2])  # 60% for col1, 40% for col2
+nextStep ,resources= container.columns([2.5, 1])  # 60% for col1, 40% for col2
 st.markdown(
     """
     <style>
@@ -99,7 +107,6 @@ with resources:
             }
             """,
     ):
-        st.subheader(documentacionTitle)
         tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre])
 
     # Pre-Onboarding Tab
@@ -120,29 +127,21 @@ with resources:
     with tabs[3]:
         st.write("Links relevantes para Cierre:")
         st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
+
 with nextStep:
-    st.subheader("Información Importante")
-    rolAprendiz = open("./images/rol-aprendiz.gif", "rb")
-    contents = rolAprendiz.read()
-    data_url = base64.b64encode(contents).decode("utf-8")
-    rolAprendiz.close()
+    st.subheader("Reportes")
+    tabs = st.tabs(['Aprendices 2024','Aprendices 2025', 'Presupuesto' ])
+    with tabs[0]:
+        aprendiz24 = get_aprendiz_24_looker_url()
+        st.components.v1.iframe(aprendiz24, width=800, height=600)
+    with tabs[1]:
+        presupuestoLink = get_presupuesto_looker_url()
+        st.components.v1.iframe(presupuestoLink, width=800, height=600)
+    with tabs[2]:
+        aprendiz25 = get_aprendiz_25_looker_url()
+        st.components.v1.iframe(aprendiz25, width=800, height=600)
 
-    st.markdown(
-        f'<img src="data:image/gif;base64,{data_url}" alt="rol aprendiz" style="padding-bottom: 10px">',
-        unsafe_allow_html=True,
-)
-    rolTutor = open("./images/rol-tutor.gif", "rb")
-    contents = rolTutor.read()
-    data_url_tutor = base64.b64encode(contents).decode("utf-8")
-    rolTutor.close()
-
-    st.markdown(
-        f'<img src="data:image/gif;base64,{data_url_tutor}" alt="rol tutor">',
-        unsafe_allow_html=True,
-)
 with st.container():
-    st.subheader("Próximos pasos")
-
     # Set up events (date format: "YYYY-MM-DD")
     #consumir desde el sheet
     events = events

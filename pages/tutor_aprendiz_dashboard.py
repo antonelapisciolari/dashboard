@@ -28,8 +28,8 @@ with open("style.css") as f:
 
 #filtros de arriba
 columnaCandidatos='CANDIDATOS'
-columnaFechaInicio='FECHA INICIO'
-columnaFechaFin='FECHA FIN'
+columnaFechaInicio='FECHA INICIO real'
+columnaFechaFin='FECHA FIN real'
 columnaHotel='HOTEL'
 columnaFPDualFCT='FPDUAL / FCT'
 columnaPosicion='POSICIÓN/DPT'
@@ -41,7 +41,7 @@ filtrosTutor = ["CORREO TUTOR", "MAIL TUTOR"]
 columnaEmail='Email'
 columnaCorreoCandidato='CORREO DE CONTACTO'
 topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin]
-
+columnStatus = 'STATUS'
 #rotacion
 columnaMesesActivos="Meses Activos"
 columnaDeptoDestino="Departamento de Destino"
@@ -67,6 +67,22 @@ def getCandidatosActivos():
      return active_candidates[topFilters[1]].nunique(), active_candidates
 active_count, active_candidates = getCandidatosActivos()
 
+
+def calcularPorcentajesStatus(df):
+    aprendicesStatus = getColumns(df, [columnStatus])
+    total_statuses = len(aprendicesStatus)
+    finalizado_count = df[columnStatus].str.lower().eq('finalizado').sum()
+    desconocido_count = df[columnStatus].str.lower().eq('desconocido').sum()
+    baja_count = df[columnStatus].str.lower().eq('baja').sum()
+    vacío_count = df[columnStatus].eq('').sum()
+
+    # Calcular los porcentajes
+    finalizado_pct = int((finalizado_count / total_statuses) * 100)
+    desconocido_pct = int((desconocido_count / total_statuses) * 100)
+    baja_count = int((baja_count / total_statuses) * 100)
+    vacío_pct = int((vacío_count / total_statuses) * 100)
+    return finalizado_pct, baja_count
+
 #filter containers
 with st.container():
     col1, col2, col3, col4 = st.columns(4)
@@ -88,6 +104,7 @@ filtered_df = df[
 ]
 
 #pie chart container and aprendiz data
+finalizado, baja = calcularPorcentajesStatus(df)
 graficos = [columnaPosicion,columnaHotel,columnaEstudios]
 with st.container():
     st.write('**¿Cómo se distribuyen mis aprendices?**')
@@ -130,7 +147,7 @@ with st.container():
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
                     <span style="color: white; font-size: 16px;">% Bajas</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">25%</span>
+                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -139,7 +156,7 @@ with st.container():
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
                     <span style="color: white; font-size: 16px;">Tasa de Finalización</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">50%</span>
+                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
                 </div>
                 """,
                 unsafe_allow_html=True
