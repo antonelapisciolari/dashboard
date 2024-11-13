@@ -32,7 +32,8 @@ div.stButton > button:first-child {
 default_values = {
     'current_page': 0,
     'responses': {},
-    'form_completed': False  # Flag to track if the form is completed
+    'form_completed': False,  # Flag to track if the form is completed
+    'photo_uploaded': False 
 }
 for key, value in default_values.items():
     st.session_state.setdefault(key, value)
