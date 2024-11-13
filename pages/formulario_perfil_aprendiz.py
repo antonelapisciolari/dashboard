@@ -75,7 +75,10 @@ def save_to_google_sheet(data):
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
     conn.update(data=updated_data)
     logging.info("Submitting successfully")
-
+    folder_id = folderIdAprendriz
+    file_id = upload_to_drive(uploaded_photo.name, folder_id, st.session_state.responses.get('q2', ''))
+    st.success(f"Archivo subido exitosamente: {file_id}")
+    st.session_state.photo_uploaded = True
 def all_questions_answered():
     current_page_questions = pages[st.session_state.current_page]
     for idx in current_page_questions:
@@ -129,11 +132,8 @@ else:
             else:
                 with open(uploaded_photo.name, "wb") as f:
                     f.write(uploaded_photo.read())
-                folder_id = folderIdAprendriz
-                file_id = upload_to_drive(uploaded_photo.name, folder_id, st.session_state.responses.get('q2', ''))
-                st.success(f"Archivo subido exitosamente: {file_id}")
                 photo_uploaded = True
-                st.session_state.photo_uploaded = True
+               
 
     # Column layout for navigation buttons
     col1, col2 = st.columns(2)
