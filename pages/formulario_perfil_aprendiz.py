@@ -122,7 +122,7 @@ else:
     if st.session_state.current_page == 1:
         MAX_FILE_SIZE = 10 * 1024 * 1024
         uploaded_photo = st.file_uploader("Sube una foto para tu perfil! (JPG or PNG)", type=["jpg", "png"], accept_multiple_files=False)
-        if uploaded_photo is not None:
+        if uploaded_photo is not None and not st.session_state.photo_uploaded:
             if uploaded_photo.size > MAX_FILE_SIZE:
                 st.warning("El archivo es demasiado grande. El tamaño máximo permitido es de 10MB.")
             else:
@@ -132,6 +132,7 @@ else:
                 file_id = upload_to_drive(uploaded_photo.name, folder_id, st.session_state.responses.get('q2', ''))
                 st.success(f"Archivo subido exitosamente: {file_id}")
                 photo_uploaded = True
+                st.session_state.photo_uploaded = True
 
     # Column layout for navigation buttons
     col1, col2 = st.columns(2)
