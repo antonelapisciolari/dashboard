@@ -7,9 +7,9 @@ tabOnboarding="Onboarding"
 tabSeguimiento="Seguimiento"
 tabCierre="Cierre"
 tutorDashboard="Recursos Dashboard"
-aprendizDashaboard="Aprendiz Dashboard"
-adminRecursosTutorDashboard="Recursos Dashboard"
-adminTutorDashboard="Tutor Dashboard"
+aprendizDashaboard="Dashboard Aprendiz"
+adminRecursosTutorDashboard="Recursos Utiles"
+adminTutorDashboard="Dashboard Programa"
 
 #login
 username="Email"

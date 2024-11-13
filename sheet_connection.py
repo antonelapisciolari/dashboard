@@ -2,6 +2,9 @@ import logging
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import gspread
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.oauth2 import service_account
 logging.basicConfig(level=logging.DEBUG)
 
 @st.cache_data  # Cache the result to avoid reloading each time
@@ -54,3 +57,22 @@ def get_sheets(connection, worksheetNames):
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
         return None
+
+def upload_to_drive(file_name,folder_id,emailCandidato):
+    credentials_info = st.secrets.connections.gcs
+    credentials = service_account.Credentials.from_service_account_info(credentials_info)
+    service = build('drive', 'v3', credentials=credentials)
+    media = MediaFileUpload(file_name, resumable=True)
+    file_metadata = {
+        'name': emailCandidato,
+        'parents': [folder_id]
+    }
+
+    # Upload the file
+    uploaded_file = service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields='id'
+    ).execute()
+
+    return uploaded_file['id']

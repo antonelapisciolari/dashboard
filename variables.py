@@ -66,3 +66,6 @@ cierreLinks = ["Meeting de Cierre", "https://docs.google.com/document/d/1hn37K1A
 aprendiz_looker_url = "https://lookerstudio.google.com/embed/reporting/a240d7c8-63aa-405e-b320-4aff88c57547/page/XQXmD"
 presupuesto_looker_url="https://lookerstudio.google.com/embed/reporting/a98142e9-3679-4dc5-b4c7-a201853d976f/page/p_fq1n4ahhjd"
 aprendiz_2025_looker_url="https://lookerstudio.google.com/embed/reporting/8da6524c-03a4-4f30-9998-d2087e9c115e/page/XQXmD"
+
+#forms
+folderIdAprendriz="1ipDPOh8RhBMQF6SpA9nKglcvavZKHh-E"

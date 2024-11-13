@@ -31,6 +31,7 @@ def getInfo():
 
 def getEvents(df):
     selected_columns_df = getColumns(df, columns_to_extract)
+    selected_columns_df = selected_columns_df.drop_duplicates(subset=[columns_to_extract[0]])
     return selected_columns_df
 
 def create_events(df):
@@ -135,11 +136,12 @@ with nextStep:
         aprendiz24 = get_aprendiz_24_looker_url()
         st.components.v1.iframe(aprendiz24, width=800, height=600)
     with tabs[1]:
-        presupuestoLink = get_presupuesto_looker_url()
-        st.components.v1.iframe(presupuestoLink, width=800, height=600)
-    with tabs[2]:
         aprendiz25 = get_aprendiz_25_looker_url()
         st.components.v1.iframe(aprendiz25, width=800, height=600)
+    with tabs[2]:
+        presupuestoLink = get_presupuesto_looker_url()
+        st.components.v1.iframe(presupuestoLink, width=800, height=600)
+
 
 with st.container():
     # Set up events (date format: "YYYY-MM-DD")

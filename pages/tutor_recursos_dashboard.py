@@ -24,12 +24,14 @@ else:
 
 #get events
 columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
+columnaCorreoTutor= "CORREO TUTOR"
 def getInfo():
     # Use the actual Google Sheets ID here
     sheet_id = registroAprendices
     df = get_google_sheet(connectionGeneral,sheet_id)
-    filters = {"CORREO TUTOR": [st.session_state.username]}
+    filters = {columnaCorreoTutor: [st.session_state.username]}
     filtered_df = filter_dataframe(df, filters)
+    filtered_df =filtered_df.drop_duplicates(subset=[columns_to_extract[0]])
     return filtered_df
     
 def getEventsByTutor(df):
@@ -37,6 +39,7 @@ def getEventsByTutor(df):
     return selected_columns_df
 
 def create_events(df):
+    #df =df.drop_duplicates(subset=[columns_to_extract[0]])
     events = []
     # Iterate over DataFrame rows
     for index, row in df.iterrows():
@@ -64,6 +67,7 @@ def create_events(df):
     return events
 
 candidatosByTutor = getInfo()
+
 eventsCandidatos = getEventsByTutor(candidatosByTutor)
 events = create_events(eventsCandidatos)
 

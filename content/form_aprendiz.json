@@ -5,13 +5,14 @@
       "description":"¡Hola! Ya quedan pocos días para encontrarnos y que conozcas a todo el equipo, pero antes queremos conocerte un poquito más, así preparamos todo para el inicio.Aquí van algunas preguntas para empezar :) ",
       "cierre":"¡Gracias por compartir un pedacito de ti con nosotros! Estamos seguros de que esta aventura será única, y nos encanta que formes parte de ella. ¡Nos vemos pronto para empezar juntos este gran viaje de aprendizaje en equipo!",
       "questions": [
-        {"id": "q1", "question": "Nombre:"},
-        {"id": "q2", "question": "Email:"},
+        {"id": "q1", "question": "🙋 Nombre:"},
+        {"id": "q2", "question": "✉️ Email:"},
         {"id": "q3", "question": "Cuéntanos algo curioso sobre ti (algo que te defina o que te guste mucho):"},
         {"id": "q4", "question": "¿Cuáles son tus hobbies o actividades favoritas?"},
-        {"id": "q5", "question": "¿Qué esperas de esta experiencia en Iberostar?"},
-        {"id": "q6", "question": "¿Qué áreas te llaman más la atención de un Hotel?"},
-        {"id": "q7", "question": "¿Hay algo en particular que te gustaría experimentar o tener la oportunidad de hacer durante tus prácticas en nuestro hotel?"}
+        {"id": "q5", "question": "¿Cuál de todos los destinos de Iberostar te gusta más?"},
+        {"id": "q6", "question": "🚀 ¿Qué esperas de esta experiencia en Iberostar?"},
+        {"id": "q7", "question": "🏨 ¿Qué áreas te llaman más la atención de un Hotel?"},
+        {"id": "q8", "question": "¿Hay algo en particular que te gustaría experimentar o tener la oportunidad de hacer durante tus prácticas en nuestro hotel?"}
       ]
     }
 }

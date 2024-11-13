@@ -6,6 +6,8 @@ matplotlib
 plotly
 streamlit-cookies-manager
 google-auth
+google-auth-httplib2 
+google-api-python-client
 streamlit-authenticator
 gcsfs
 st-files-connection

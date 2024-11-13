@@ -42,16 +42,14 @@ columnaEmail='Email'
 columnaCorreoCandidato='CORREO DE CONTACTO'
 topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin]
 columnStatus = 'STATUS'
-#rotacion
-columnaMesesActivos="Meses Activos"
-columnaDeptoDestino="Departamento de Destino"
-columnaHotelDestino="Hotel destino"
+
 #trae todos los datos filtrados por Tutor 
 def getInfo():
     sheet_id = registroAprendices
     filters = {filtrosTutor[0]: [st.session_state.username]}
     df = get_google_sheet(connectionGeneral,sheet_id)
     dfiltered = filter_dataframe(df, filters)
+    dfiltered =dfiltered.drop_duplicates(subset=[columnaCandidatos])
     return dfiltered
 
 df = getInfo()
@@ -59,29 +57,20 @@ df = getInfo()
 #parseando las fechas
 df[topFilters[0]] = pd.to_datetime(df[topFilters[0]], format='%d/%m/%Y')
 df[topFilters[4]] = pd.to_datetime(df[topFilters[4]], format='%d/%m/%Y')
-
-#filtrar candidatos activos
-def getCandidatosActivos():
-     today = pd.to_datetime(datetime.today().date())
-     active_candidates = df[(df[topFilters[0]] <= today) & (df[topFilters[4]] >= today)]
-     return active_candidates[topFilters[1]].nunique(), active_candidates
-active_count, active_candidates = getCandidatosActivos()
+active_candidates = df[df[columnStatus].str.upper() == 'ACTIVO']
 
 
 def calcularPorcentajesStatus(df):
     aprendicesStatus = getColumns(df, [columnStatus])
     total_statuses = len(aprendicesStatus)
     finalizado_count = df[columnStatus].str.lower().eq('finalizado').sum()
-    desconocido_count = df[columnStatus].str.lower().eq('desconocido').sum()
     baja_count = df[columnStatus].str.lower().eq('baja').sum()
-    vacío_count = df[columnStatus].eq('').sum()
+    activos_count = df[columnStatus].str.lower().eq('activo').sum()
 
     # Calcular los porcentajes
     finalizado_pct = int((finalizado_count / total_statuses) * 100)
-    desconocido_pct = int((desconocido_count / total_statuses) * 100)
     baja_count = int((baja_count / total_statuses) * 100)
-    vacío_pct = int((vacío_count / total_statuses) * 100)
-    return finalizado_pct, baja_count
+    return finalizado_pct, baja_count,activos_count
 
 #filter containers
 with st.container():
@@ -91,7 +80,7 @@ with st.container():
     with st.container():
         hotel = col2.selectbox(f"**{topFilters[2]}**", options=["Todos"] + df[topFilters[2]].unique().tolist())
     with st.container():
-        fecha_inicio = col3.date_input(f"**{topFilters[0]}**", value=pd.to_datetime('01/01/2024'))
+        fecha_inicio = col3.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
     with st.container():
         programa = col4.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + df[topFilters[3]].unique().tolist())
 
@@ -104,7 +93,7 @@ filtered_df = df[
 ]
 
 #pie chart container and aprendiz data
-finalizado, baja = calcularPorcentajesStatus(df)
+finalizado, baja,active_count = calcularPorcentajesStatus(df)
 graficos = [columnaPosicion,columnaHotel,columnaEstudios]
 with st.container():
     st.write('**¿Cómo se distribuyen mis aprendices?**')
@@ -146,8 +135,8 @@ with st.container():
             st.markdown(
                 f"""
                 <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">% Bajas</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}</span>
+                    <span style="color: white; font-size: 16px;">Bajas</span><br>
+                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -278,6 +267,12 @@ with st.container():
                             unsafe_allow_html=True
                     )
 
+#rotacion
+columnaMesesActivos="Meses Activos"
+columnaDeptoDestino="Departamento de Destino"
+columnaDeptoOrigen="Departamento de Origen"
+columnaHotelDestino="Hotel destino"
+columnaNombre="Nombre"
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
     filters = {filtrosTutor[1]: [st.session_state.username]}
@@ -294,16 +289,17 @@ with st.container():
             rotacion[columnaMesesActivos] = pd.to_datetime(rotacion[columnaMesesActivos], format='%d/%m/%Y')
             # Filtrar datos para el próximo mes en adelante y agrupar por hotel, mes y departamento
             hoy = datetime.today()
+            mes_actual = hoy.replace(day=1)
             prox_mes = hoy.replace(day=1) + timedelta(days=31)
             prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
-            df = rotacion[rotacion[columnaMesesActivos] >= prox_mes]
-
+            df = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
             # Crear una columna para el mes (año-mes) y agrupar
             df["Mes"] = df[columnaMesesActivos].dt.to_period("M").astype(str)
             df[columnaDeptoDestino] = df[columnaDeptoDestino].str.strip().str.title()
-
+            df = df.drop_duplicates(subset=[columnaNombre, columnaDeptoOrigen, columnaDeptoDestino, columnaMesesActivos])
             # Agrupar por hotel, mes y departamento destino
             df_grouped = df.groupby([columnaHotelDestino, "Mes", columnaDeptoDestino]).size().reset_index(name="Cantidad")
+
             # Obtener los próximos 12 meses como períodos
             meses_futuros = pd.date_range(prox_mes, periods=12, freq="MS").strftime("%Y-%m").tolist()
             color_map = generate_color_map(df, columnaDeptoDestino)
@@ -313,7 +309,6 @@ with st.container():
             for hotel in hoteles:
                 # Filtrar los datos del hotel específico
                 hotel_data = df_grouped[df_grouped[columnaHotelDestino] == hotel]
-                
                 # Crear gráfico de barras
                 fig = px.bar(
                     hotel_data,

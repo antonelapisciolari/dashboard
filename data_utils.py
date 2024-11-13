@@ -1,4 +1,5 @@
 from variables import celeste, amarillo, aquamarine, azul, orange, teal, gris
+import re 
 def filter_dataframe(df, filters):
     for column, value in filters.items():
         df = df[df[column].isin(value)]
@@ -36,3 +37,9 @@ def generate_color_map(df, column_name):
     color_map = {dept: next(color_cycle) for dept in unique_departments}
     
     return color_map
+
+
+def is_valid_email(email):
+    # Simple regex for validating an email
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    return re.match(email_regex, email) is not None
