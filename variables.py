@@ -8,6 +8,8 @@ feedbackSheets="1_d0aGSzQ4xB0FIkVikWBii3n3tF7l3it4GmNrDZw61s"
 agendaSheets="1OJ7tinHw7K-fx_kiK3r7pAHPXVf-PO8b0o8FDhXpGwg"
 connectionGeneral="gsheets"
 connectionFeedbacks="gsheets_feedback"
+connectionFeedbackPerfilTutor="gsheets_feedback_perfil_tutor"
+worksheetPerfilTutor="feedback_perfil_tutor"
 connectionUsuarios="usuarios"
 worksheetUsuarios="Usuarios"
 formularioPulse1Semana="formularioPulse1Semana"
@@ -69,3 +71,4 @@ aprendiz_2025_looker_url="https://lookerstudio.google.com/embed/reporting/8da652
 
 #forms
 folderIdAprendriz="1ipDPOh8RhBMQF6SpA9nKglcvavZKHh-E"
+folderIdTutor="1qQZGjDTukHla-_pbhLeppLHxogNKSmML"
