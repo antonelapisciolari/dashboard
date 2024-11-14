@@ -268,8 +268,14 @@ with st.container():
         st.write('**¿En dónde se encuentran hoy los aprendices?**')
     with filtroHotel:
         hotelOptions = sorted(df[topFilters[2]].unique().tolist())
-        tutor = filtroHotel.selectbox("HOTEL", options=["Todos"] + hotelOptions)
-    graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.4])
+        hotel = filtroHotel.selectbox("HOTEL", options=["Todos"] + hotelOptions)
+        columns_to_extract = [columnaCandidatos,columnaFechaInicio,columnaFechaFin,columnaPosicion, columnaHotel]
+        actualCandidatos = getColumns(active_candidates, columns_to_extract)
+        actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
+        actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
+        df_hotel = actualCandidatos[((actualCandidatos[topFilters[2]] == hotel) | (hotel == "Todos"))]
+    
+    graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.6])
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
             rotacion= getRotationInfo()
@@ -325,14 +331,11 @@ with st.container():
         else:
             st.write(noDatosDisponibles)
 
-    columns_to_extract = [columnaCandidatos,columnaFechaInicio,columnaFechaFin,columnaPosicion]
-    actualCandidatos = getColumns(active_candidates, columns_to_extract)
-    actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
-    actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
+
     with tablaAprendicesHoy:
         st.write('Aprendices:')
         if actualCandidatos is not None and not actualCandidatos.empty:
-            st.dataframe(actualCandidatos,hide_index=True)
+            st.dataframe(df_hotel,hide_index=True)
         else:
             st.write(noDatosDisponibles)
         
