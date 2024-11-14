@@ -2,10 +2,10 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from variables import connectionFeedbackPerfilTutor, folderIdTutor,worksheetPerfilTutor, smileFacePath, rocketPath, camaraPath
+from variables import folderIdTutor,worksheetPerfilTutor, smileFacePath, rocketPath, camaraPath,connectionFeedbacks
 from data_utils import is_valid_email
 import logging
-from sheet_connection import upload_to_drive
+from sheet_connection import upload_to_drive,get_all_worksheets
 import os
 
 def run():
@@ -58,8 +58,8 @@ def next_question():
 
 def create_gsheets_connection():
     try:
-        conn = st.connection(connectionFeedbackPerfilTutor, type=GSheetsConnection)
-        return conn
+        connFeedback = get_all_worksheets(connectionFeedbacks)
+        return connFeedback
     except Exception as e:
         st.error(f"Unable to connect to storage: {e}")
         logging.error(e, stack_info=True, exc_info=True)
@@ -70,11 +70,12 @@ def save_to_google_sheet(data):
     responses_only = list(data.values())
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPerfilTutor)
+    print(existing_data)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
-    print(updated_data)
+    print(new_row)
     conn.update(worksheet=worksheetPerfilTutor, data=updated_data)
     logging.info("Submitting successfully")
     folder_id = folderIdTutor
@@ -180,6 +181,7 @@ else:
             if st.button("Completar", disabled=not (all_questions_answered() and photo_uploaded)):
                 if all_questions_answered() and photo_uploaded:
                     with st.spinner("Guardando las respuestas, por favor espera..."):
+                        print(st.session_state.responses)
                         save_to_google_sheet(st.session_state.responses)
                         st.session_state.form_completed = True  # Set the form as completed
                         st.rerun()  # Rerun the app to show the new page

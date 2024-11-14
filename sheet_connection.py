@@ -58,6 +58,21 @@ def get_sheets(connection, worksheetNames):
         logging.error(f"An unexpected error occurred: {e}")
         return None
 
+def get_all_worksheets(connection):
+    try:
+        conn = st.connection(connection, type=GSheetsConnection)
+        return conn
+
+    except FileNotFoundError as e:
+        logging.error(f"Service account file not found: {e}")
+        return None
+    except gspread.exceptions.APIError as e:
+        logging.error(f"Google Sheets API error: {e}")
+        return None
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+        return None
+
 def upload_to_drive(file_name,folder_id,emailCandidato):
     credentials_info = st.secrets.connections.gcs
     credentials = service_account.Credentials.from_service_account_info(credentials_info)
