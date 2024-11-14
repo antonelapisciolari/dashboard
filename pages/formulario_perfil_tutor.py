@@ -70,12 +70,10 @@ def save_to_google_sheet(data):
     responses_only = list(data.values())
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPerfilTutor)
-    print(existing_data)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
-    print(new_row)
     conn.update(worksheet=worksheetPerfilTutor, data=updated_data)
     logging.info("Submitting successfully")
     folder_id = folderIdTutor
@@ -181,7 +179,6 @@ else:
             if st.button("Completar", disabled=not (all_questions_answered() and photo_uploaded)):
                 if all_questions_answered() and photo_uploaded:
                     with st.spinner("Guardando las respuestas, por favor espera..."):
-                        print(st.session_state.responses)
                         save_to_google_sheet(st.session_state.responses)
                         st.session_state.form_completed = True  # Set the form as completed
                         st.rerun()  # Rerun the app to show the new page

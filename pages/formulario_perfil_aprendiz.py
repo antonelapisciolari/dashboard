@@ -70,7 +70,6 @@ def save_to_google_sheet(data):
     responses_only = list(data.values())
     conn = create_gsheets_connection()
     existing_data = conn.read()
-    print(responses_only)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
