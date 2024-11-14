@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from variables import connectionFeedbackPerfilTutor, folderIdTutor,worksheetPerfilTutor
+from variables import connectionFeedbackPerfilTutor, folderIdTutor,worksheetPerfilTutor, smileFacePath, rocketPath, camaraPath
 from data_utils import is_valid_email
 import logging
 from sheet_connection import upload_to_drive
@@ -15,7 +15,7 @@ def run():
         layout="centered",
     )
 
-    st.image("./images/creciendoIberostar.png", width=200)
+    st.image("./images/logoCreciendoJuntos.png", width=250)
 
 if __name__ == "__main__":
     run()
@@ -44,7 +44,7 @@ with open('content/formulario_perfil_tutor.json', 'r', encoding='utf-8') as f:
 
 # Define pages and their questions
 pageOneQuestions = range(0, 5)  # Questions for page 1
-pageTwoQuestions = range(5, 10)  # Questions for page 2
+pageTwoQuestions = range(5, 9)  # Questions for page 2
 pages = [pageOneQuestions, pageTwoQuestions]
 
 # Total number of questions
@@ -70,13 +70,12 @@ def save_to_google_sheet(data):
     responses_only = list(data.values())
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPerfilTutor)
-    print(existing_data.columns)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
     print(updated_data)
-    conn.update(data=updated_data)
+    conn.update(worksheet=worksheetPerfilTutor, data=updated_data)
     logging.info("Submitting successfully")
     folder_id = folderIdTutor
     file_id = upload_to_drive(uploaded_photo.name, folder_id, st.session_state.responses.get('q2', ''))
@@ -110,10 +109,29 @@ else:
     current_page_questions = pages[st.session_state.current_page]
     email_valid = True
     photo_uploaded = False
+    if st.session_state.current_page == 0:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;padding-bottom:10px">
+            <img src="{smileFacePath}" style="width:60px; ">
+            <h4>Algunas cosas sobre ti</h4>
+        </div>
+        """, unsafe_allow_html=True)
 
+    if st.session_state.current_page == 1:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;padding-bottom:10px">
+            <img src="{rocketPath}" style="width:60px;">
+            <h4>Algunas cosas sobre el programa e Iberostar</h4>
+        </div>
+        """, unsafe_allow_html=True)
     for idx in current_page_questions:
         question_item = quiz_data["text_form"]["questions"][idx]
-        st.subheader(question_item['question'])
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;">
+            <h6 style="margin: 0;">{question_item['question']}</h4>
+        </div>
+        """, unsafe_allow_html=True)
+
         response = st.text_input(f"Respuesta", key=f"response_{idx}")
         
         if question_item['id'] == 'q2':
@@ -127,6 +145,12 @@ else:
             submit_answer(question_item["id"], response)
 
     if st.session_state.current_page == 1:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;">
+            <img src="{camaraPath}" style="width:60px;">
+            <h4>Una Foto Tuya</h4>
+        </div>
+        """, unsafe_allow_html=True)
         MAX_FILE_SIZE = 10 * 1024 * 1024
         uploaded_photo = st.file_uploader("Sube una foto para tu perfil! (JPG or PNG)", type=["jpg", "png"], accept_multiple_files=False)
         if uploaded_photo is not None and not st.session_state.photo_uploaded:

@@ -72,3 +72,6 @@ aprendiz_2025_looker_url="https://lookerstudio.google.com/embed/reporting/8da652
 #forms
 folderIdAprendriz="1ipDPOh8RhBMQF6SpA9nKglcvavZKHh-E"
 folderIdTutor="1qQZGjDTukHla-_pbhLeppLHxogNKSmML"
+smileFacePath="https://github.com/user-attachments/assets/dd9fe972-19e1-46c0-bff6-bb2df20716ef"
+rocketPath="https://github.com/user-attachments/assets/75b1a65f-6416-4366-b54e-ba3b56c49333"
+camaraPath="https://github.com/user-attachments/assets/50d2c611-8a03-42c5-81da-1f6cf1820942"

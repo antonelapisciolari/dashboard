@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from variables import connectionFeedbacks, folderIdAprendriz
+from variables import connectionFeedbacks, folderIdAprendriz, smileFacePath, rocketPath, camaraPath
 from data_utils import is_valid_email
 import logging
 from sheet_connection import upload_to_drive
@@ -15,7 +15,7 @@ def run():
         layout="centered",
     )
 
-    st.image("./images/creciendoIberostar.png", width=200)
+    st.image("./images/logoCreciendoJuntos.png", width=300)
 
 if __name__ == "__main__":
     run()
@@ -107,10 +107,29 @@ else:
     current_page_questions = pages[st.session_state.current_page]
     email_valid = True
     photo_uploaded = False
+    if st.session_state.current_page == 0:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;padding-bottom:10px">
+            <img src="{smileFacePath}" style="width:60px; ">
+            <h4>Algunas cosas sobre ti</h4>
+        </div>
+        """, unsafe_allow_html=True)
 
+    if st.session_state.current_page == 1:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;padding-bottom:10px">
+            <img src="{rocketPath}" style="width:60px;">
+            <h4>Algunas cosas sobre el programa e Iberostar</h4>
+        </div>
+        """, unsafe_allow_html=True)
     for idx in current_page_questions:
         question_item = quiz_data["text_form"]["questions"][idx]
-        st.subheader(question_item['question'])
+        st.markdown(f"""
+        <div style="display: flex; align-items: center;">
+            <h6 style="margin: 0;">{question_item['question']}</h4>
+        </div>
+        """, unsafe_allow_html=True)
+        
         response = st.text_input(f"Respuesta", key=f"response_{idx}")
         
         if question_item['id'] == 'q2':
