@@ -16,6 +16,16 @@ def get_current_page_name():
 
 def make_sidebar():
     with st.sidebar:
+        st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            width: 200px;  /* Adjust the width to your preference */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
         st.title("Menu")
         st.write("")
         st.write("")
@@ -41,6 +51,16 @@ def make_sidebar():
 
 def make_sidebar_admin():
     with st.sidebar:
+        st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            width: 200px;  /* Adjust the width to your preference */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
         st.title("Menu")
         st.write("")
         st.write("")
@@ -61,6 +81,16 @@ def make_sidebar_admin():
             st.switch_page("streamlit_app.py")
 def make_sidebar_tutor():
     with st.sidebar:
+        st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            width: 200px;  /* Adjust the width to your preference */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
         st.title("Menu")
         st.write("")
         st.write("")

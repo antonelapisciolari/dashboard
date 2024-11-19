@@ -6,6 +6,11 @@
       "role": "admin"
     },
     {
+      "username": "sandra.serrano@grupoiberostar.com",
+      "password": "sandra.s",
+      "role": "admin"
+    },
+    {
       "username": "antopiscio@gmail.com",
       "password": "admin",
       "role": "admin"

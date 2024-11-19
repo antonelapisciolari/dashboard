@@ -9,7 +9,7 @@ from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
 from variables import connectionGeneral
 import base64
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks,agendaSheets
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks,tabFeedback,formsLinks
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -104,7 +104,7 @@ with resources:
             """,
     ):
         st.subheader(documentacionTitle)
-        tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre])
+        tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre,tabFeedback])
 
     # Pre-Onboarding Tab
     with tabs[0]:
@@ -124,6 +124,21 @@ with resources:
     with tabs[3]:
         st.write("Links relevantes para Cierre:")
         st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
+            # Cierre Tab
+    with tabs[4]:
+        tutorForms, aprendizForms = st.columns(2)
+        with aprendizForms:
+            st.write("**Aprendiz:**")
+            st.write(f"[{formsLinks[0]}]({formsLinks[1]})")
+            st.write(f"[{formsLinks[2]}]({formsLinks[3]})")
+            st.write(f"[{formsLinks[4]}]({formsLinks[5]})")
+            st.write(f"[{formsLinks[6]}]({formsLinks[7]})")
+            st.write(f"[{formsLinks[8]}]({formsLinks[9]})")
+            st.write(f"[{formsLinks[10]}]({formsLinks[11]})")
+        with tutorForms:
+            st.write("**Tutor:**")
+            st.write(f"[{formsLinks[12]}]({formsLinks[13]})")
+            st.write(f"[{formsLinks[14]}]({formsLinks[15]})")
 with nextStep:
     st.subheader("Información Importante")
     rolAprendiz = open("./images/rol-aprendiz.gif", "rb")

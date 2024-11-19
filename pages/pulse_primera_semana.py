@@ -9,7 +9,7 @@ import logging
 
 def run():
     st.set_page_config(
-        page_title="Pulse 1º Semana",
+        page_title="Formulario 1º Semana",
         page_icon="./images/formIcon.png",
         layout="centered",
     )

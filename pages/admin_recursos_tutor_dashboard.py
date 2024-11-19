@@ -8,7 +8,7 @@ import pandas as pd
 from sheet_connection import get_google_sheet
 from data_utils import filter_dataframe, getColumns
 from variables import connectionGeneral
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url
+from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -68,18 +68,11 @@ candidatosByTutor = getInfo()
 eventsCandidatos = getEvents(candidatosByTutor)
 events = create_events(eventsCandidatos)
 
-def get_presupuesto_looker_url():
-    return presupuesto_looker_url
-@st.cache_data
-def get_aprendiz_24_looker_url():
-    return aprendiz_looker_url
-@st.cache_data
-def get_aprendiz_25_looker_url():
-    return aprendiz_2025_looker_url
+
 # Create the main container for the layout
 container = st.container()
 # Create two columns inside the container, one taking 60% width and the other 40%
-nextStep ,resources= container.columns([2.5, 1])  # 60% for col1, 40% for col2
+nextStep ,resources= container.columns([2.5, 1.5])  # 60% for col1, 40% for col2
 st.markdown(
     """
     <style>
@@ -108,7 +101,7 @@ with resources:
             }
             """,
     ):
-        tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre])
+        tabs = st.tabs([tabPreOnboarding, tabOnboarding, tabSeguimiento, tabCierre,tabFeedback])
 
     # Pre-Onboarding Tab
     with tabs[0]:
@@ -128,19 +121,54 @@ with resources:
     with tabs[3]:
         st.write("Links relevantes para Cierre:")
         st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
-
+    with tabs[4]:
+        tutorForms, aprendizForms = st.columns(2)
+        with aprendizForms:
+            st.write("**Aprendiz:**")
+            st.write(f"[{formsLinks[0]}]({formsLinks[1]})")
+            st.write(f"[{formsLinks[2]}]({formsLinks[3]})")
+            st.write(f"[{formsLinks[4]}]({formsLinks[5]})")
+            st.write(f"[{formsLinks[6]}]({formsLinks[7]})")
+            st.write(f"[{formsLinks[8]}]({formsLinks[9]})")
+            st.write(f"[{formsLinks[10]}]({formsLinks[11]})")
+        with tutorForms:
+            st.write("**Tutor:**")
+            st.write(f"[{formsLinks[12]}]({formsLinks[13]})")
+            st.write(f"[{formsLinks[14]}]({formsLinks[15]})")
+def get_presupuesto_looker_url():
+     st.components.v1.iframe(presupuesto_looker_url, width=800, height=600)
+@st.cache_data
+def get_aprendiz_24_looker_url():
+    st.components.v1.iframe(aprendiz_looker_url, width=800, height=600)
+@st.cache_data
+def get_aprendiz_25_looker_url():
+    st.components.v1.iframe(aprendiz_2025_looker_url, width=800, height=600)
 with nextStep:
     st.subheader("Reportes")
-    tabs = st.tabs(['Aprendices 2024','Aprendices 2025', 'Presupuesto' ])
-    with tabs[0]:
-        aprendiz24 = get_aprendiz_24_looker_url()
-        st.components.v1.iframe(aprendiz24, width=800, height=600)
-    with tabs[1]:
-        aprendiz25 = get_aprendiz_25_looker_url()
-        st.components.v1.iframe(aprendiz25, width=800, height=600)
-    with tabs[2]:
-        presupuestoLink = get_presupuesto_looker_url()
-        st.components.v1.iframe(presupuestoLink, width=800, height=600)
+    selector, espacio = st.columns([1.5,4])
+    with selector:
+        option = st.selectbox(
+        "Selecciona un reporte",
+        ("Aprendices 2024", "Aprendices 2025", "Presupuesto"),
+        index=0
+    )
+    if option == "Aprendices 2024":
+        get_aprendiz_24_looker_url()
+    elif option == "Aprendices 2025":
+        get_aprendiz_25_looker_url()
+    elif option == "Presupuesto":
+        get_presupuesto_looker_url()
+
+    # tabs = st.tabs(['Aprendices 2024','Aprendices 2025', 'Presupuesto' ])
+    # with tabs[0]:
+    #     aprendiz24 = get_aprendiz_24_looker_url()
+    #     st.components.v1.iframe(aprendiz24, width=800, height=600)
+    # with tabs[1]:
+    #     aprendiz25 = get_aprendiz_25_looker_url()
+    #     st.components.v1.iframe(aprendiz25, width=800, height=600)
+    # with tabs[2]:
+    #     presupuestoLink = get_presupuesto_looker_url()
+    #     st.components.v1.iframe(presupuestoLink, width=800, height=600)
 
 
 with st.container():

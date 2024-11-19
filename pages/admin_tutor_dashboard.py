@@ -6,7 +6,7 @@ from data_utils import filter_dataframe, getColumns,generate_color_map
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, gris, formularioPulse1Semana, formAprendiz,noDatosDisponibles
+from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, gris, formAprendiz,noDatosDisponibles
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 
@@ -210,7 +210,7 @@ with st.container():
 
 #Container Feedback
 def getFeebackDetails():
-    feedbacks = get_sheets(connectionFeedbacks, [formularioPulse1Semana,formAprendiz])
+    feedbacks = get_sheets(connectionFeedbacks, [worksheetPulse1Semana,formAprendiz])
     return feedbacks
 
 #feedback details 

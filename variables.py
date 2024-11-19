@@ -53,6 +53,7 @@ tabPreOnboarding=vars.tabPreOnboarding
 tabOnboarding=vars.tabOnboarding
 tabSeguimiento=vars.tabSeguimiento
 tabCierre=vars.tabCierre
+tabFeedback="Formularios"
 
 #menu pages
 tutorDashboard=vars.tutorDashboard
@@ -63,6 +64,15 @@ preOnboardingLinks = ["Guía Express para el Tutor/a!", "https://docs.google.com
 onboardingLinks = ["Meeting Tips – ¡Primer Día del Aprendiz!", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
 seguimientoLinks = ["Meeting Tips - Seguimiento", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
 cierreLinks = ["Meeting de Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]
+formsLinks = ["Formulario 1º semana", "https://fpdual-dashboard.streamlit.app/pulse_primera_semana",
+"Cambio Area","https://fpdual-dashboard.streamlit.app/formulario_cambio_area",
+"Formulario 1º mes Aprendiz", "https://fpdual-dashboard.streamlit.app/formulario_primer_mes",
+"Formulario 4º mes Aprendiz", "https://fpdual-dashboard.streamlit.app/formulario_cuarto_mes",
+"Formulario Aprendiz - Cierre 1er Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_primer_ciclo",
+"Formulario Aprendiz - Cierre 2do Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_segundo_ciclo",
+"Formulario Tutor - Cierre 1er Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_primer_ciclo",
+"Formulario Tutor - Cierre 2do Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_segundo_ciclo"
+              ]
 
 #admin dashboard
 aprendiz_looker_url = "https://lookerstudio.google.com/embed/reporting/a240d7c8-63aa-405e-b320-4aff88c57547/page/XQXmD"
