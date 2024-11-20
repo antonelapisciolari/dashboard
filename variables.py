@@ -39,8 +39,8 @@ loginMessage=vars.loginMessage
 loginDescription=vars.loginDescription
 noDatosDisponibles="No hay datos disponibles"
 
-page_icon="https://assets4.cdn.iberostar.com/assets/favicon-aed60cf99a80a69e437a1476d22eea0d083d788070b7f4ac4c6c53595cf0687c.ico"
-companyIcon="./images/logoCreciendoJuntos.png"
+page_icon="./images/icon.ico"
+companyIcon="./images/smallIcon.png"
 title= vars.title
 #tutor dashboard 
 preOnboardingImage="https://github.com/user-attachments/assets/7dd8d62d-b5ce-44ac-bda9-5eca1459a8b3"
