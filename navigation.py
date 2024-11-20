@@ -66,8 +66,8 @@ def make_sidebar_admin():
         st.write("")
 
         if st.session_state.get("logged_in", False):
-            st.page_link("pages/admin_recursos_tutor_dashboard.py", label=adminRecursosTutorDashboard)
             st.page_link("pages/admin_tutor_dashboard.py", label=adminTutorDashboard)
+            st.page_link("pages/admin_recursos_tutor_dashboard.py", label=adminRecursosTutorDashboard)
 
             st.write("")
             st.write("")
@@ -107,7 +107,7 @@ def make_sidebar_tutor():
         elif get_current_page_name() != "streamlit_app":
             # If anyone tries to access a secret page without being logged in,
             # redirect them to the login page
-            st.switch_page("streamlit_app.py")         
+            st.switch_page("streamlit_app.py")
 def logout():
     st.session_state.logged_in = False
     st.info(logoutMessage)

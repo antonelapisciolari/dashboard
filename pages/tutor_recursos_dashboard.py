@@ -51,6 +51,7 @@ def create_events(df):
         start_event = {
             "start": start_date,
             "title": f"Inicio {row[columns_to_extract[0]]}",
+            "description": f"Inicio {row[columns_to_extract[0]]}",
             "backgroundColor": amarillo
         }
         
@@ -58,6 +59,7 @@ def create_events(df):
         end_event = {
             "start": end_date,
             "title": f"Fin {row[columns_to_extract[0]]}",
+            "description": f"Fin {row[columns_to_extract[0]]}",
             "backgroundColor": aquamarine
         }
         
@@ -180,7 +182,7 @@ with st.container():
             font-size: 1rem;  /* Adjust the title size */
         }
         .fc {
-            width: 70%;  /* Set calendar width to 70% of the container for desktop */
+            width: 60%;  /* Set calendar width to 70% of the container for desktop */
             margin: 0 auto;
         }
         .fc-view {
@@ -199,7 +201,7 @@ with st.container():
     """
     # Display the subheader with the current month and year
     st.subheader(f"Calendario")
-
+    details_placeholder = st.empty()
     # Create a dictionary to hold events by date
     # Display the calendar
     selected_date = calendar(
@@ -207,5 +209,9 @@ with st.container():
         options=calendar_options,
         custom_css=custom_css
     )
+    
+    # if selected_date:
+    # # Find the event details
+    #     details_placeholder.markdown(f"### Event Details\n**Title:** {selected_date['eventClick']['event']['title']}\n**Start:** {selected_date['eventClick']['event']['start']}")
 
 

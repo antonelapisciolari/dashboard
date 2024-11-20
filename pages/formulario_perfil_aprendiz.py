@@ -68,6 +68,7 @@ def create_gsheets_connection():
 def save_to_google_sheet(data):
     logging.info("Submitting records")
     responses_only = list(data.values())
+    responses_only.append('TBD')
     conn = create_gsheets_connection()
     existing_data = conn.read()
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match

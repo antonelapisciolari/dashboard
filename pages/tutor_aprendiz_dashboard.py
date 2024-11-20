@@ -2,7 +2,7 @@ from navigation import make_sidebar_tutor
 import streamlit as st
 import plotly.express as px
 from page_utils import apply_page_config
-from data_utils import filter_dataframe, getColumns,generate_color_map
+from data_utils import filter_dataframe, getColumns,generate_color_map,calcularPorcentajesStatus
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,17 +60,6 @@ df[topFilters[4]] = pd.to_datetime(df[topFilters[4]], format='%d/%m/%Y')
 active_candidates = df[df[columnStatus].str.upper() == 'ACTIVO']
 
 
-def calcularPorcentajesStatus(df):
-    aprendicesStatus = getColumns(df, [columnStatus])
-    total_statuses = len(aprendicesStatus)
-    finalizado_count = df[columnStatus].str.lower().eq('finalizado').sum()
-    baja_count = df[columnStatus].str.lower().eq('baja').sum()
-    activos_count = df[columnStatus].str.lower().eq('activo').sum()
-
-    # Calcular los porcentajes
-    finalizado_pct = int((finalizado_count / total_statuses) * 100)
-    baja_count = int((baja_count / total_statuses) * 100)
-    return finalizado_pct, baja_count,activos_count
 
 #filter containers
 with st.container():
@@ -91,9 +80,8 @@ filtered_df = df[
     (df[topFilters[0]] >= pd.to_datetime(fecha_inicio)) &  
     ((df[topFilters[3]] == programa) | (programa == "Todos"))
 ]
-
+finalizado, baja,active_count, bajaCount, finalizadoCount = calcularPorcentajesStatus(filtered_df)
 #pie chart container and aprendiz data
-finalizado, baja,active_count = calcularPorcentajesStatus(df)
 graficos = [columnaPosicion,columnaHotel,columnaEstudios]
 with st.container():
     st.write('**¿Cómo se distribuyen mis aprendices?**')
@@ -134,18 +122,32 @@ with st.container():
             )
             st.markdown(
                 f"""
-                <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">Bajas</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
+                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+                    <!-- First div -->
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 16px;">Bajas</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
+                    </div>
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{bajaCount}</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
             st.markdown(
                 f"""
-                <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">Tasa de Finalización</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
+                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+                    <!-- First div -->
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 16px;">Finalizados</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
+                    </div>
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizadoCount}</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -273,6 +275,9 @@ columnaDeptoDestino="Departamento de Destino"
 columnaDeptoOrigen="Departamento de Origen"
 columnaHotelDestino="Hotel destino"
 columnaNombre="Nombre"
+columnaFechaInicioRotacion="Fecha de Inicio"
+columnaEmailAprendiz="MAIL APRENDIZ"
+
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
     filters = {filtrosTutor[1]: [st.session_state.username]}
@@ -285,7 +290,9 @@ with st.container():
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.4])
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
-            rotacion= getRotationInfo()
+            rotacionUnfiltered= getRotationInfo()
+            rotacion = rotacionUnfiltered[rotacionUnfiltered[columnaEmailAprendiz].isin(active_candidates[columnaCorreoCandidato])]
+            
             rotacion[columnaMesesActivos] = pd.to_datetime(rotacion[columnaMesesActivos], format='%d/%m/%Y')
             # Filtrar datos para el próximo mes en adelante y agrupar por hotel, mes y departamento
             hoy = datetime.today()
@@ -342,10 +349,19 @@ with st.container():
     actualCandidatos = getColumns(active_candidates, columns_to_extract)
     actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
     actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
+    #rotacion[columnaFechaInicioRotacion] = rotacion[columnaFechaInicioRotacion].dt.strftime('%d/%m/%Y')
+    result_df = rotacion.groupby(
+    ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
+        ).agg(
+            {
+                "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
+            }
+        ).reset_index()
+
     with tablaAprendicesHoy:
         st.write('Mis Aprendices:')
         if actualCandidatos is not None and not actualCandidatos.empty:
-            st.dataframe(actualCandidatos,hide_index=True)
+            st.dataframe(result_df, hide_index="true")
         else:
             st.write(noDatosDisponibles)
 

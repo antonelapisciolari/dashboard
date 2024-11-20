@@ -68,7 +68,6 @@ candidatosByTutor = getInfo()
 eventsCandidatos = getEvents(candidatosByTutor)
 events = create_events(eventsCandidatos)
 
-
 # Create the main container for the layout
 container = st.container()
 # Create two columns inside the container, one taking 60% width and the other 40%
@@ -121,6 +120,7 @@ with resources:
     with tabs[3]:
         st.write("Links relevantes para Cierre:")
         st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
+    # forms tab
     with tabs[4]:
         tutorForms, aprendizForms = st.columns(2)
         with aprendizForms:
@@ -159,21 +159,8 @@ with nextStep:
     elif option == "Presupuesto":
         get_presupuesto_looker_url()
 
-    # tabs = st.tabs(['Aprendices 2024','Aprendices 2025', 'Presupuesto' ])
-    # with tabs[0]:
-    #     aprendiz24 = get_aprendiz_24_looker_url()
-    #     st.components.v1.iframe(aprendiz24, width=800, height=600)
-    # with tabs[1]:
-    #     aprendiz25 = get_aprendiz_25_looker_url()
-    #     st.components.v1.iframe(aprendiz25, width=800, height=600)
-    # with tabs[2]:
-    #     presupuestoLink = get_presupuesto_looker_url()
-    #     st.components.v1.iframe(presupuestoLink, width=800, height=600)
-
 
 with st.container():
-    # Set up events (date format: "YYYY-MM-DD")
-    #consumir desde el sheet
     events = events
     today = datetime.today().strftime('%Y-%m-%d')
     calendar_options = {

@@ -71,6 +71,8 @@ def save_to_google_sheet(data):
         data.get(idx, "")  # Fetch responses by index to maintain the order
         for idx in range(total_questions)
     ]
+    responses_only.append("TBD")
+    responses_only.append("TBD")
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPulse1Semana)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match

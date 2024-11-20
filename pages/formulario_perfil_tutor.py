@@ -71,9 +71,11 @@ def save_to_google_sheet(data):
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPerfilTutor)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
-    
+
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
+
+
     conn.update(worksheet=worksheetPerfilTutor, data=updated_data)
     logging.info("Submitting successfully")
     folder_id = folderIdTutor

@@ -2,7 +2,7 @@ from navigation import make_sidebar_admin
 import streamlit as st
 import plotly.express as px
 from page_utils import apply_page_config
-from data_utils import filter_dataframe, getColumns,generate_color_map
+from data_utils import calcularPorcentajesStatus, getColumns,generate_color_map
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -61,27 +61,15 @@ df = getInfo()
 #parseando las fechas
 df[topFilters[0]] = pd.to_datetime(df[topFilters[0]], format='%d/%m/%Y')
 df[topFilters[4]] = pd.to_datetime(df[topFilters[4]], format='%d/%m/%Y')
-print(len(df))
 df= df.drop_duplicates(subset=[columnaCorreoCandidato])
-print(len(df))
 active_candidates = df[df[topFilters[6]].str.upper() == 'ACTIVO']
-def calcularPorcentajesStatus(df):
-    aprendicesStatus = getColumns(df, [columnStatus])
-    total_statuses = len(aprendicesStatus)
-    finalizado_count = df[columnStatus].str.lower().eq('finalizado').sum()
-    baja_count = df[columnStatus].str.lower().eq('baja').sum()
-    activo_count = df[columnStatus].str.lower().eq('activo').sum()
-
-    # Calcular los porcentajes
-    finalizado_pct = int((finalizado_count / total_statuses) * 100)
-    baja_pct = int((baja_count / total_statuses) * 100)
-    return finalizado_pct, baja_pct,activo_count
 #filter containers
 with st.container():
     col1, col2, col3, col4,col5, col6 = st.columns(6)
     with st.container():
-        tutor_options =[value for value in df[topFilters[1]].unique() if pd.notna(value) and str(value).strip() != ""]
-        tutor = col1.selectbox("**TUTOR**", options=["Todos"] + df[topFilters[5]].unique().tolist())
+        tutor_options =[value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip() != ""]
+        tutor_options = sorted(tutor_options)
+        tutor = col1.selectbox("**TUTOR**", options=["Todos"] + tutor_options)
     with st.container():
         candidato_options = sorted(df[topFilters[1]].unique().tolist())
         candidato = col2.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
@@ -106,7 +94,7 @@ filtered_df = df[
 ]
 #pie chart container and aprendiz data
 graficos = [columnaPosicion,columnaHotel,columnaEstudios,columnaZona]
-finalizado, baja,active_count = calcularPorcentajesStatus(df)
+finalizado, baja,active_count, bajaCount, finalizadoCount = calcularPorcentajesStatus(filtered_df)
 with st.container():
     st.write('**¿Cómo se distribuyen los aprendices?**')
     custom_colors = [aquamarine, amarillo, azul, orange] 
@@ -191,18 +179,32 @@ with st.container():
             )
             st.markdown(
                 f"""
-                <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">Bajas</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
+                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+                    <!-- First div -->
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 16px;">Bajas</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
+                    </div>
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{bajaCount}</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
             st.markdown(
                 f"""
-                <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">Tasa de Finalización</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
+                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
+                    <!-- First div -->
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 16px;">Finalizados</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
+                    </div>
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
+                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizadoCount}</span>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
