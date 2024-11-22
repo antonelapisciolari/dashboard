@@ -2,14 +2,14 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 from sheet_connection import get_all_worksheets
-from variables import connectionFeedbacks, worksheetPulse1Semana,autocompletarTutor,autocompletarNombre
+from variables import connectionFeedbacks, worksheetFormularioAprendizCierre1Ciclo,autocompletarTutor,autocompletarNombre
 from data_utils import is_valid_email
 import pandas as pd
 import logging
 
 def run():
     st.set_page_config(
-        page_title="Formulario 1º Semana",
+        page_title="Formulario del 1° Mes",
         page_icon="./images/formIcon.png",
         layout="centered",
     )
@@ -37,17 +37,20 @@ for key, value in default_values.items():
     st.session_state.setdefault(key, value)
 
 # Load quiz data
-with open('content/formularioPulse1Semana.json', 'r', encoding='utf-8') as f:
+with open('content/formulario_aprendiz_cierre_primer_ciclo.json', 'r', encoding='utf-8') as f:
     quiz_data = json.load(f)
 
+email_valid = True 
 # Define pages and their questions
-pageOneQuestions = range(0, 3)  # Questions for page 1
-pageTwoQuestions = range(3, 6)  # Questions for page 2
-pages = [pageOneQuestions, pageTwoQuestions]
+page1Questions = range(0, 6)  # Questions for page 1
+page2Questions = range(6,8)  # Questions for page 2
+page3Questions = range(8,10)  # Questions for page 2
+page4Questions = range(10, 12)  # Questions for page 2
+pages = [page1Questions, page2Questions,page3Questions,page4Questions]
 
 # Total number of questions
 total_questions = len(quiz_data["text_form"]["questions"])
-
+subtitles = quiz_data["text_form"]["subtitles"]
 def submit_answer(question_index, response):
     st.session_state.responses[question_index] = response  # Use the index to maintain order
 
@@ -73,20 +76,21 @@ def save_to_google_sheet(data):
     ]
     responses_only.append(autocompletarTutor)
     responses_only.append(autocompletarNombre)
-    responses_only.append("TBD")
     conn = create_gsheets_connection()
-    existing_data = conn.read(worksheet=worksheetPulse1Semana)
+    existing_data = conn.read(worksheet=worksheetFormularioAprendizCierre1Ciclo)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     print(responses_only)
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
-    conn.update(worksheet=worksheetPulse1Semana, data=updated_data)
+    conn.update(worksheet=worksheetFormularioAprendizCierre1Ciclo, data=updated_data)
     logging.info("Submitting successfully")
 
 def all_questions_answered():
+    """Check if all questions on the current page are answered."""
     current_page_questions = pages[st.session_state.current_page]
     for idx in current_page_questions:
-        if idx not in st.session_state.responses or not st.session_state.responses[idx]:
+        response = st.session_state.responses.get(idx, None)
+        if response is None or response == "":
             return False
     return True
 
@@ -108,22 +112,32 @@ else:
         previous_response = st.session_state.responses.get(idx, None)
         question_item = quiz_data["text_form"]["questions"][idx]
         st.subheader(question_item['question'])
+        if "slider" in question_item and question_item["slider"]:
+            start, end = map(int, question_item["slider"].split(","))
+            my_range = range(start,end)
+            response = st.select_slider(
+            "Seleccione un valor",
+            options=my_range,
+            key=f"response_{idx}",
+            value=previous_response if previous_response is not None else my_range[0],
+        )
         
-        if "options" in question_item and question_item["options"]:
+        elif "options" in question_item and question_item["options"]:
             response = st.selectbox(
             "Seleccione una opción:",
             question_item["options"],
             key=f"response_{idx}",
             index=question_item["options"].index(previous_response) if previous_response in question_item["options"] else 0,
         )
-        else:
-            response = st.text_input(
+        
+        elif not ("slider" in question_item or "options" in question_item):
+          response = st.text_input(
             "Respuesta",
             key=f"response_{idx}",
             value=previous_response if previous_response is not None else "",
         )
         
-        if question_item['id'] == 'q1':
+        if "email" in question_item and question_item["email"]:
             if response and not is_valid_email(response):
                 st.error("Por favor, ingresa un correo electrónico válido.")
                 email_valid = False

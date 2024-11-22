@@ -50,6 +50,7 @@ columnaDeptoDestino="Departamento de Destino"
 columnaDeptoOrigen="Departamento de Origen"
 columnaHotelDestino="Hotel destino"
 columnaNombre="Nombre"
+columnaFechaInicioRotacion="Fecha de Inicio"
 #trae todos los datos filtrados por Tutor 
 def getInfo():
     sheet_id = registroAprendices
@@ -268,14 +269,6 @@ with st.container():
     titulo, filtroHotel  = st.columns(2)
     with titulo:
         st.write('**¿En dónde se encuentran hoy los aprendices?**')
-    with filtroHotel:
-        hotelOptions = sorted(df[topFilters[2]].unique().tolist())
-        hotel = filtroHotel.selectbox("HOTEL", options=["Todos"] + hotelOptions)
-        columns_to_extract = [columnaCandidatos,columnaFechaInicio,columnaFechaFin,columnaPosicion, columnaHotel]
-        actualCandidatos = getColumns(active_candidates, columns_to_extract)
-        actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
-        actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
-        df_hotel = actualCandidatos[((actualCandidatos[topFilters[2]] == hotel) | (hotel == "Todos"))]
     
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.6])
     with graficoHotel:
@@ -333,11 +326,26 @@ with st.container():
         else:
             st.write(noDatosDisponibles)
 
-
+    hoy = datetime.today()
+    mes_actual = hoy.replace(day=1)
+    prox_mes = hoy.replace(day=1) + timedelta(days=31)
+    prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
+    rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
+    result_df = rotacion.groupby(
+    ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
+        ).agg(
+            {
+                "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
+            }
+        ).reset_index()
+    desired_position = 3  # Assuming 0-based indexing
+    column_to_move = result_df.pop("Meses Activos")  # Remove 'Meses Activos' temporarily
+    result_df.insert(desired_position, "Meses Activos", column_to_move) 
+    result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
     with tablaAprendicesHoy:
-        st.write('Aprendices:')
-        if actualCandidatos is not None and not actualCandidatos.empty:
-            st.dataframe(df_hotel,hide_index=True)
+        st.write('Mis Aprendices:')
+        if result_df is not None and not result_df.empty:
+            st.dataframe(result_df, hide_index="true")
         else:
             st.write(noDatosDisponibles)
         

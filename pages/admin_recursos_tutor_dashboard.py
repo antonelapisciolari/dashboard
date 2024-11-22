@@ -6,7 +6,7 @@ from streamlit_calendar import calendar
 from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
-from data_utils import filter_dataframe, getColumns
+from data_utils import getColumns
 from variables import connectionGeneral
 from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback
 apply_page_config(st)
@@ -19,7 +19,9 @@ if "logged_in" not in st.session_state or not st.session_state.logged_in:
 else:
     if st.session_state.role == 'admin':
         make_sidebar_admin()
-
+#leer el style.css 
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 #get events
 columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
@@ -104,11 +106,11 @@ with resources:
 
     # Pre-Onboarding Tab
     with tabs[0]:
-        st.write("Links relevantes para Pre-Onboarding:")
+        st.write("Links relevantes para preparación:")
         st.write(f"[{preOnboardingLinks[0]}]({preOnboardingLinks[1]})")
     # Onboarding Tab
     with tabs[1]:
-        st.write("Links relevantes para Onboarding:")
+        st.write("Links relevantes para primeros días:")
         st.write(f"[{onboardingLinks[0]}]({onboardingLinks[1]})")
 
     # Seguimiento Tab
@@ -171,7 +173,8 @@ with st.container():
         },
         "initialDate": today,
         "initialView": "dayGridMonth",
-        "locale":"ES"
+        "locale":"ES",
+        "selectable": True,
     }
     custom_css = """
         .fc-toolbar-title {
@@ -203,7 +206,13 @@ with st.container():
     selected_date = calendar(
         events,  # Pass the event dictionary
         options=calendar_options,
-        custom_css=custom_css
+        custom_css=custom_css,
+        callbacks = ["eventClick"]
     )
+    details_placeholder = st.empty()
+    if selected_date:
+    # Find the event details
+        details_placeholder.markdown(f"**Evento:** {selected_date['eventClick']['event']['title']}\n**Dia:** {selected_date['eventClick']['event']['start']}")
+
 
 

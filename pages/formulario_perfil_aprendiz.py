@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from variables import connectionFeedbacks, folderIdAprendriz, smileFacePath, rocketPath, camaraPath
+from variables import connectionFeedbacks, folderIdAprendriz, smileFacePath, rocketPath, autocompletarTutor
 from data_utils import is_valid_email
 import logging
 from sheet_connection import upload_to_drive
@@ -68,7 +68,7 @@ def create_gsheets_connection():
 def save_to_google_sheet(data):
     logging.info("Submitting records")
     responses_only = list(data.values())
-    responses_only.append('TBD')
+    responses_only.append(autocompletarTutor)
     conn = create_gsheets_connection()
     existing_data = conn.read()
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
@@ -108,6 +108,7 @@ else:
     current_page_questions = pages[st.session_state.current_page]
     email_valid = True
     photo_uploaded = False
+
     if st.session_state.current_page == 0:
         st.markdown(f"""
         <div style="display: flex; align-items: center;padding-bottom:10px">
@@ -124,6 +125,7 @@ else:
         </div>
         """, unsafe_allow_html=True)
     for idx in current_page_questions:
+        previous_response = st.session_state.responses.get(idx, None)
         question_item = quiz_data["text_form"]["questions"][idx]
         st.markdown(f"""
         <div style="display: flex; align-items: center;">
@@ -131,7 +133,11 @@ else:
         </div>
         """, unsafe_allow_html=True)
         
-        response = st.text_input(f"Respuesta", key=f"response_{idx}")
+        response = st.text_input(
+            "Respuesta",
+            key=f"response_{idx}",
+            value=previous_response if previous_response is not None else "",
+        )
         
         if question_item['id'] == 'q2':
             if response and not is_valid_email(response):
@@ -164,7 +170,7 @@ else:
     with col2:
         # Disable the "Completar" button if conditions are not met
         if st.session_state.current_page < len(pages) - 1:
-            if st.button("Continuar", on_click=next_question, disabled=not email_valid):
+            if st.button("Continuar", on_click=next_question, disabled=not (email_valid and all_questions_answered())):
                 if all_questions_answered():
                     st.session_state.current_page += 1
                 else:

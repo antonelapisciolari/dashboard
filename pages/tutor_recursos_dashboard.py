@@ -21,7 +21,9 @@ else:
     if st.session_state.role == 'tutor':
         make_sidebar_tutor()
 
-
+#leer el style.css 
+with open("style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 #get events
 columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
 columnaCorreoTutor= "CORREO TUTOR"
@@ -110,11 +112,11 @@ with resources:
 
     # Pre-Onboarding Tab
     with tabs[0]:
-        st.write("Links relevantes para Pre-Onboarding:")
+        st.write("Links relevantes para preparación:")
         st.write(f"[{preOnboardingLinks[0]}]({preOnboardingLinks[1]})")
     # Onboarding Tab
     with tabs[1]:
-        st.write("Links relevantes para Onboarding:")
+        st.write("Links relevantes para primeros días:")
         st.write(f"[{onboardingLinks[0]}]({onboardingLinks[1]})")
 
     # Seguimiento Tab
@@ -175,7 +177,8 @@ with st.container():
         },
         "initialDate": today,
         "initialView": "dayGridMonth",
-        "locale":"ES"
+        "locale":"ES",
+        "selectable": True,
     }
     custom_css = """
         .fc-toolbar-title {
@@ -207,11 +210,12 @@ with st.container():
     selected_date = calendar(
         events,  # Pass the event dictionary
         options=calendar_options,
-        custom_css=custom_css
+        custom_css=custom_css,
+        callbacks = ["eventClick"]
     )
     
-    # if selected_date:
-    # # Find the event details
-    #     details_placeholder.markdown(f"### Event Details\n**Title:** {selected_date['eventClick']['event']['title']}\n**Start:** {selected_date['eventClick']['event']['start']}")
+    if selected_date:
+    # Find the event details
+        details_placeholder.markdown(f"**Evento:** {selected_date['eventClick']['event']['title']}\n**Dia:** {selected_date['eventClick']['event']['start']}")
 
 

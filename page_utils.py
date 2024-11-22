@@ -1,4 +1,6 @@
 from variables import title, page_icon, companyIcon
+from PIL import Image
+
 def apply_page_config(st):
     st.set_page_config(
         page_title=title,
@@ -7,4 +9,3 @@ def apply_page_config(st):
     )
 
     st.logo(companyIcon,size="large")
-    

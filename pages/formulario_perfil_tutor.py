@@ -126,6 +126,7 @@ else:
         </div>
         """, unsafe_allow_html=True)
     for idx in current_page_questions:
+        previous_response = st.session_state.responses.get(idx, None)
         question_item = quiz_data["text_form"]["questions"][idx]
         st.markdown(f"""
         <div style="display: flex; align-items: center;">
@@ -133,7 +134,11 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        response = st.text_input(f"Respuesta", key=f"response_{idx}")
+        response = st.text_input(
+            "Respuesta",
+            key=f"response_{idx}",
+            value=previous_response if previous_response is not None else "",
+        )
         
         if question_item['id'] == 'q2':
             if response and not is_valid_email(response):
@@ -172,7 +177,7 @@ else:
     with col2:
         # Disable the "Completar" button if conditions are not met
         if st.session_state.current_page < len(pages) - 1:
-            if st.button("Continuar", on_click=next_question, disabled=not email_valid):
+            if st.button("Continuar", on_click=next_question, disabled=not (email_valid and all_questions_answered())):
                 if all_questions_answered():
                     st.session_state.current_page += 1
                 else:

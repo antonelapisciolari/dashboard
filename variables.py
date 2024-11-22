@@ -13,6 +13,13 @@ worksheetPerfilTutor="formTutor"
 connectionUsuarios="usuarios"
 worksheetUsuarios="Usuarios"
 worksheetPulse1Semana="formularioPulse1Semana"
+worksheetCambioArea="formularioCambioArea"
+worksheetFormulario1Mes="formulario1Mes"
+worksheetFormulario4Mes="formularioCuatroMes"
+worksheetFormularioAprendizCierre1Ciclo="formularioAprendizCierre1Ciclo"
+worksheetFormularioAprendizCierre2Ciclo="formularioAprendizCierre2Ciclo"
+worksheetFormularioTutorCierre1Ciclo="formularioTutorCierre1Ciclo"
+worksheetFormularioTutorCierre2Ciclo="formularioTutorCierre2Ciclo"
 formAprendiz="formAprendiz"
 rotationSheet="Rotación"
 costeSheet = ""
@@ -61,9 +68,9 @@ aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
 preOnboardingLinks = ["Guía Express para el Tutor/a!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0"]
-onboardingLinks = ["Meeting Tips – ¡Primer Día del Aprendiz!", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
-seguimientoLinks = ["Meeting Tips - Seguimiento", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
-cierreLinks = ["Meeting de Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]
+onboardingLinks = ["Manual 1: Consejos Claves Primer día", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
+seguimientoLinks = ["Manual 2: Consejos Claves Cambio de área", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
+cierreLinks = ["Manual 4: Consejos claves Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]
 formsLinks = ["Formulario 1º semana", "https://fpdual-dashboard.streamlit.app/pulse_primera_semana",
 "Cambio Area","https://fpdual-dashboard.streamlit.app/formulario_cambio_area",
 "Formulario 1º mes Aprendiz", "https://fpdual-dashboard.streamlit.app/formulario_primer_mes",
@@ -85,3 +92,5 @@ folderIdTutor="1qQZGjDTukHla-_pbhLeppLHxogNKSmML"
 smileFacePath="https://github.com/user-attachments/assets/dd9fe972-19e1-46c0-bff6-bb2df20716ef"
 rocketPath="https://github.com/user-attachments/assets/75b1a65f-6416-4366-b54e-ba3b56c49333"
 camaraPath="https://github.com/user-attachments/assets/50d2c611-8a03-42c5-81da-1f6cf1820942"
+autocompletarTutor="=IFERROR(VLOOKUP($A3,Base_datos!$A:$C,3,0))"
+autocompletarNombre="=IFERROR(VLOOKUP($A3,Base_datos!$A:$D,4,0))"

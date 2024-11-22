@@ -4,11 +4,13 @@
       "description":"Queremos saber cómo te fue en esta parte de tu recorrido por el hotel. ¡Cada experiencia cuenta! Cuéntanos qué tal te sentiste y cómo podemos mejorar juntos.",
       "cierre":"¡Gracias por compartir! Te deseamos lo mejor para las próximas semanas! ¡Aprovechalas al máximo!",
       "questions": [
-        {"id": "q1", "question": "Email:"},
+        {"id": "q1", "question": "Email:", "email":true},
         {"id": "q2", "question": "Selecciona el área que vas a Analizar:", "options": ["PISOS", "B&R", "COCINA", "SERVICIOS TÉCNICOS","RECEPCIÓN"]},
-        {"id": "q3", "question": "¿Cómo te has sentido en esta área?", "options": ["Súper cómodo/a 😊", "Bien", "Me costó adaptarme","No me sentí cómodo/a "]},
-        {"id": "q5", "question": "Del 1 al 4, ¿Te ha servido la reunión con tu TUTOR antes de empezar en esta área?", "options": ["Sí, totalmente", "Más o menos", "No mucho"]},
-        {"id": "q6", "question": "Otro comentario"}
+        {"id": "q3", "question": "¿Cómo te has sentido en esta área?", "options": ["Súper cómodo/a 😊", "Bien", "Me costó adaptarme","No me sentí cómodo/a"]},
+        {"id": "q4", "question": "Del 1 al 4, ¿Te ha servido la reunión con tu TUTOR antes de empezar en esta área?","slider":"1,5"},
+        {"id": "q5", "question": "¿Qué es lo que más te ha llamado la atención de esta área?"},
+        {"id": "q6", "question": "¿Qué cambios implementarías tú para que cada cliente se sienta aún más especial en esta área?"},
+        {"id": "q7", "question": "¿Has notado algo en esta área que podríamos hacer de manera más sostenible?"}
       ]
     }
 }

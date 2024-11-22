@@ -4,6 +4,7 @@ import plotly.express as px
 from page_utils import apply_page_config
 from data_utils import filter_dataframe, getColumns,generate_color_map,calcularPorcentajesStatus
 from sheet_connection import get_google_sheet, get_sheets
+from feedback_utils import getFeedbackPulse1Semana
 import pandas as pd
 import matplotlib.pyplot as plt
 from variables import registroAprendices, azul, amarillo, aquamarine,worksheetPulse1Semana, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, formAprendiz,noDatosDisponibles
@@ -158,6 +159,16 @@ def getFeebackDetails():
     feedbacks = get_sheets(connectionFeedbacks, [worksheetPulse1Semana,formAprendiz])
     return feedbacks
 
+feedbacks= getFeebackDetails()
+feedbackPulseDf = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
+    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
+)]
+feedbackPulseDf = feedbackPulseDf.drop_duplicates(subset=[columnaEmail])
+feedbackAprendiz= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
+    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
+)]
+
+pulse1SemanaPromedio = getFeedbackPulse1Semana(feedbackPulseDf)
 #feedback details 
 with st.container():
     st.write('**¿Cómo se están sintiendo en cada etapa del proceso?**')
@@ -168,7 +179,7 @@ with st.container():
             st.markdown(
                 f"""
                     <span style="color: gray; font-size: 16px;">Pulse</span><br>
-                    <span style="color: black; font-size: 20px; font-weight: bold;">9.6</span>
+                    <span style="color: black; font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
                 """,
                 unsafe_allow_html=True
             )
@@ -195,21 +206,16 @@ with st.container():
                 unsafe_allow_html=True
             )
 
-feedbacks= getFeebackDetails()
-feedbackPulse = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackAprendiz= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
+
+feedbackAprendiz = feedbackAprendiz.drop_duplicates(subset=[columnaEmail])
 
 feedback_types = ['Pulse 1º Semana', 'Cambio Area', '1º Mes'] 
 with st.expander("Detalle de Feedbacks"):
     with st.container():
         tabs = st.tabs(feedback_types)
         with tabs[0]:
-            if feedbackPulse is not None and not feedbackPulse.empty:
-                st.dataframe(feedbackPulse)
+            if feedbackPulseDf is not None and not feedbackPulseDf.empty:
+                st.dataframe(feedbackPulseDf)
             else:
                 st.write(noDatosDisponibles)
 
@@ -345,11 +351,11 @@ with st.container():
         else:
             st.write(noDatosDisponibles)
 
-    columns_to_extract = [columnaCandidatos,columnaFechaInicio,columnaFechaFin,columnaPosicion]
-    actualCandidatos = getColumns(active_candidates, columns_to_extract)
-    actualCandidatos[columns_to_extract[1]] = actualCandidatos[columns_to_extract[1]].dt.strftime('%d/%m/%Y')
-    actualCandidatos[columns_to_extract[2]] = actualCandidatos[columns_to_extract[2]].dt.strftime('%d/%m/%Y')
-    #rotacion[columnaFechaInicioRotacion] = rotacion[columnaFechaInicioRotacion].dt.strftime('%d/%m/%Y')
+    hoy = datetime.today()
+    mes_actual = hoy.replace(day=1)
+    prox_mes = hoy.replace(day=1) + timedelta(days=31)
+    prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
+    rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
     result_df = rotacion.groupby(
     ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
         ).agg(
@@ -357,10 +363,10 @@ with st.container():
                 "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
             }
         ).reset_index()
-
+    result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
     with tablaAprendicesHoy:
         st.write('Mis Aprendices:')
-        if actualCandidatos is not None and not actualCandidatos.empty:
+        if result_df is not None and not result_df.empty:
             st.dataframe(result_df, hide_index="true")
         else:
             st.write(noDatosDisponibles)
