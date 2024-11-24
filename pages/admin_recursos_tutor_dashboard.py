@@ -6,9 +6,9 @@ from streamlit_calendar import calendar
 from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
-from data_utils import getColumns
+from data_utils import getColumns,create_events
 from variables import connectionGeneral
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback
+from variables import registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback
 apply_page_config(st)
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
@@ -24,7 +24,7 @@ with open("style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 #get events
-columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real']
+columns_to_extract = ['CANDIDATOS','FECHA INICIO real', 'FECHA FIN real','Envío 1er Feedback','Envío 2do Feedback','Envío 3er Feedback']
 def getInfo():
     # Use the actual Google Sheets ID here
     sheet_id = registroAprendices
@@ -36,39 +36,10 @@ def getEvents(df):
     selected_columns_df = selected_columns_df.drop_duplicates(subset=[columns_to_extract[0]])
     return selected_columns_df
 
-def create_events(df):
-    events = []
-    # Iterate over DataFrame rows
-    for index, row in df.iterrows():
-        # Parse dates and handle NaT values
-        start_date = pd.to_datetime(row[columns_to_extract[1]], dayfirst=True)
-        end_date = pd.to_datetime(row[columns_to_extract[2]], dayfirst=True)
-        
-        # Check if dates are valid and not NaT
-        if pd.notna(start_date):
-            start_date_str = start_date.strftime('%Y-%m-%d')
-            # Create start event
-            start_event = {
-                "start": start_date_str,
-                "title": f"Inicio {row[columns_to_extract[0]]}",
-                "backgroundColor": amarillo
-            }
-            events.append(start_event)
-        
-        if pd.notna(end_date):
-            end_date_str = end_date.strftime('%Y-%m-%d')
-            # Create end event
-            end_event = {
-                "start": end_date_str,
-                "title": f"Fin {row[columns_to_extract[0]]}",
-                "backgroundColor": aquamarine
-            }
-            events.append(end_event)
-    
-    return events
+
 candidatosByTutor = getInfo()
 eventsCandidatos = getEvents(candidatosByTutor)
-events = create_events(eventsCandidatos)
+events = create_events(eventsCandidatos, columns_to_extract)
 
 # Create the main container for the layout
 container = st.container()
@@ -185,7 +156,7 @@ with st.container():
             margin: 0 auto;
         }
         .fc-view {
-            min-height: 300px;  /* Set a minimum height */
+            min-height: 250px;  /* Set a minimum height */
         }
         
         /* Responsive adjustments for smaller screens */

@@ -5,7 +5,7 @@
       "cierre":"¡Gracias por tu feedback! Queremos que esta experiencia siga siendo increíble para ti, No dudes en contactar con tu tutor/a si tienes ideas o propuestas que sugerir!",
       "questions": [
         {"id": "q1", "question": "Email:", "email":true},
-        {"id": "q2", "question": "¿Cómo te has sentido en este primer mes?:", "options": ["Súper bien", "Bien", "Un poco perdido/a", "No me sentí cómodo/a"]},
+        {"id": "q2", "question": "¿Cómo te has sentido en este primer mes?", "options": ["Súper bien", "Bien", "Un poco perdido/a", "No me sentí cómodo/a"]},
         {"id": "q3", "question": "Del 1 al 4, ¿Te has sentido bien recibido/a por el equipo en las áreas donde has trabajado?","slider":"1,5"},
         {"id": "q4", "question": "Del 1 al 4, ¿Las tareas que has realizado hasta ahora se alinean con lo que esperabas aprender?","slider":"1,5"},
         {"id": "q5", "question": "Del 1 al 4, ¿Estas pudiendo aplicar lo que vas aprendiendo en el Centro Educativo en esta parte práctica de tu aprendizaje?","slider":"1,5"},

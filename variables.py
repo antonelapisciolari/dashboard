@@ -32,7 +32,7 @@ orange="#FF6B35"
 celeste="#007EA7"
 teal="#00A6A6"
 gris="#8D99AE"
-
+feedback_types = ['Pulse 1º Semana', 'Cambio Area', '1º Mes', '4º Mes','1º Cierre','2º Cierre'] 
 #login
 username=vars.username
 password=vars.password

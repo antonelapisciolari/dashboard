@@ -1,5 +1,7 @@
 from variables import celeste, amarillo, aquamarine, azul, orange, teal, gris
 import re 
+import pandas as pd
+import altair as alt
 def filter_dataframe(df, filters):
     for column, value in filters.items():
         df = df[df[column].isin(value)]
@@ -59,3 +61,104 @@ def calcularPorcentajesStatus(df):
     if baja_count !=0:
         baja_pct = int((baja_count / total_statuses) * 100)
     return finalizado_pct, baja_pct,activo_count, baja_count,finalizado_count
+
+def create_donut_chart(input_response, input_text, input_color):
+    if input_color == 'blue':
+        chart_color = ['#002855', '#ffcb1d']
+    if input_color == 'yellow':
+        chart_color = ['#FECA1D', '#4c3c09']
+    if input_color == 'orange':
+        chart_color = ['#FF6B35', '#4d2010']
+    if input_color == 'gray':
+        chart_color = ['#8D99AE', '#cbdcfb']
+        
+    source = pd.DataFrame({
+        "Topic": ['', input_text],
+        "% value": [100-input_response, input_response]
+    })
+    source_bg = pd.DataFrame({
+        "Topic": ['', input_text],
+        "% value": [100, 0]
+    })
+        
+    plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
+        theta="% value",
+        color= alt.Color("Topic:N",
+                        scale=alt.Scale(
+                            #domain=['A', 'B'],
+                            domain=[input_text, ''],
+                            # range=['#29b5e8', '#155F7A']),  # 31333F
+                            range=chart_color),
+                        legend=None),
+    ).properties(width=120, height=120)
+        
+    text = plot.mark_text(align='center', color="#29b5e8", fontSize=24, fontWeight=700).encode(text=alt.value(f'{input_response} %'))
+    plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
+        theta="% value",
+        color= alt.Color("Topic:N",
+                        scale=alt.Scale(
+                            # domain=['A', 'B'],
+                            domain=[input_text, ''],
+                            range=chart_color),  # 31333F
+                        legend=None),
+    ).properties(width=120, height=120)
+    return plot_bg + plot + text
+
+def create_events(df, columns_to_extract):
+    events = []
+    # Iterate over DataFrame rows
+    for index, row in df.iterrows():
+        # Parse dates and handle NaT values
+        start_date = pd.to_datetime(row[columns_to_extract[1]], dayfirst=True)
+        end_date = pd.to_datetime(row[columns_to_extract[2]], dayfirst=True)
+        feedback1Semana = pd.to_datetime(row[columns_to_extract[3]], dayfirst=True)
+        feedback1Mes = pd.to_datetime(row[columns_to_extract[4]], dayfirst=True)
+        feedback4Mes = pd.to_datetime(row[columns_to_extract[5]], dayfirst=True)
+        # Check if dates are valid and not NaT
+        if pd.notna(start_date):
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            # Create start event
+            start_event = {
+                "start": start_date_str,
+                "title": f"Inicio {row[columns_to_extract[0]]}",
+                "backgroundColor": amarillo
+            }
+            events.append(start_event)
+        
+        if pd.notna(end_date):
+            end_date_str = end_date.strftime('%Y-%m-%d')
+            # Create end event
+            end_event = {
+                "start": end_date_str,
+                "title": f"Fin {row[columns_to_extract[0]]}",
+                "backgroundColor": aquamarine
+            }
+            events.append(end_event)
+        if pd.notna(feedback1Semana):
+            feedback1Semana_str = feedback1Semana.strftime('%Y-%m-%d')
+            # Create end event
+            feedback1SemanaEvent = {
+                "start": feedback1Semana_str,
+                "title": f"Envio Feedback 1 Semana - {row[columns_to_extract[0]]}",
+                "backgroundColor": gris
+            }
+            events.append(feedback1SemanaEvent)
+        if pd.notna(feedback1Mes):
+            feedback1Mes_str = feedback1Mes.strftime('%Y-%m-%d')
+            # Create end event
+            feedback1MesEvent = {
+                "start": feedback1Mes_str,
+                "title": f"Envio Feedback 1 Mes - {row[columns_to_extract[0]]}",
+                "backgroundColor": azul
+            }
+            events.append(feedback1MesEvent)
+        if pd.notna(feedback4Mes):
+            feedback4Mes_str = feedback4Mes.strftime('%Y-%m-%d')
+            # Create end event
+            feedback4MesEvent = {
+                "start": feedback4Mes_str,
+                "title": f"Envio Feedback 4 Mes - {row[columns_to_extract[0]]}",
+                "backgroundColor": orange
+            }
+            events.append(feedback4MesEvent)
+    return events

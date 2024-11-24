@@ -2,13 +2,14 @@ from navigation import make_sidebar_admin
 import streamlit as st
 import plotly.express as px
 from page_utils import apply_page_config
-from data_utils import calcularPorcentajesStatus, getColumns,generate_color_map
+from data_utils import calcularPorcentajesStatus,create_donut_chart,generate_color_map
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
 from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, gris, formAprendiz,noDatosDisponibles
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
+
 
 #tab icono y titulo
 apply_page_config(st)
@@ -97,167 +98,137 @@ filtered_df = df[
 graficos = [columnaPosicion,columnaHotel,columnaEstudios,columnaZona]
 finalizado, baja,active_count, bajaCount, finalizadoCount = calcularPorcentajesStatus(filtered_df)
 with st.container():
-    st.write('**¿Cómo se distribuyen los aprendices?**')
-    custom_colors = [aquamarine, amarillo, azul, orange] 
-    graficosContainer, estadisticas = st.columns([8,2])
-    with graficosContainer:
-        chartDepto, chartHotel, chartEstudio, chartZona  = st.columns(4)
-        fig_size = (4, 4)
+    st.header('**¿Cómo se distribuyen los aprendices?**')
+
+# Layout containers
+containerActivos, containerBajas,containerBajasCantidad, containerFinalizados,containerFinalizadosCant = st.columns(5)
+
+with containerActivos:
+    st.markdown(
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Aprendices Activos</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""
+        <div style="background-color: {azul}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
+            <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{active_count}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# Bajas Card
+with containerBajas:
+    st.markdown(
+        f"<div style='text-align: center; color: {azul}; font-size: 16px; font-weight: bold;'>Bajas %</div>",
+        unsafe_allow_html=True,
+    )
+    baja_chart = create_donut_chart(baja, "Bajas", 'blue')
+    st.altair_chart(baja_chart, use_container_width=True)
+with containerBajasCantidad:
+        st.markdown(
+            f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad</div>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"""
+            <div style="background-color: {azul}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
+                <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{bajaCount}</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+# Finalizados Card
+with containerFinalizados:
+    st.markdown("<div style='text-align: center;font-weight: bold;'>Finalizados %</div>", unsafe_allow_html=True)
+    # Use columns to place the donut chart and "Cantidad" side-by-side
+    finalizado_chart = create_donut_chart(finalizado, "Finalizados", 'orange')
+    st.altair_chart(finalizado_chart, use_container_width=True)
+with containerFinalizadosCant:
+    st.markdown(
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""
+        <div style="background-color: {azul}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
+            <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{finalizadoCount}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+custom_colors = [aquamarine, amarillo, azul, orange] 
+chartDepto, chartHotel, chartEstudio, chartZona  = st.columns(4)
+fig_size = (4, 4)
+
+with chartDepto:
+    # Create the figure and axis for the bar chart
+    fig1, ax1 = plt.subplots(figsize=fig_size)
+    
+    # Plot a bar chart and apply custom colors
+    value_counts = filtered_df[graficos[0]].value_counts()
+    if not value_counts.empty and value_counts.sum() > 0:
+        value_counts.plot.bar(ax=ax1, color=custom_colors)
         
-        with chartDepto:
-            # Create the figure and axis for the bar chart
-            fig1, ax1 = plt.subplots(figsize=fig_size)
-            
-            # Plot a bar chart and apply custom colors
-            value_counts = filtered_df[graficos[0]].value_counts()
-            if not value_counts.empty and value_counts.sum() > 0:
-                value_counts.plot.bar(ax=ax1, color=custom_colors)
-                
+        # Add the amounts on top of each bar
+        for index, value in enumerate(value_counts):
+            ax1.text(index, value, str(value), ha='center', va='bottom', fontsize=10)
+        
+        # Set the title and labels
+        ax1.set_ylabel("Count")
+        ax1.set_title(graficos[0])
+        
+        # Display the bar chart in Streamlit
+        st.pyplot(fig1)
+
+with chartHotel:
+    fig2, ax2 = plt.subplots(figsize=fig_size)
+    value_counts = filtered_df[graficos[1]].value_counts()
+    if not value_counts.empty and value_counts.sum() > 0:
+        value_counts.plot.bar(ax=ax2, color=custom_colors)
+        
                 # Add the amounts on top of each bar
-                for index, value in enumerate(value_counts):
-                    ax1.text(index, value, str(value), ha='center', va='bottom', fontsize=10)
-                
-                # Set the title and labels
-                ax1.set_ylabel("Count")
-                ax1.set_title(graficos[0])
-                
-                # Display the bar chart in Streamlit
-                st.pyplot(fig1)
+        for index, value in enumerate(value_counts):
+            ax2.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+        ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right', fontsize=8)
+        # Set the title and labels
+        ax2.set_ylabel("Count")
+        ax2.set_title(graficos[1])
+        st.pyplot(fig2)
+    
+with chartEstudio:
+    fig3, ax3 = plt.subplots(figsize=fig_size)
+    value_counts = filtered_df[graficos[2]].value_counts()
+    if not value_counts.empty and value_counts.sum() > 0:
+        value_counts.plot.bar(ax=ax3, color=custom_colors)
         
-        with chartHotel:
-            fig2, ax2 = plt.subplots(figsize=fig_size)
-            value_counts = filtered_df[graficos[1]].value_counts()
-            if not value_counts.empty and value_counts.sum() > 0:
-                value_counts.plot.bar(ax=ax2, color=custom_colors)
-                
-                        # Add the amounts on top of each bar
-                for index, value in enumerate(value_counts):
-                    ax2.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
-                ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right', fontsize=8)
-                # Set the title and labels
-                ax2.set_ylabel("Count")
-                ax2.set_title(graficos[1])
-                st.pyplot(fig2)
-            
-        with chartEstudio:
-            fig3, ax3 = plt.subplots(figsize=fig_size)
-            value_counts = filtered_df[graficos[2]].value_counts()
-            if not value_counts.empty and value_counts.sum() > 0:
-                value_counts.plot.bar(ax=ax3, color=custom_colors)
-                
-                        # Add the amounts on top of each bar
-                for index, value in enumerate(value_counts):
-                    ax3.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
-                ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right', fontsize=8)
-                # Set the title and labels
-                ax3.set_ylabel("Count")
-                ax3.set_title(graficos[2])
-                st.pyplot(fig3)
+                # Add the amounts on top of each bar
+        for index, value in enumerate(value_counts):
+            ax3.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+        ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right', fontsize=8)
+        # Set the title and labels
+        ax3.set_ylabel("Count")
+        ax3.set_title(graficos[2])
+        st.pyplot(fig3)
+
+with chartZona:
+    fig4, ax4 = plt.subplots(figsize=fig_size)
+    value_counts = filtered_df[graficos[3]].value_counts()
+    if not value_counts.empty and value_counts.sum() > 0:
+        value_counts.plot.bar(ax=ax4, color=custom_colors)
         
-        with chartZona:
-            fig4, ax4 = plt.subplots(figsize=fig_size)
-            value_counts = filtered_df[graficos[3]].value_counts()
-            if not value_counts.empty and value_counts.sum() > 0:
-                value_counts.plot.bar(ax=ax4, color=custom_colors)
-                
-                        # Add the amounts on top of each bar
-                for index, value in enumerate(value_counts):
-                    ax4.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
+                # Add the amounts on top of each bar
+        for index, value in enumerate(value_counts):
+            ax4.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
 
-                # Set the title and labels
-                ax4.set_ylabel("Count")
-                ax4.set_title(graficos[3])
-                st.pyplot(fig4)
-    with estadisticas:
-            st.markdown(
-                f"""
-                <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                    <span style="color: white; font-size: 16px;">Aprendices Activos</span><br>
-                    <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{active_count}</span>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-            st.markdown(
-                f"""
-                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
-                    <!-- First div -->
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
-                        <span style="color: white; font-size: 16px;">Bajas</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{baja}%</span>
-                    </div>
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
-                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{bajaCount}</span>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-            st.markdown(
-                f"""
-                <div style="display: flex; justify-content: space-between; gap: 10px; margin-bottom: 10px;">
-                    <!-- First div -->
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
-                        <span style="color: white; font-size: 16px;">Finalizados</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizado}%</span>
-                    </div>
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px; text-align: center; flex: 1;">
-                        <span style="color: white; font-size: 14px;">Cantidad</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">{finalizadoCount}</span>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-#Container Feedback
-def getFeebackDetails():
-    feedbacks = get_sheets(connectionFeedbacks, [worksheetPulse1Semana,formAprendiz])
-    return feedbacks
-
-#feedback details 
-with st.container():
-        st.write('**¿Cómo se están sintiendo en cada etapa del proceso?**')
-        feedbackPulse, feedbackCambioArea, feedback = st.columns(3)
-        with feedbackPulse:
-            with st.container():
-                with st.container():
-                    st.markdown(
-                        f"""
-                        <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                            <span style="color: white; font-size: 16px;">Pulse</span><br>
-                            <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">2</span>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-
-        # Second container (inside col2)
-        with feedbackCambioArea:
-            with st.container():
-                st.markdown(
-                    f"""
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                        <span style="color: white; font-size: 16px;">Cambio de Area</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">2</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-        # Third container (inside col3)
-        with feedback:
-            with st.container():
-                st.markdown(
-                    f"""
-                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
-                        <span style="color: white; font-size: 16px;">3rd Feedback</span><br>
-                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">3.1</span>
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+        # Set the title and labels
+        ax4.set_ylabel("Count")
+        ax4.set_title(graficos[3])
+        st.pyplot(fig4)
 
 
 def getRotationInfo():
@@ -266,9 +237,8 @@ def getRotationInfo():
 
 #donde estan mis aprendices
 with st.container():
-    titulo, filtroHotel  = st.columns(2)
-    with titulo:
-        st.write('**¿En dónde se encuentran hoy los aprendices?**')
+
+    st.header('**¿En dónde se encuentran hoy los aprendices?**')
     
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.6])
     with graficoHotel:
@@ -349,3 +319,51 @@ with st.container():
         else:
             st.write(noDatosDisponibles)
         
+
+#Container Feedback
+def getFeebackDetails():
+    feedbacks = get_sheets(connectionFeedbacks, [worksheetPulse1Semana,formAprendiz])
+    return feedbacks
+
+#feedback details 
+with st.container():
+        st.header('**¿Cómo se están sintiendo en cada etapa del proceso?**')
+        feedbackPulse, feedbackCambioArea, feedback = st.columns(3)
+        with feedbackPulse:
+            with st.container():
+                with st.container():
+                    st.markdown(
+                        f"""
+                        <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                            <span style="color: white; font-size: 16px;">Pulse</span><br>
+                            <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">2</span>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+        # Second container (inside col2)
+        with feedbackCambioArea:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                        <span style="color: white; font-size: 16px;">Cambio de Area</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">2</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        # Third container (inside col3)
+        with feedback:
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div style="background-color: {azul}; padding: 10px; border-radius: 5px;text-align: center;margin-bottom: 10px;"">
+                        <span style="color: white; font-size: 16px;">3rd Feedback</span><br>
+                        <span style="color: #FECA1D; font-size: 20px; font-weight: bold;">3.1</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
