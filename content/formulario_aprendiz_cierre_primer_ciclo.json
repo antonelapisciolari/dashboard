@@ -6,10 +6,10 @@
       "subtitles": ["Tu Experiencia en este primer ciclo","Experiencia del Cliente","Sostenibilidad","Tus Aportes y Recomendaciones"],
       "questions": [
         {"id": "q1", "question": "Email:", "email":true},
-        {"id": "q2", "question": "¿Cómo te has sentido en este primer ciclo?","options": ["Genial, lo disfruté muchísimo","Estuvo bien - TBD", "Mas o Menos.", "No fue lo que esperaba"]},
-        {"id": "q3", "question": "¿Te sentiste bien acompañado/a por tu Tutor/a?","options": [" Sí, estuvieron súper presentes 👍", " Sí, aunque me gustaría haber tenido más apoyo", "Tuve que resolver varias cosas por mi cuenta"]},
+        {"id": "q2", "question": "Del 1 al 4, ¿Cómo te has sentido en este primer ciclo?","slider":"1,5"},
+        {"id": "q3", "question": "¿Te sentiste bien acompañado/a por tu Tutor/a?","options": [" Sí, estuvieron súper presentes", " Sí, aunque me gustaría haber tenido más apoyo", "Tuve que resolver varias cosas por mi cuenta"]},
         {"id": "q4", "question": "¿Qué área te ha gustado más?:", "options": ["PISOS", "B&R", "COCINA", "SERVICIOS TÉCNICOS","RECEPCIÓN"]},
-        {"id": "q5", "question": "Del 1 al 4, ¿Cuánto has podido aplicar lo del instituto en el hotel? ","slider":"1,5"},
+        {"id": "q5", "question": "Del 1 al 4, ¿Cuánto has podido aplicar lo del instituto en el hotel?","slider":"1,5"},
         {"id": "q6", "question": "Del 1 al 4, ¿Cuánto te gustaría seguir formando parte de nuestro equipo al finalizar el programa?","slider":"1,5"},
       
         {"id": "q7", "question": "En cuanto a la Experiencia del Cliente, ¿sentiste que pudiste aportar valor?","options": ["Sí, propuse ideas nuevas y me sentí útil", "Un poco, pero creo que puedo mejorar en esta área", "No mucho, me costó involucrarme en ese aspecto"]},

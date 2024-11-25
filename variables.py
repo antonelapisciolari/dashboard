@@ -32,6 +32,8 @@ orange="#FF6B35"
 celeste="#007EA7"
 teal="#00A6A6"
 gris="#8D99AE"
+verde="#08af64"
+rojo="#d62828"
 feedback_types = ['Pulse 1º Semana', 'Cambio Area', '1º Mes', '4º Mes','1º Cierre','2º Cierre'] 
 #login
 username=vars.username
@@ -94,3 +96,17 @@ rocketPath="https://github.com/user-attachments/assets/75b1a65f-6416-4366-b54e-b
 camaraPath="https://github.com/user-attachments/assets/50d2c611-8a03-42c5-81da-1f6cf1820942"
 autocompletarTutor="=IFERROR(VLOOKUP($A3,Base_datos!$A:$C,3,0))"
 autocompletarNombre="=IFERROR(VLOOKUP($A3,Base_datos!$A:$D,4,0))"
+pulse1SemanaPromedio= 'Sin Datos'
+cambioAreaPromedio= 'Sin Datos'
+primerMesPromedio ='Sin Datos'
+cuartoMesPromedio='Sin Datos'
+aprendizCierrePrimerCicloPromedio='Sin Datos'
+aprendizCierreSegundoCicloPromedio='Sin Datos'
+colorPulse='white'
+colorCambioArea='white'
+colorPrimerMes='white'
+colorCuartoMes='white'
+colorPrimerCierre='white'
+colorSegundoCierre='white'
+colorAprendizCierrePrimerCiclo='white'
+colorAprendizCierreSegundoCiclo='white'

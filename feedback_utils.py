@@ -1,7 +1,7 @@
 from data_utils import getColumns
 import streamlit as st
 import json
-
+import pandas as pd
 with open('content/formularioPulse1Semana.json', 'r', encoding='utf-8') as f:
     quiz_data = json.load(f)
 
@@ -29,8 +29,6 @@ def getFeedbackPulse1Semana(feedback):
     return round(promedio_escalado.mean(), 2)
 
 
-
-
 with open('content/formulario_cambio_area.json', 'r', encoding='utf-8') as f:
     quiz_data_cambio_area = json.load(f)
 
@@ -54,7 +52,6 @@ def getFeedbackPromedioCambioArea(feedback):
     promedio_escalado = (average_scores/max_ponderacion)*10
     return round(promedio_escalado.mean(), 2)
 
-
 with open('content/formulario_primer_mes.json', 'r', encoding='utf-8') as f:
     quiz_data_primer_mes = json.load(f)
 
@@ -77,3 +74,99 @@ def getFeedbackPromedioPrimerMes(feedback):
     
     promedio_escalado = (average_scores/max_ponderacion)*10
     return round(promedio_escalado.mean(), 2)
+
+with open('content/formulario_cuarto_mes.json', 'r', encoding='utf-8') as f:
+    quiz_data_cuarto_mes = json.load(f)
+
+def getFeedbackPromedioCuartoMes(feedback):
+    dfiltered = getColumns(feedback,[quiz_data_cuarto_mes["text_form"]["questions"][1]["question"],quiz_data_cuarto_mes["text_form"]["questions"][2]["question"],quiz_data_cuarto_mes["text_form"]["questions"][3]["question"]])
+    feedback_mapping = {
+    4:4,
+    3:3,
+    2:2,
+    1:1
+}
+    max_ponderacion = 4 #maximo valor de la respuesta
+    df_mapped = dfiltered.map(lambda x: feedback_mapping.get(x, 0))
+    # Step 3: Calculate averages
+    average_scores = df_mapped.mean()
+    
+    promedio_escalado = (average_scores/max_ponderacion)*10
+    return round(promedio_escalado.mean(), 2)
+
+with open('content/formulario_aprendiz_cierre_primer_ciclo.json', 'r', encoding='utf-8') as f:
+    quiz_data_aprendiz_cierre_primer_ciclo = json.load(f)
+
+def getFeedbackPromedioAprendizCierrePrimerCiclo(feedback):
+    dfiltered = getColumns(feedback,[quiz_data_aprendiz_cierre_primer_ciclo["text_form"]["questions"][1]["question"],quiz_data_aprendiz_cierre_primer_ciclo["text_form"]["questions"][2]["question"],quiz_data_aprendiz_cierre_primer_ciclo["text_form"]["questions"][4]["question"],quiz_data_aprendiz_cierre_primer_ciclo["text_form"]["questions"][5]["question"]])
+    feedback_mapping = {
+        "Sí, estuvieron súper presentes":3,
+        "Sí, aunque me gustaría haber tenido más apoyo":2,
+        "Tuve que resolver varias cosas por mi cuenta":1,
+        4:4,
+        3:3,
+        2:2,
+        1:1
+    }
+    max_ponderacion = 4 #maximo valor de la respuesta
+    df_mapped = dfiltered.map(lambda x: feedback_mapping.get(x, 0))
+    # Step 3: Calculate averages
+    average_scores = df_mapped.mean()
+    
+    promedio_escalado = (average_scores/max_ponderacion)*10
+    return round(promedio_escalado.mean(), 2)
+
+with open('content/formulario_aprendiz_cierre_segundo_ciclo.json', 'r', encoding='utf-8') as f:
+    quiz_data_aprendiz_cierre_segundo_ciclo = json.load(f)
+
+def getFeedbackPromedioAprendizCierreSegundoCiclo(feedback):
+    dfiltered = getColumns(feedback,[quiz_data_aprendiz_cierre_segundo_ciclo["text_form"]["questions"][1]["question"],quiz_data_aprendiz_cierre_segundo_ciclo["text_form"]["questions"][2]["question"],quiz_data_aprendiz_cierre_segundo_ciclo["text_form"]["questions"][3]["question"],quiz_data_aprendiz_cierre_segundo_ciclo["text_form"]["questions"][9]["question"],quiz_data_aprendiz_cierre_segundo_ciclo["text_form"]["questions"][13]["question"]])
+    feedback_mapping = {
+        "Sí, estuvieron súper presentes y me ayudaron en todo":3,
+        "Sí, aunque me gustaría haber tenido más apoyo":2,
+        "No tanto, tuve que resolver varias cosas por mi cuenta":1,
+        4:4,
+        3:3,
+        2:2,
+        1:1,
+        5:5,
+        6:6,
+        7:7,
+        8:8,
+        9:9,
+        10:10
+    }
+    max_ponderacion = 4 #maximo valor de la respuesta
+    df_mapped = dfiltered.map(lambda x: feedback_mapping.get(x, 0))
+    # Step 3: Calculate averages
+    average_scores = df_mapped.mean()
+    
+    promedio_escalado = (average_scores/max_ponderacion)*10
+    return round(promedio_escalado.mean(), 2)
+
+
+
+def calcularEstadoRespuestas(active_candidates,columnaEnvio1Feedback,hoy, feedbackPulseDf,columnaCorreoCandidato ):
+    active_candidates[columnaEnvio1Feedback] = pd.to_datetime(active_candidates[columnaEnvio1Feedback])
+    candidatos_feedback_inprogress = active_candidates[active_candidates[columnaEnvio1Feedback] < hoy]
+    feedback_emails = feedbackPulseDf['Email'].unique()
+    feedback_emails_normalized = [email.lower() for email in feedback_emails]
+
+    candidatos_feedback_inprogress['Normalized Email'] = candidatos_feedback_inprogress[columnaCorreoCandidato].str.lower()
+    candidatos_feedback_inprogress['Feedback Respondido'] = candidatos_feedback_inprogress['Normalized Email'].isin(feedback_emails_normalized)
+
+    # Drop the temporary normalized email column (optional)
+    candidatos_feedback_inprogress.drop(columns=['Normalized Email'], inplace=True)
+
+    total_candidates = len(candidatos_feedback_inprogress)
+    in_feedback_count = candidatos_feedback_inprogress['Feedback Respondido'].sum()
+    not_in_feedback_count = total_candidates - in_feedback_count
+    percentage_in_feedback = (in_feedback_count / total_candidates) * 100 if total_candidates > 0 else 0
+
+    results = {
+        'Respuestas Recibidas': in_feedback_count,
+        'Feedback Enviado': total_candidates,
+        '% Respuestas': round(percentage_in_feedback, 2),
+        'Feedback Sin responder': not_in_feedback_count
+    }
+    return results,candidatos_feedback_inprogress

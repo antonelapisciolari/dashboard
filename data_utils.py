@@ -1,4 +1,4 @@
-from variables import celeste, amarillo, aquamarine, azul, orange, teal, gris
+from variables import celeste, amarillo, aquamarine, azul, orange, teal, gris,rojo,verde
 import re 
 import pandas as pd
 import altair as alt
@@ -66,9 +66,9 @@ def create_donut_chart(input_response, input_text, input_color):
     if input_color == 'blue':
         chart_color = ['#002855', '#ffcb1d']
     if input_color == 'yellow':
-        chart_color = ['#FECA1D', '#4c3c09']
+        chart_color = ['#FECA1D', '#3AA597']
     if input_color == 'orange':
-        chart_color = ['#FF6B35', '#4d2010']
+        chart_color = ['#FF6B35', '#002855']
     if input_color == 'gray':
         chart_color = ['#8D99AE', '#cbdcfb']
         
@@ -81,7 +81,7 @@ def create_donut_chart(input_response, input_text, input_color):
         "% value": [100, 0]
     })
         
-    plot = alt.Chart(source).mark_arc(innerRadius=45, cornerRadius=25).encode(
+    plot = alt.Chart(source).mark_arc(innerRadius=35, cornerRadius=15).encode(
         theta="% value",
         color= alt.Color("Topic:N",
                         scale=alt.Scale(
@@ -92,8 +92,8 @@ def create_donut_chart(input_response, input_text, input_color):
                         legend=None),
     ).properties(width=120, height=120)
         
-    text = plot.mark_text(align='center', color="#29b5e8", fontSize=24, fontWeight=700).encode(text=alt.value(f'{input_response} %'))
-    plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=45, cornerRadius=20).encode(
+    text = plot.mark_text(align='center', color="#29b5e8", fontSize=20, fontWeight=700).encode(text=alt.value(f'{input_response} %'))
+    plot_bg = alt.Chart(source_bg).mark_arc(innerRadius=35, cornerRadius=10).encode(
         theta="% value",
         color= alt.Color("Topic:N",
                         scale=alt.Scale(
@@ -162,3 +162,15 @@ def create_events(df, columns_to_extract):
             }
             events.append(feedback4MesEvent)
     return events
+
+
+def feedbackColor(value):
+    if value == 0:
+        color = "white"
+    elif 1 <= value < 4:  # Less than 4
+        color = rojo
+    elif 4 <= value <= 7:  # Between 4 and 7, inclusive
+        color = amarillo
+    else:  # Greater than 7
+        color = verde
+    return color

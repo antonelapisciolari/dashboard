@@ -2,14 +2,14 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 from sheet_connection import get_all_worksheets
-from variables import connectionFeedbacks, worksheetFormularioAprendizCierre1Ciclo,autocompletarTutor,autocompletarNombre
+from variables import connectionFeedbacks, worksheetFormularioAprendizCierre2Ciclo,autocompletarTutor,autocompletarNombre
 from data_utils import is_valid_email
 import pandas as pd
 import logging
 
 def run():
     st.set_page_config(
-        page_title="Formulario Cierre 1° Ciclo",
+        page_title="Formulario Cierre 2do Ciclo",
         page_icon="./images/formIcon.png",
         layout="centered",
     )
@@ -37,16 +37,15 @@ for key, value in default_values.items():
     st.session_state.setdefault(key, value)
 
 # Load quiz data
-with open('content/formulario_aprendiz_cierre_primer_ciclo.json', 'r', encoding='utf-8') as f:
+with open('content/formulario_aprendiz_cierre_segundo_ciclo.json', 'r', encoding='utf-8') as f:
     quiz_data = json.load(f)
 
 email_valid = True 
 # Define pages and their questions
-page1Questions = range(0, 6)  # Questions for page 1
-page2Questions = range(6,8)  # Questions for page 2
-page3Questions = range(8,10)  # Questions for page 2
-page4Questions = range(10, 12)  # Questions for page 2
-pages = [page1Questions, page2Questions,page3Questions,page4Questions]
+page1Questions = range(0, 4)  # Questions for page 1
+page2Questions = range(4,8)  # Questions for page 2
+page3Questions = range(8,14)  # Questions for page 2
+pages = [page1Questions, page2Questions,page3Questions]
 
 # Total number of questions
 total_questions = len(quiz_data["text_form"]["questions"])
@@ -77,12 +76,12 @@ def save_to_google_sheet(data):
     responses_only.append(autocompletarTutor)
     responses_only.append(autocompletarNombre)
     conn = create_gsheets_connection()
-    existing_data = conn.read(worksheet=worksheetFormularioAprendizCierre1Ciclo)
+    existing_data = conn.read(worksheet=worksheetFormularioAprendizCierre2Ciclo)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
     print(responses_only)
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
-    conn.update(worksheet=worksheetFormularioAprendizCierre1Ciclo, data=updated_data)
+    conn.update(worksheet=worksheetFormularioAprendizCierre2Ciclo, data=updated_data)
     logging.info("Submitting successfully")
 
 def all_questions_answered():
