@@ -114,7 +114,7 @@ with resources:
             st.write(f"[{formsLinks[12]}]({formsLinks[13]})")
             st.write(f"[{formsLinks[14]}]({formsLinks[15]})")
 with nextStep:
-    st.subheader("Información Importante")
+    st.subheader("")
     rolAprendiz = open("./images/carusel_tutor.gif", "rb")
     contents = rolAprendiz.read()
     data_url = base64.b64encode(contents).decode("utf-8")

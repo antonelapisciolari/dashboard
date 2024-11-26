@@ -237,9 +237,7 @@ def getRotationInfo():
 
 #donde estan mis aprendices
 with st.container():
-
     st.header('**¿En dónde se encuentran hoy los aprendices?**')
-    
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.6])
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
@@ -327,9 +325,20 @@ def getFeebackDetails():
 
 feedbacks= getFeebackDetails()
 
+#feedback details 
+with st.container():
+    st.header('**¿Cómo se están sintiendo en cada etapa del proceso?**')
+    tutorFilter, spaceFilte = st.columns([2,5])
+    with tutorFilter:
+        tutor_options_feedback =[value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip() != ""]
+        tutor_options_feedback = sorted(tutor_options_feedback)
+        tutor = tutorFilter.selectbox("**TUTOR**", options=["Todos"] + tutor_options_feedback,key='select_tutor_feed')
+        df = df[
+        ((df[topFilters[5]] == tutor) | (tutor == "Todos"))]
+active_candidates_feed = df[df[topFilters[6]].str.upper() == 'ACTIVO']
 feedbackPulseDf = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
+        df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
+    )]
 feedbackPulseDf = feedbackPulseDf.drop_duplicates(subset=[columnaEmail])
 if feedbackPulseDf is not None and not feedbackPulseDf.empty:
     pulse1SemanaPromedio = getFeedbackPulse1Semana(feedbackPulseDf)
@@ -342,7 +351,6 @@ feedbackCambioAreaDf = feedbackCambioAreaDf.drop_duplicates(subset=[columnaEmail
 if feedbackCambioAreaDf is not None and not feedbackCambioAreaDf.empty:
     cambioAreaPromedio = getFeedbackPromedioCambioArea(feedbackCambioAreaDf)
     colorCambioArea= feedbackColor(cambioAreaPromedio)
-
 
 feedback1MesDf= feedbacks[2][feedbacks[2][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
@@ -360,7 +368,6 @@ if feedback4MesDf is not None and not feedback4MesDf.empty:
     cuartoMesPromedio = getFeedbackPromedioCuartoMes(feedback4MesDf)
     colorCuartoMes= feedbackColor(cuartoMesPromedio)
 
-
 feedbackAprendizPrimerCierreDf= feedbacks[4][feedbacks[4][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
 )]
@@ -377,77 +384,73 @@ if feedbackAprendizSegundoCierreDf is not None and not feedbackAprendizSegundoCi
     aprendizCierreSegundoCicloPromedio = getFeedbackPromedioAprendizCierreSegundoCiclo(feedbackAprendizSegundoCierreDf)
     colorAprendizCierreSegundoCiclo= feedbackColor(aprendizCierreSegundoCicloPromedio)
 
-#feedback details 
-with st.container():
-    st.header('**¿Cómo se están sintiendo en cada etapa del proceso?**')
-    metricaPulse, metricaCambioArea, metrica1Mes, metrica4Mes, metrica1Cierre, metrica2Cierrre = st.columns(6)
-    with metricaPulse:
-     with st.container():
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">Pulse</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metricaCambioArea:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">Cambio Area</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica1Mes:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">1° Mes</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica4Mes:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">4° Mes</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{cuartoMesPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica1Cierre:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">1° Cierre</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica2Cierrre:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
-                        <span style="color: black; font-size: 16px;font-weight: bold;">2° Cierre</span><br>
-                        <span style="font-size: 20px; font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
+metricaPulse, metricaCambioArea, metrica1Mes, metrica4Mes, metrica1Cierre, metrica2Cierrre = st.columns(6)
+with metricaPulse:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">Pulse</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+with metricaCambioArea:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">Cambio Area</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+with metrica1Mes:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">1° Mes</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+with metrica4Mes:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">4° Mes</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{cuartoMesPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+with metrica1Cierre:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">1° Cierre</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
+with metrica2Cierrre:
+    with st.container():
+        st.markdown(
+            f"""
+                <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
+                    <span style="color: black; font-size: 16px;font-weight: bold;">2° Cierre</span><br>
+                    <span style="font-size: 20px; font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
+                </div>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 with st.expander("Detalle de Feedbacks"):
@@ -494,17 +497,17 @@ with st.container():
             st.write('')
             graficosRespuestas, respuestasRecibidas, respuestasPendientes, respuestasSinResponder, = st.columns([1,2,2,2])
             if i == 0:
-                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedbackPulseDf, columnaCorreoCandidato)
+                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackPulseDf, columnaCorreoCandidato)
             if i == 1:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedbackCambioAreaDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackCambioAreaDf, columnaCorreoCandidato)
             if i == 2:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedback1MesDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedback1MesDf, columnaCorreoCandidato)
             if i == 3:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedback4MesDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedback4MesDf, columnaCorreoCandidato)
             if i == 4:
-                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedbackAprendizPrimerCierreDf, columnaCorreoCandidato)
+                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackAprendizPrimerCierreDf, columnaCorreoCandidato)
             if i == 5:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates, columnaEnvio1Feedback, hoy, feedbackAprendizSegundoCierreDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackAprendizSegundoCierreDf, columnaCorreoCandidato)
             with graficosRespuestas:
                 chart = create_donut_chart(response_data['% Respuestas'], "Respuestas", 'orange')
                 st.altair_chart(chart, use_container_width=True)

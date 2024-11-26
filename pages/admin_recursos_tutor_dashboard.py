@@ -171,7 +171,7 @@ with st.container():
     """
     # Display the subheader with the current month and year
     st.subheader(f"Calendario")
-
+    details_placeholder = st.empty()
     # Create a dictionary to hold events by date
     # Display the calendar
     selected_date = calendar(
@@ -180,7 +180,7 @@ with st.container():
         custom_css=custom_css,
         callbacks = ["eventClick"]
     )
-    details_placeholder = st.empty()
+
     if selected_date:
     # Find the event details
         details_placeholder.markdown(f"**Evento:** {selected_date['eventClick']['event']['title']}\n**Dia:** {selected_date['eventClick']['event']['start']}")
