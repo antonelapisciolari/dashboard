@@ -6,13 +6,13 @@ from data_utils import calcularPorcentajesStatus,create_donut_chart,generate_col
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio
+from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,feedbackTitle,feedbackSubtitle,detalleFeedbackTitle
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 from feedback_utils import getFeedbackPulse1Semana,getFeedbackPromedioCambioArea,getFeedbackPromedioPrimerMes,getFeedbackPromedioCuartoMes,getFeedbackPromedioAprendizCierrePrimerCiclo,getFeedbackPromedioAprendizCierreSegundoCiclo,calcularEstadoRespuestas
 
 #tab icono y titulo
-apply_page_config(st)
+apply_page_config()
 #verificar si el usuario esta logueado sino redigirlo a la login
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
     st.warning(errorRedirection)
@@ -39,12 +39,22 @@ columnaTutor='TUTOR'
 columnaZona='ZONA'
 columnStatus = 'STATUS'
 filtrosTutor = ["CORREO TUTOR", "MAIL TUTOR"]
-
+colorLetraPrimerSemana='black'
+colorLetraCambioArea='black'
+colorLetraPrimerMes='black'
+colorLetraCuartoMes='black'
+colorLetraPrimerCierre='black'
+colorLetraSegundoCierre='blacks'
 #feedback
 columnaEmail='Email'
 columnaCorreoCandidato='CORREO DE CONTACTO'
 topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin,columnaTutor,columnStatus]
-columnaEnvio1Feedback='Envío 1er Feedback'
+columnaEnvio1Semana='Envío 1er Feedback'
+columnaEnvio1Mes='Envío 2do Feedback'
+columnaEnvio4Mes='Envío 3er Feedback'
+columnaEnvioCambioArea='Form cambio de área'
+columnaEnvio1Cierre='Fecha Cierre 1 er Ciclo'
+columnaEnvio2Cierre='Fecha Inicio 2do ciclo'
 #rotacion
 columnaMesesActivos="Meses Activos"
 columnaDeptoDestino="Departamento de Destino"
@@ -69,20 +79,21 @@ active_candidates = df[df[topFilters[6]].str.upper() == 'ACTIVO']
 with st.container():
     col1, col2, col3, col4,col5, col6 = st.columns(6)
     with st.container():
+        programa_options = sorted(df[topFilters[3]].unique().tolist())
+        programa = col1.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options, index=2)
+    with st.container():
         tutor_options =[value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip() != ""]
         tutor_options = sorted(tutor_options)
-        tutor = col1.selectbox("**TUTOR**", options=["Todos"] + tutor_options)
+        tutor = col2.selectbox("**TUTOR**", options=["Todos"] + tutor_options)
     with st.container():
         candidato_options = sorted(df[topFilters[1]].unique().tolist())
-        candidato = col2.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
+        candidato = col3.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
     with st.container():
         hotel_options = sorted(df[topFilters[2]].unique().tolist())
-        hotel = col3.selectbox(f"**{topFilters[2]}**", options=["Todos"] + hotel_options)
+        hotel = col4.selectbox(f"**{topFilters[2]}**", options=["Todos"] + hotel_options)
     with st.container():
-        fecha_inicio = col4.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
-    with st.container():
-        programa_options = sorted(df[topFilters[3]].unique().tolist())
-        programa = col5.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options)
+        fecha_inicio = col5.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
+
     with st.container():
         status = col6.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
 # Filter DataFrame based on selected values
@@ -128,7 +139,7 @@ with containerBajas:
     st.altair_chart(baja_chart, use_container_width=True)
 with containerBajasCantidad:
         st.markdown(
-            f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad</div>",
+            f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad Bajas</div>",
             unsafe_allow_html=True,
         )
         st.markdown(
@@ -140,7 +151,6 @@ with containerBajasCantidad:
             unsafe_allow_html=True,
         )
 
-
 # Finalizados Card
 with containerFinalizados:
     st.markdown("<div style='text-align: center;font-weight: bold;'>Finalizados %</div>", unsafe_allow_html=True)
@@ -149,7 +159,7 @@ with containerFinalizados:
     st.altair_chart(finalizado_chart, use_container_width=True)
 with containerFinalizadosCant:
     st.markdown(
-        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad</div>",
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Cantidad Finalizados</div>",
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -162,12 +172,12 @@ with containerFinalizadosCant:
     )
 
 custom_colors = [aquamarine, amarillo, azul, orange] 
-chartDepto, chartHotel, chartEstudio, chartZona  = st.columns(4)
+chartHotel, chartDepto, chartEstudio, chartZona  = st.columns(4)
 fig_size = (4, 4)
 
 with chartDepto:
     # Create the figure and axis for the bar chart
-    fig1, ax1 = plt.subplots(figsize=fig_size)
+    fig1, ax1 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     
     # Plot a bar chart and apply custom colors
     value_counts = filtered_df[graficos[0]].value_counts()
@@ -186,7 +196,7 @@ with chartDepto:
         st.pyplot(fig1)
 
 with chartHotel:
-    fig2, ax2 = plt.subplots(figsize=fig_size)
+    fig2, ax2 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[1]].value_counts()
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax2, color=custom_colors)
@@ -201,7 +211,7 @@ with chartHotel:
         st.pyplot(fig2)
     
 with chartEstudio:
-    fig3, ax3 = plt.subplots(figsize=fig_size)
+    fig3, ax3 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[2]].value_counts()
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax3, color=custom_colors)
@@ -216,7 +226,7 @@ with chartEstudio:
         st.pyplot(fig3)
 
 with chartZona:
-    fig4, ax4 = plt.subplots(figsize=fig_size)
+    fig4, ax4 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[3]].value_counts()
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax4, color=custom_colors)
@@ -230,7 +240,7 @@ with chartZona:
         ax4.set_title(graficos[3])
         st.pyplot(fig4)
 
-
+st.divider()
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
     return rotacion[0]
@@ -311,13 +321,23 @@ with st.container():
     result_df.insert(desired_position, "Meses Activos", column_to_move) 
     result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
     with tablaAprendicesHoy:
-        st.write('Mis Aprendices:')
-        if result_df is not None and not result_df.empty:
-            st.dataframe(result_df, hide_index="true")
+        col1, col2 = st.columns(2)
+        with st.container():
+            hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
+            hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
+        with st.container():
+            depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
+            depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
+    # Filter DataFrame based on selected values
+        filtered_df = result_df[
+            ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
+            ((result_df[columnaDeptoDestino] == depto) | (depto == "Todos"))]
+        if filtered_df is not None and not filtered_df.empty:
+            st.dataframe(filtered_df, hide_index="true")
         else:
             st.write(noDatosDisponibles)
         
-
+st.divider()
 #Container Feedback
 def getFeebackDetails():
     feedbacks = get_sheets(connectionFeedbacks, [worksheetPulse1Semana,worksheetCambioArea,worksheetFormulario1Mes,worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo])
@@ -327,7 +347,8 @@ feedbacks= getFeebackDetails()
 
 #feedback details 
 with st.container():
-    st.header('**¿Cómo se están sintiendo en cada etapa del proceso?**')
+    st.header(feedbackTitle)
+    st.write(feedbackSubtitle)
     tutorFilter, spaceFilte = st.columns([2,5])
     with tutorFilter:
         tutor_options_feedback =[value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip() != ""]
@@ -342,15 +363,16 @@ feedbackPulseDf = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lowe
 feedbackPulseDf = feedbackPulseDf.drop_duplicates(subset=[columnaEmail])
 if feedbackPulseDf is not None and not feedbackPulseDf.empty:
     pulse1SemanaPromedio = getFeedbackPulse1Semana(feedbackPulseDf)
-    colorPulse= feedbackColor(pulse1SemanaPromedio)
+    colorPulse, colorLetraPrimerSemana= feedbackColor(pulse1SemanaPromedio)
 
 feedbackCambioAreaDf= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
 )]
 feedbackCambioAreaDf = feedbackCambioAreaDf.drop_duplicates(subset=[columnaEmail])
 if feedbackCambioAreaDf is not None and not feedbackCambioAreaDf.empty:
+
     cambioAreaPromedio = getFeedbackPromedioCambioArea(feedbackCambioAreaDf)
-    colorCambioArea= feedbackColor(cambioAreaPromedio)
+    colorCambioArea,colorLetraCambioArea= feedbackColor(cambioAreaPromedio)
 
 feedback1MesDf= feedbacks[2][feedbacks[2][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
@@ -358,7 +380,7 @@ feedback1MesDf= feedbacks[2][feedbacks[2][columnaEmail].apply(lambda x: x.lower(
 feedback1MesDf = feedback1MesDf.drop_duplicates(subset=[columnaEmail])
 if feedback1MesDf is not None and not feedback1MesDf.empty:
     primerMesPromedio = getFeedbackPromedioPrimerMes(feedback1MesDf)
-    colorPrimerMes= feedbackColor(primerMesPromedio)
+    colorPrimerMes,colorLetraPrimerMes= feedbackColor(primerMesPromedio)
 
 feedback4MesDf= feedbacks[3][feedbacks[3][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
@@ -366,7 +388,7 @@ feedback4MesDf= feedbacks[3][feedbacks[3][columnaEmail].apply(lambda x: x.lower(
 feedback4MesDf = feedback4MesDf.drop_duplicates(subset=[columnaEmail])
 if feedback4MesDf is not None and not feedback4MesDf.empty:
     cuartoMesPromedio = getFeedbackPromedioCuartoMes(feedback4MesDf)
-    colorCuartoMes= feedbackColor(cuartoMesPromedio)
+    colorCuartoMes,colorLetraCuartoMes= feedbackColor(cuartoMesPromedio)
 
 feedbackAprendizPrimerCierreDf= feedbacks[4][feedbacks[4][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
@@ -374,7 +396,7 @@ feedbackAprendizPrimerCierreDf= feedbacks[4][feedbacks[4][columnaEmail].apply(la
 feedbackAprendizPrimerCierreDf = feedbackAprendizPrimerCierreDf.drop_duplicates(subset=[columnaEmail])
 if feedbackAprendizPrimerCierreDf is not None and not feedbackAprendizPrimerCierreDf.empty:
     aprendizCierrePrimerCicloPromedio = getFeedbackPromedioAprendizCierrePrimerCiclo(feedbackAprendizPrimerCierreDf)
-    colorAprendizCierrePrimerCiclo= feedbackColor(aprendizCierrePrimerCicloPromedio)
+    colorAprendizCierrePrimerCiclo,colorLetraPrimerCierre= feedbackColor(aprendizCierrePrimerCicloPromedio)
 
 feedbackAprendizSegundoCierreDf= feedbacks[5][feedbacks[5][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
     df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
@@ -382,7 +404,7 @@ feedbackAprendizSegundoCierreDf= feedbacks[5][feedbacks[5][columnaEmail].apply(l
 feedbackAprendizSegundoCierreDf = feedbackAprendizSegundoCierreDf.drop_duplicates(subset=[columnaEmail])
 if feedbackAprendizSegundoCierreDf is not None and not feedbackAprendizSegundoCierreDf.empty:
     aprendizCierreSegundoCicloPromedio = getFeedbackPromedioAprendizCierreSegundoCiclo(feedbackAprendizSegundoCierreDf)
-    colorAprendizCierreSegundoCiclo= feedbackColor(aprendizCierreSegundoCicloPromedio)
+    colorAprendizCierreSegundoCiclo,colorLetraSegundoCierre= feedbackColor(aprendizCierreSegundoCicloPromedio)
 
 metricaPulse, metricaCambioArea, metrica1Mes, metrica4Mes, metrica1Cierre, metrica2Cierrre = st.columns(6)
 with metricaPulse:
@@ -390,8 +412,8 @@ with metricaPulse:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">Pulse</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
+                    <span style="color:{colorLetraPrimerSemana}; font-size: 16px;font-weight: bold;">Pulse</span><br>
+                    <span style="color:{colorLetraPrimerSemana};font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
@@ -401,8 +423,8 @@ with metricaCambioArea:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">Cambio Area</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
+                    <span style="color:{colorLetraCambioArea}; font-size: 16px;font-weight: bold;">Cambio Area</span><br>
+                    <span style="color:{colorLetraCambioArea};font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
@@ -412,8 +434,8 @@ with metrica1Mes:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">1° Mes</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
+                    <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">1° Mes</span><br>
+                    <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
@@ -423,8 +445,8 @@ with metrica4Mes:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">4° Mes</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{cuartoMesPromedio}</span>
+                    <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">4° Mes</span><br>
+                    <span style="color:{colorLetraCuartoMes};font-size: 20px; font-weight: bold;">{cuartoMesPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
@@ -434,8 +456,8 @@ with metrica1Cierre:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">1° Cierre</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
+                    <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">1° Cierre</span><br>
+                    <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
@@ -445,15 +467,15 @@ with metrica2Cierrre:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
-                    <span style="color: black; font-size: 16px;font-weight: bold;">2° Cierre</span><br>
-                    <span style="font-size: 20px; font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
+                    <span style="color: {colorLetraSegundoCierre}; font-size: 16px;font-weight: bold;">2° Cierre</span><br>
+                    <span style="color: {colorLetraSegundoCierre};font-size: 20px; font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
                 </div>
             """,
             unsafe_allow_html=True
         )
 
 
-with st.expander("Detalle de Feedbacks"):
+with st.expander(detalleFeedbackTitle):
     with st.container():
         tabs = st.tabs(feedback_types)
         with tabs[0]:
@@ -492,24 +514,31 @@ with st.expander("Detalle de Feedbacks"):
 with st.container():
     st.subheader('**Estado Respuestas**')
     tabs = st.tabs(feedback_types)
-    for i, feedback in enumerate(feedback_types[:4]):
+    for i, feedback in enumerate(feedback_types):
         with tabs[i]:
             st.write('')
             graficosRespuestas, respuestasRecibidas, respuestasPendientes, respuestasSinResponder, = st.columns([1,2,2,2])
             if i == 0:
-                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackPulseDf, columnaCorreoCandidato)
+                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Semana, hoy, feedbackPulseDf, columnaCorreoCandidato)
             if i == 1:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackCambioAreaDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvioCambioArea, hoy, feedbackCambioAreaDf, columnaCorreoCandidato)
             if i == 2:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedback1MesDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Mes, hoy, feedback1MesDf, columnaCorreoCandidato)
             if i == 3:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedback4MesDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio4Mes, hoy, feedback4MesDf, columnaCorreoCandidato)
             if i == 4:
-                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackAprendizPrimerCierreDf, columnaCorreoCandidato)
+                response_data, candidatos_feedback_inprogress = calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Cierre, hoy, feedbackAprendizPrimerCierreDf, columnaCorreoCandidato)
             if i == 5:
-                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio1Feedback, hoy, feedbackAprendizSegundoCierreDf, columnaCorreoCandidato)
+                response_data , candidatos_feedback_inprogress= calcularEstadoRespuestas(active_candidates_feed, columnaEnvio2Cierre, hoy, feedbackAprendizSegundoCierreDf, columnaCorreoCandidato)
             with graficosRespuestas:
-                chart = create_donut_chart(response_data['% Respuestas'], "Respuestas", 'orange')
+                percentage = response_data['% Respuestas']
+                if percentage < 40:
+                    color = 'blue'
+                elif 40 <= percentage <= 70:
+                    color = 'yellow'
+                else:
+                    color = 'green'
+                chart = create_donut_chart(response_data['% Respuestas'], "Respuestas", color)
                 st.altair_chart(chart, use_container_width=True)
             with respuestasPendientes: 
                 st.markdown(

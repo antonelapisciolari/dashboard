@@ -8,7 +8,7 @@
         {"id": "q1", "question": "Email:", "email":true},
         {"id": "q2", "question": "Del 1 al 4, ¿Cómo te has sentido en este primer ciclo?","slider":"1,5"},
         {"id": "q3", "question": "¿Te sentiste bien acompañado/a por tu Tutor/a?","options": [" Sí, estuvieron súper presentes", " Sí, aunque me gustaría haber tenido más apoyo", "Tuve que resolver varias cosas por mi cuenta"]},
-        {"id": "q4", "question": "¿Qué área te ha gustado más?:", "options": ["PISOS", "B&R", "COCINA", "SERVICIOS TÉCNICOS","RECEPCIÓN"]},
+        {"id": "q4", "question": "¿Qué área te ha gustado más?:"},
         {"id": "q5", "question": "Del 1 al 4, ¿Cuánto has podido aplicar lo del instituto en el hotel?","slider":"1,5"},
         {"id": "q6", "question": "Del 1 al 4, ¿Cuánto te gustaría seguir formando parte de nuestro equipo al finalizar el programa?","slider":"1,5"},
       

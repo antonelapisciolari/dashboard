@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 from sheet_connection import get_all_worksheets
-from variables import connectionFeedbacks, worksheetPulse1Semana,autocompletarTutor,autocompletarNombre
+from variables import connectionFeedbacks, worksheetPulse1Semana,autocompletarTutor,autocompletarNombre,page_icon
 from data_utils import is_valid_email
 import pandas as pd
 import logging
@@ -10,7 +10,7 @@ import logging
 def run():
     st.set_page_config(
         page_title="Formulario 1º Semana",
-        page_icon="./images/formIcon.png",
+        page_icon=page_icon,
         layout="centered",
     )
 
@@ -73,11 +73,9 @@ def save_to_google_sheet(data):
     ]
     responses_only.append(autocompletarTutor)
     responses_only.append(autocompletarNombre)
-    responses_only.append("TBD")
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPulse1Semana)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
-    print(responses_only)
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
     conn.update(worksheet=worksheetPulse1Semana, data=updated_data)

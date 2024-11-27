@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from variables import folderIdTutor,worksheetPerfilTutor, smileFacePath, rocketPath, camaraPath,connectionFeedbacks
+from variables import folderIdTutor,worksheetPerfilTutor, smileFacePath, rocketPath, camaraPath,connectionFeedbacks,page_icon
 from data_utils import is_valid_email
 import logging
 from sheet_connection import upload_to_drive,get_all_worksheets
@@ -11,7 +11,7 @@ import os
 def run():
     st.set_page_config(
         page_title="Formulario FP Dual",
-        page_icon="./images/formIcon.png",
+        page_icon=page_icon,
         layout="centered",
     )
 

@@ -11,7 +11,7 @@
         {"id": "q5", "question": "Del 1 al 4, ¿Estas pudiendo aplicar lo que vas aprendiendo en el Centro Educativo en esta parte práctica de tu aprendizaje?","slider":"1,5"},
         {"id": "q6", "question": "Del 1 al 4, ¿Cómo te has sentido con las reuniones de seguimiento con tu tutor/a?","slider":"1,5"},
         {"id": "q7", "question": "En temas de Sostenibilidad, ¿has podido aplicar lo que has aprendido en las áreas que has recorrido?","options": ["Sí, y he podido aportar ideas nuevas", "Un poco, pero me gustaría profundizar para involucrarme", "No, no he visto cómo aplicarlo, me gustaria que me expliquen de nuevo"]},
-        {"id": "q8", "question": "En temas de Experiencia del Cliente, ¿Has podido apcortar ideas para mejorar la atención al cliente en las áreas que has recorrido?","options": ["Sí, aporté ideas nuevas, siempre estoy muy atento", "Un poco, me gustaría profundizar más para poder mejorar la Experiencia del cliente.", "No, no he podido estar atento a la Excelencia al cliente, me gustaría verlo con mi tutor de qué manera puedo abordarlo."]}
+        {"id": "q8", "question": "En temas de Experiencia del Cliente, ¿Has podido apcortar ideas para mejorar la atención al cliente en las áreas que has recorrido?","options": ["Sí, aporté ideas nuevas, siempre estoy muy atento", "Un poco, me gustaría profundizar más para poder mejorar la Experiencia del cliente.", "No, no he podido estar atento a la Experiencia del cliente, me gustaría verlo con mi tutor de qué manera puedo abordarlo."]}
       ]
     }
 }

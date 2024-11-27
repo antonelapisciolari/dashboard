@@ -1,15 +1,16 @@
 title ="FP Dual Panel"
 #tutor dashboard
-recursosUtiles="Recursos Útiles"
-documentacionTitle="Documentación"
-tabPreOnboarding="Preparación"
+recursosUtiles="Impulsa el desarrollo de tus aprendices con estos recursos"
+documentacionTitle="Materiales de apoyo"
+tabPreOnboarding="Antes de empezar"
 tabOnboarding="Primeros Días"
 tabSeguimiento="Seguimiento"
 tabCierre="Cierre"
-tutorDashboard="Recursos Dashboard"
-aprendizDashaboard="Dashboard Aprendiz"
-adminRecursosTutorDashboard="Recursos Utiles"
-adminTutorDashboard="Dashboard Programa"
+tutorDashboard="Recursos Útiles"
+aprendizDashaboard="Reporte de mis aprendices"
+
+adminRecursosTutorDashboard="Recursos Útiles"
+adminTutorDashboard="Reporte General"
 
 #login
 username="Email"

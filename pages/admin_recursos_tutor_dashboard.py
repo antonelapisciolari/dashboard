@@ -6,10 +6,10 @@ from streamlit_calendar import calendar
 from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
-from data_utils import getColumns,create_events
+from data_utils import getColumns,create_events,crearAgenda
 from variables import connectionGeneral
-from variables import registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback
-apply_page_config(st)
+from variables import registroAprendices, recursosUtiles,formsLinks, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks, aprendiz_looker_url, presupuesto_looker_url,aprendiz_2025_looker_url,tabFeedback,tituloCalendario,tituloOrganizacion
+apply_page_config()
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
     st.warning("Sesion expirada. Redirigiendo a login...")
@@ -108,14 +108,15 @@ with resources:
             st.write("**Tutor:**")
             st.write(f"[{formsLinks[12]}]({formsLinks[13]})")
             st.write(f"[{formsLinks[14]}]({formsLinks[15]})")
+@st.cache_data
 def get_presupuesto_looker_url():
-     st.components.v1.iframe(presupuesto_looker_url, width=800, height=600)
+    st.components.v1.iframe(presupuesto_looker_url, width=700, height=600)
 @st.cache_data
 def get_aprendiz_24_looker_url():
-    st.components.v1.iframe(aprendiz_looker_url, width=800, height=600)
+    st.components.v1.iframe(aprendiz_looker_url, width=700, height=600)
 @st.cache_data
 def get_aprendiz_25_looker_url():
-    st.components.v1.iframe(aprendiz_2025_looker_url, width=800, height=600)
+    st.components.v1.iframe(aprendiz_2025_looker_url, width=700, height=600)
 with nextStep:
     st.subheader("Reportes")
     selector, espacio = st.columns([1.5,4])
@@ -134,6 +135,7 @@ with nextStep:
 
 
 with st.container():
+    st.subheader(tituloOrganizacion)
     events = events
     today = datetime.today().strftime('%Y-%m-%d')
     calendar_options = {
@@ -170,7 +172,7 @@ with st.container():
         }
     """
     # Display the subheader with the current month and year
-    st.subheader(f"Calendario")
+    st.subheader(tituloCalendario)
     details_placeholder = st.empty()
     # Create a dictionary to hold events by date
     # Display the calendar
@@ -187,3 +189,5 @@ with st.container():
 
 
 
+st.subheader("Agenda")
+crearAgenda()

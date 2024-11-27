@@ -2,7 +2,7 @@ import streamlit as st
 import json
 from streamlit_gsheets import GSheetsConnection
 from sheet_connection import get_all_worksheets
-from variables import connectionFeedbacks, worksheetFormulario1Mes,autocompletarTutor,autocompletarNombre
+from variables import connectionFeedbacks, worksheetFormulario1Mes,autocompletarTutor,autocompletarNombre,page_icon
 from data_utils import is_valid_email
 import pandas as pd
 import logging
@@ -10,7 +10,7 @@ import logging
 def run():
     st.set_page_config(
         page_title="Formulario del 1° Mes",
-        page_icon="./images/formIcon.png",
+        page_icon=page_icon,
         layout="centered",
     )
 
@@ -113,7 +113,7 @@ else:
             start, end = map(int, question_item["slider"].split(","))
             my_range = range(start,end)
             response = st.select_slider(
-            "Seleccione un valor",
+            "Seleccione una opción",
             options=my_range,
             key=f"response_{idx}",
             value=previous_response if previous_response is not None else my_range[0],

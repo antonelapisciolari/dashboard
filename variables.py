@@ -34,7 +34,7 @@ teal="#00A6A6"
 gris="#8D99AE"
 verde="#08af64"
 rojo="#d62828"
-feedback_types = ['Pulse 1º Semana', 'Cambio Area', '1º Mes', '4º Mes','1º Cierre','2º Cierre'] 
+
 #login
 username=vars.username
 password=vars.password
@@ -51,6 +51,21 @@ noDatosDisponibles="No hay datos disponibles"
 page_icon="./images/icon.ico"
 companyIcon="./images/smallIcon.png"
 title= vars.title
+
+#comunes
+tituloOrganizacion="Planifica el camino!"
+tituloCalendario="Mantente al Día con los Próximos Pasos"
+feedbackTitle="¿Cómo van tus aprendices?"
+feedbackSubtitle="Usa sus feedbacks y reflexiones para conocer sus avances, inquietudes y seguir apoyándolos en cada etapa"
+detalleFeedbackTitle="¡Accede aquí al detalle completo de sus comentarios!"
+dondeEstanMisAprendices="¿En dónde se encuentran hoy mis aprendices?"
+primerSemana="1° Semana"
+primerMes="1° Mes"
+cuartoMes="4° Mes"
+primerCierre="1° Ciclo Cierre"
+segundoCierre="2° Ciclo Cierre"
+cambioArea="Cambio de área"
+feedback_types = [primerSemana, cambioArea, primerMes, cuartoMes,primerCierre,segundoCierre] 
 #tutor dashboard 
 preOnboardingImage="https://github.com/user-attachments/assets/7dd8d62d-b5ce-44ac-bda9-5eca1459a8b3"
 onboardingImage="https://github.com/user-attachments/assets/2234162c-6c63-4ea4-9565-69206f7870fa"
@@ -69,19 +84,20 @@ tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
-preOnboardingLinks = ["Guía Express para el Tutor/a!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0"]
-onboardingLinks = ["Manual 1: Consejos Claves Primer día", "https://docs.google.com/document/d/1f1QN7PlVTcpcXLk-ELx37Ulb7dOCTbDDcMqHWQ3UNk0/edit?tab=t.0#heading=h.f6elu9z606tn"]
-seguimientoLinks = ["Manual 2: Consejos Claves Cambio de área", "https://docs.google.com/document/d/1Yjh1DlffuTeq5PZNVSgUZ_WyYOMfb7IolpYFl4qYbDw/edit?tab=t.0#heading=h.yvse9tfgikrc"]
-cierreLinks = ["Manual 4: Consejos claves Cierre", "https://docs.google.com/document/d/1hn37K1A9O1Yr1jFyLfhp8zKNUdGqU5uEzX4mquRj_gE/edit#heading=h.p2j4qotp1ckv"]
-formsLinks = ["Formulario 1º semana", "https://fpdual-dashboard.streamlit.app/pulse_primera_semana",
+preOnboardingLinks = ["Guía Exprés!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0"]
+onboardingLinks = ["Manual 1: Consejos Claves Primer día", "https://drive.google.com/file/d/1RVP5B_-coA6BOipl_KzMIi460wuGIREW/view?usp=drive_link"]
+seguimientoLinks = ["Manual 2: Consejos Claves Cambio de área", "https://drive.google.com/file/d/1JrxQ1ruBPBVJ5Fg5MKzi6beufi4ciNRq/view?usp=drive_link","Manual 3: Claves para el Seguimiento","https://drive.google.com/file/d/1LuzFXXaxn2YnAB8LUwdhnMRteriXiy2-/view?usp=drive_link"]
+cierreLinks = ["Manual 4: Claves para el Cierre", "https://drive.google.com/file/d/10JNaBsRVVU1ihtL7AKXn_LTUjChlrChA/view?usp=drive_link"]
+formsLinks = ["Primera Semana", "https://fpdual-dashboard.streamlit.app/pulse_primera_semana",
 "Cambio Area","https://fpdual-dashboard.streamlit.app/formulario_cambio_area",
-"Formulario 1º mes Aprendiz", "https://fpdual-dashboard.streamlit.app/formulario_primer_mes",
-"Formulario 4º mes Aprendiz", "https://fpdual-dashboard.streamlit.app/formulario_cuarto_mes",
-"Formulario Aprendiz - Cierre 1er Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_primer_ciclo",
-"Formulario Aprendiz - Cierre 2do Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_segundo_ciclo",
-"Formulario Tutor - Cierre 1er Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_primer_ciclo",
-"Formulario Tutor - Cierre 2do Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_segundo_ciclo"
+"Primer Mes", "https://fpdual-dashboard.streamlit.app/formulario_primer_mes",
+"Cuarto Mes", "https://fpdual-dashboard.streamlit.app/formulario_cuarto_mes",
+"Cierre 1° Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_primer_ciclo",
+"Cierre 2° Ciclo","https://fpdual-dashboard.streamlit.app/formulario_aprendiz_cierre_segundo_ciclo",
+"Reflexión 1° Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_primer_ciclo",
+"Reflexión 2° Ciclo","https://fpdual-dashboard.streamlit.app/formulario_tutor_cierre_segundo_ciclo"
               ]
+
 
 #admin dashboard
 aprendiz_looker_url = "https://lookerstudio.google.com/embed/reporting/a240d7c8-63aa-405e-b320-4aff88c57547/page/XQXmD"

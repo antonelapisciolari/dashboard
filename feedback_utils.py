@@ -6,7 +6,7 @@ with open('content/formularioPulse1Semana.json', 'r', encoding='utf-8') as f:
     quiz_data = json.load(f)
 
 def getFeedbackPulse1Semana(feedback):
-    dfiltered = getColumns(feedback, [quiz_data["text_form"]["questions"][1]["question"], quiz_data["text_form"]["questions"][2]["question"], quiz_data["text_form"]["questions"][4]["question"]])
+    dfiltered = getColumns(feedback, [quiz_data["text_form"]["questions"][1]["question"],quiz_data["text_form"]["questions"][2]["question"],quiz_data["text_form"]["questions"][4]["question"]])
     feedback_mapping = {
     "Genial 😊": 4,
     "Bien 👍": 3,
@@ -147,7 +147,7 @@ def getFeedbackPromedioAprendizCierreSegundoCiclo(feedback):
 
 
 def calcularEstadoRespuestas(active_candidates,columnaEnvio1Feedback,hoy, feedbackPulseDf,columnaCorreoCandidato ):
-    active_candidates[columnaEnvio1Feedback] = pd.to_datetime(active_candidates[columnaEnvio1Feedback])
+    active_candidates[columnaEnvio1Feedback] = pd.to_datetime(active_candidates[columnaEnvio1Feedback], format='%d/%m/%Y')
     candidatos_feedback_inprogress = active_candidates[active_candidates[columnaEnvio1Feedback] < hoy]
     feedback_emails = feedbackPulseDf['Email'].unique()
     feedback_emails_normalized = [email.lower() for email in feedback_emails]

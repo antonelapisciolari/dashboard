@@ -2,6 +2,7 @@ from variables import celeste, amarillo, aquamarine, azul, orange, teal, gris,ro
 import re 
 import pandas as pd
 import altair as alt
+from streamlit_carousel import carousel
 def filter_dataframe(df, filters):
     for column, value in filters.items():
         df = df[df[column].isin(value)]
@@ -64,13 +65,13 @@ def calcularPorcentajesStatus(df):
 
 def create_donut_chart(input_response, input_text, input_color):
     if input_color == 'blue':
-        chart_color = ['#002855', '#ffcb1d']
+        chart_color = [azul, '#cbdcfb']
     if input_color == 'yellow':
-        chart_color = ['#FECA1D', '#3AA597']
+        chart_color = [amarillo, '#cbdcfb']
     if input_color == 'orange':
-        chart_color = ['#FF6B35', '#002855']
-    if input_color == 'gray':
-        chart_color = ['#8D99AE', '#cbdcfb']
+        chart_color = [orange, '#cbdcfb']
+    if input_color == 'green':
+        chart_color = [aquamarine, '#cbdcfb']
         
     source = pd.DataFrame({
         "Topic": ['', input_text],
@@ -167,10 +168,43 @@ def create_events(df, columns_to_extract):
 def feedbackColor(value):
     if value == 0:
         color = "white"
+        letraColor = "black"
     elif 1 <= value < 4:  # Less than 4
-        color = rojo
+        color = azul
+        letraColor = "white"
     elif 4 <= value <= 7:  # Between 4 and 7, inclusive
         color = amarillo
+        letraColor = "black"
     else:  # Greater than 7
-        color = verde
-    return color
+        color = aquamarine
+        letraColor = "black"
+    return color, letraColor
+
+
+def crearAgenda():
+    carousel_items = []  # Initialize as an empty list
+
+    # Append items to the carousel
+    carousel_items.append({
+        "title": "",
+        "text": "",
+        "img": "./images/agenda_1_DH.png"
+    })
+    carousel_items.append({
+        "title": "",
+        "text": "",
+        "img": "./images/agenda_2_DH.png"
+    })
+    carousel_items.append({
+        "title": "",
+        "text": "",
+        "img": "./images/agenda_1_DC.png"
+    })
+    carousel_items.append({
+        "title": "",
+        "text": "",
+        "img": "./images/agenda_2_DC.png"
+    })
+
+    carousel(items=carousel_items, container_height= 1100)
+    

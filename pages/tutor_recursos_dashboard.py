@@ -6,11 +6,11 @@ from streamlit_calendar import calendar
 from datetime import datetime
 import pandas as pd
 from sheet_connection import get_google_sheet
-from data_utils import filter_dataframe, getColumns,create_events
+from data_utils import filter_dataframe, getColumns,create_events,crearAgenda
 from variables import connectionGeneral
 import base64
-from variables import amarillo, aquamarine, registroAprendices, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks,tabFeedback,formsLinks
-apply_page_config(st)
+from variables import registroAprendices,tituloOrganizacion,tituloCalendario, recursosUtiles,documentacionTitle, tabPreOnboarding, tabCierre,tabOnboarding,tabSeguimiento, preOnboardingLinks, onboardingLinks,seguimientoLinks,cierreLinks,tabFeedback,formsLinks
+apply_page_config()
 
 if "logged_in" not in st.session_state or not st.session_state.logged_in:
     st.warning("Sesion expirada. Redirigiendo a login...")
@@ -63,7 +63,6 @@ st.markdown(
 # In the 60% container, you can place some text or content
 with resources:
     st.subheader(recursosUtiles)
-    # Create two side-by-side containers inside col1
 
     # Add content to the first inner column
     with stylable_container(
@@ -82,24 +81,26 @@ with resources:
 
     # Pre-Onboarding Tab
     with tabs[0]:
-        st.write("Links relevantes para preparación:")
+        st.write("¡Prepárate para acompañar a tus aprendices en su camino!:")
         st.write(f"[{preOnboardingLinks[0]}]({preOnboardingLinks[1]})")
     # Onboarding Tab
     with tabs[1]:
-        st.write("Links relevantes para primeros días:")
+        st.write("Usa estos consejos para recibir a tu Aprendiz:")
         st.write(f"[{onboardingLinks[0]}]({onboardingLinks[1]})")
 
     # Seguimiento Tab
     with tabs[2]:
-        st.write("Links relevantes para Seguimiento:")
+        st.write("Acompañalo tanto en los cambios de área como con reuniones de seguimiento:")
         st.write(f"[{seguimientoLinks[0]}]({seguimientoLinks[1]})")
+        st.write(f"[{seguimientoLinks[2]}]({seguimientoLinks[3]})")
 
     # Cierre Tab
     with tabs[3]:
-        st.write("Links relevantes para Cierre:")
+        st.write("Finaliza el ciclo reflexionando y celebrando logros!:")
         st.write(f"[{cierreLinks[0]}]({cierreLinks[1]})")
             # Cierre Tab
     with tabs[4]:
+        st.write("Accede a los formularios del programa: los tuyos al cierre y los de tus aprendices durante el ciclo:")
         tutorForms, aprendizForms = st.columns(2)
         with aprendizForms:
             st.write("**Aprendiz:**")
@@ -115,6 +116,7 @@ with resources:
             st.write(f"[{formsLinks[14]}]({formsLinks[15]})")
 with nextStep:
     st.subheader("")
+    st.write("")
     rolAprendiz = open("./images/carusel_tutor.gif", "rb")
     contents = rolAprendiz.read()
     data_url = base64.b64encode(contents).decode("utf-8")
@@ -125,7 +127,7 @@ with nextStep:
         unsafe_allow_html=True,
 )
 with st.container():
-    st.subheader("Próximos pasos")
+    st.subheader(tituloOrganizacion)
     events = events
     today = datetime.today().strftime('%Y-%m-%d')
     calendar_options = {
@@ -162,7 +164,7 @@ with st.container():
         }
     """
     # Display the subheader with the current month and year
-    st.subheader(f"Calendario")
+    st.subheader(tituloCalendario)
     details_placeholder = st.empty()
     # Create a dictionary to hold events by date
     # Display the calendar
@@ -177,4 +179,6 @@ with st.container():
     # Find the event details
         details_placeholder.markdown(f"**Evento:** {selected_date['eventClick']['event']['title']}\n**Dia:** {selected_date['eventClick']['event']['start']}")
 
+st.subheader("Agenda")
+crearAgenda()
 

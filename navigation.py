@@ -35,7 +35,7 @@ def make_sidebar():
             st.page_link("pages/admin_tutor_dashboard.py", label=adminTutorDashboard)
             st.page_link("pages/tutor_aprendiz_dashboard.py", label=aprendizDashboard)
             st.page_link("pages/tutor_recursos_dashboard.py", label=tutorDashboard)
-
+            
             st.write("")
             st.write("")
 
@@ -98,6 +98,8 @@ def make_sidebar_tutor():
         if st.session_state.get("logged_in", False):
             st.page_link("pages/tutor_aprendiz_dashboard.py", label=aprendizDashboard)
             st.page_link("pages/tutor_recursos_dashboard.py", label=tutorDashboard)
+            st.page_link("pages/agenda_dh.py", label='Agenda DH')
+            st.page_link("pages/agenda_dc.py", label='Agenda DC')
             st.write("")
             st.write("")
 
