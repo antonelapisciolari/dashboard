@@ -107,12 +107,12 @@ filtered_df = df[
 ]
 #pie chart container and aprendiz data
 graficos = [columnaPosicion,columnaHotel,columnaEstudios,columnaZona]
-finalizado, baja,active_count, bajaCount, finalizadoCount,total_statuses = calcularPorcentajesStatus(filtered_df)
+finalizado, baja,active_count, bajaCount, finalizadoCount,total_statuses,pdt_iniciado_count = calcularPorcentajesStatus(filtered_df)
 with st.container():
     st.header('**¿Cómo se distribuyen los aprendices?**')
 
 # Layout containers
-totalAprendices,containerActivos, containerBajas,containerBajasCantidad, containerFinalizados,containerFinalizadosCant = st.columns(6)
+totalAprendices,totalPdtInicio, containerActivos, containerBajas,containerBajasCantidad, containerFinalizados,containerFinalizadosCant = st.columns(7)
 with totalAprendices:
     st.markdown(
         f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total Aprendices</div>",
@@ -122,6 +122,20 @@ with totalAprendices:
         f"""
         <div style="background-color: {aquamarine}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
             <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{total_statuses}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with totalPdtInicio:
+    st.markdown(
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total PDT Incio</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""
+        <div style="background-color: {aquamarine}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
+            <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{pdt_iniciado_count}</span>
         </div>
         """,
         unsafe_allow_html=True,
