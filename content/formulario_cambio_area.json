@@ -5,7 +5,7 @@
       "cierre":"¡Gracias por compartir! Te deseamos lo mejor para las próximas semanas! ¡Aprovechalas al máximo!",
       "questions": [
         {"id": "q1", "question": "Email:", "email":true},
-        {"id": "q2", "question": "Selecciona el área que vas a Analizar:"},
+        {"id": "q2", "question": "¿Qué area vas a analizar?:"},
         {"id": "q3", "question": "¿Cómo te has sentido en esta área?", "options": ["Súper cómodo/a 😊", "Bien", "Me costó adaptarme","No me sentí cómodo/a"]},
         {"id": "q4", "question": "Del 1 al 4, ¿Te ha servido la reunión con tu TUTOR antes de empezar en esta área?","slider":"1,5"},
         {"id": "q5", "question": "¿Qué es lo que más te ha llamado la atención de esta área?"},
