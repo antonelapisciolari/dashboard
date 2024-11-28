@@ -6,7 +6,7 @@ from data_utils import calcularPorcentajesStatus,create_donut_chart,generate_col
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, connectionGeneral, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,feedbackTitle,feedbackSubtitle,detalleFeedbackTitle
+from variables import registroAprendices, azul, amarillo, aquamarine, primerMes, cuartoMes,primerCierre,segundoCierre,cambioArea,connectionGeneral,primerSemana, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,feedbackTitle,feedbackSubtitle,detalleFeedbackTitle
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 from feedback_utils import getFeedbackPulse1Semana,getFeedbackPromedioCambioArea,getFeedbackPromedioPrimerMes,getFeedbackPromedioCuartoMes,getFeedbackPromedioAprendizCierrePrimerCiclo,getFeedbackPromedioAprendizCierreSegundoCiclo,calcularEstadoRespuestas
@@ -129,7 +129,7 @@ with totalAprendices:
 
 with totalPdtInicio:
     st.markdown(
-        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total PDT Incio</div>",
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total PDT Inicio</div>",
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -442,7 +442,7 @@ with metricaPulse:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
-                    <span style="color:{colorLetraPrimerSemana}; font-size: 16px;font-weight: bold;">Pulse</span><br>
+                    <span style="color:{colorLetraPrimerSemana}; font-size: 16px;font-weight: bold;">{primerSemana}</span><br>
                     <span style="color:{colorLetraPrimerSemana};font-size: 20px; font-weight: bold;">{pulse1SemanaPromedio}</span>
                 </div>
             """,
@@ -453,7 +453,7 @@ with metricaCambioArea:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
-                    <span style="color:{colorLetraCambioArea}; font-size: 16px;font-weight: bold;">Cambio Area</span><br>
+                    <span style="color:{colorLetraCambioArea}; font-size: 16px;font-weight: bold;">{cambioArea}</span><br>
                     <span style="color:{colorLetraCambioArea};font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
                 </div>
             """,
@@ -464,7 +464,7 @@ with metrica1Mes:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
-                    <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">1° Mes</span><br>
+                    <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">{primerMes}</span><br>
                     <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
                 </div>
             """,
@@ -475,7 +475,7 @@ with metrica4Mes:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
-                    <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">4° Mes</span><br>
+                    <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">{cuartoMes}</span><br>
                     <span style="color:{colorLetraCuartoMes};font-size: 20px; font-weight: bold;">{cuartoMesPromedio}</span>
                 </div>
             """,
@@ -486,7 +486,7 @@ with metrica1Cierre:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
-                    <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">1° Cierre</span><br>
+                    <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">{primerCierre}</span><br>
                     <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
                 </div>
             """,
@@ -497,7 +497,7 @@ with metrica2Cierrre:
         st.markdown(
             f"""
                 <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
-                    <span style="color: {colorLetraSegundoCierre}; font-size: 16px;font-weight: bold;">2° Cierre</span><br>
+                    <span style="color: {colorLetraSegundoCierre}; font-size: 16px;font-weight: bold;">{segundoCierre}</span><br>
                     <span style="color: {colorLetraSegundoCierre};font-size: 20px; font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
                 </div>
             """,

@@ -113,7 +113,7 @@ with totalAprendices:
     )
 with totalPdtInicio:
     st.markdown(
-        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total PDT Incio</div>",
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total PDT Inicio</div>",
         unsafe_allow_html=True,
     )
     st.markdown(

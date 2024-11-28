@@ -11,6 +11,11 @@
       "role": "admin"
     },
     {
+      "username": "miquelangel.bennasar@grupoiberostar.com",
+      "password": "miquel.b",
+      "role": "admin"
+    },
+    {
       "username": "antopiscio@gmail.com",
       "password": "admin",
       "role": "admin"
