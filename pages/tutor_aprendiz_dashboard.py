@@ -91,13 +91,26 @@ filtered_df = df[
     (df[topFilters[0]] >= pd.to_datetime(fecha_inicio)) &  
     ((df[topFilters[3]] == programa) | (programa == "Todos"))
 ]
-finalizado, baja,active_count, bajaCount, finalizadoCount = calcularPorcentajesStatus(filtered_df)
+finalizado, baja,active_count, bajaCount, finalizadoCount,total_statuses = calcularPorcentajesStatus(filtered_df)
 #pie chart container and aprendiz data
 graficos = [columnaPosicion,columnaHotel,columnaEstudios]
 with st.container():
     st.header('**¿Cómo se distribuyen mis aprendices?**')
 # Layout containers
-containerActivos, containerBajas,containerBajasCantidad, containerFinalizados,containerFinalizadosCant = st.columns(5)
+totalAprendices,containerActivos, containerBajas,containerBajasCantidad, containerFinalizados,containerFinalizadosCant = st.columns(6)
+with totalAprendices:
+    st.markdown(
+        f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Total Aprendices</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        f"""
+        <div style="background-color: {aquamarine}; padding: 10px; border-radius: 50%; text-align: center; margin-bottom: 10px; width: 100px; height: 100px; line-height: 80px; margin: 0 auto;">
+            <span style="color: #FECA1D; font-size: 24px; font-weight: bold;">{total_statuses}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 with containerActivos:
     st.markdown(
         f"<div style='text-align: center; color: {azul}; font-size: 16px;font-weight: bold;'>Aprendices Activos</div>",
@@ -227,6 +240,7 @@ with st.container():
             for hotel in hoteles:
                 # Filtrar los datos del hotel específico
                 hotel_data = df_grouped[df_grouped[columnaHotelDestino] == hotel]
+                hotel_data["Mes"] = pd.Categorical(hotel_data["Mes"], categories=meses_futuros, ordered=True)
                 # Crear gráfico de barras
                 fig = px.bar(
                     hotel_data,
@@ -241,6 +255,7 @@ with st.container():
                 )
                 
                 fig.update_traces(textposition="outside")
+                fig.update_layout(xaxis=dict(type='category'))
                     # Save the figure as an image
                 fig.write_image(f"{hotel}.png")
 

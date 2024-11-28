@@ -61,7 +61,7 @@ def calcularPorcentajesStatus(df):
        finalizado_pct = int((finalizado_count / total_statuses) * 100) 
     if baja_count !=0:
         baja_pct = int((baja_count / total_statuses) * 100)
-    return finalizado_pct, baja_pct,activo_count, baja_count,finalizado_count
+    return finalizado_pct, baja_pct,activo_count, baja_count,finalizado_count,total_statuses
 
 def create_donut_chart(input_response, input_text, input_color):
     if input_color == 'blue':
