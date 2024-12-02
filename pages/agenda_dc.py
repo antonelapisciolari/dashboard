@@ -1,4 +1,4 @@
-from navigation import make_sidebar_tutor
+from navigation import make_sidebar_tutor,make_sidebar_admin
 import streamlit as st
 from page_utils import apply_page_config
 from streamlit_carousel import carousel
@@ -12,6 +12,9 @@ if "logged_in" not in st.session_state or not st.session_state.logged_in:
 else:
     if st.session_state.role == 'tutor':
         make_sidebar_tutor()
+    else:
+        make_sidebar_admin()
+
 
 #leer el style.css 
 with open("style.css") as f:

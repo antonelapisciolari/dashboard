@@ -78,7 +78,7 @@ tabOnboarding=vars.tabOnboarding
 tabSeguimiento=vars.tabSeguimiento
 tabCierre=vars.tabCierre
 tabFeedback="Formularios"
-
+referenciaColores="Recomendaciones por color:"
 #menu pages
 tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard

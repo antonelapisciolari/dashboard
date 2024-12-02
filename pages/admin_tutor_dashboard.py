@@ -6,7 +6,7 @@ from data_utils import calcularPorcentajesStatus,create_donut_chart,generate_col
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices, azul, amarillo, aquamarine, primerMes, cuartoMes,primerCierre,segundoCierre,cambioArea,connectionGeneral,primerSemana, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,feedbackTitle,feedbackSubtitle,detalleFeedbackTitle
+from variables import registroAprendices, azul,referenciaColores, amarillo, aquamarine, primerMes, cuartoMes,primerCierre,segundoCierre,cambioArea,connectionGeneral,primerSemana, worksheetPulse1Semana,connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection,noDatosDisponibles,worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,feedbackTitle,feedbackSubtitle,detalleFeedbackTitle
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 from feedback_utils import getFeedbackPulse1Semana,getFeedbackPromedioCambioArea,getFeedbackPromedioPrimerMes,getFeedbackPromedioCuartoMes,getFeedbackPromedioAprendizCierrePrimerCiclo,getFeedbackPromedioAprendizCierreSegundoCiclo,calcularEstadoRespuestas
@@ -162,7 +162,13 @@ with containerBajas:
         f"<div style='text-align: center; color: {azul}; font-size: 16px; font-weight: bold;'>Bajas %</div>",
         unsafe_allow_html=True,
     )
-    baja_chart = create_donut_chart(baja, "Bajas", 'blue')
+    if baja < 40:
+        color = 'blue'
+    elif 40 <= finalizado <= 70:
+        color = 'yellow'
+    else:
+        color = 'green'
+    baja_chart = create_donut_chart(baja, "Bajas", color)
     st.altair_chart(baja_chart, use_container_width=True)
 with containerBajasCantidad:
         st.markdown(
@@ -182,7 +188,13 @@ with containerBajasCantidad:
 with containerFinalizados:
     st.markdown("<div style='text-align: center;font-weight: bold;'>Finalizados %</div>", unsafe_allow_html=True)
     # Use columns to place the donut chart and "Cantidad" side-by-side
-    finalizado_chart = create_donut_chart(finalizado, "Finalizados", 'orange')
+    if finalizado < 40:
+        color = 'blue'
+    elif 40 <= finalizado <= 70:
+        color = 'yellow'
+    else:
+        color = 'green'
+    finalizado_chart = create_donut_chart(finalizado, "Finalizados", color)
     st.altair_chart(finalizado_chart, use_container_width=True)
 with containerFinalizadosCant:
     st.markdown(
@@ -197,7 +209,7 @@ with containerFinalizadosCant:
         """,
         unsafe_allow_html=True,
     )
-
+st.write("**Gráficos**")
 custom_colors = [aquamarine, amarillo, azul, orange] 
 chartHotel, chartDepto, chartEstudio, chartZona  = st.columns(4)
 fig_size = (4, 4)
@@ -205,6 +217,9 @@ fig_size = (4, 4)
 with chartDepto:
     # Create the figure and axis for the bar chart
     fig1, ax1 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
+    
+    # Set the background of the axis to transparent
+    ax1.set_facecolor('none')  # Or use 'white' for a white background
     
     # Plot a bar chart and apply custom colors
     value_counts = filtered_df[graficos[0]].value_counts()
@@ -217,14 +232,20 @@ with chartDepto:
         
         # Set the title and labels
         ax1.set_ylabel("Count")
-        ax1.set_title(graficos[0])
+        ax1.set_title(
+            graficos[0],
+            fontdict={'fontsize': 14, 'fontweight': 'bold','color': azul} 
+        )
         
         # Display the bar chart in Streamlit
         st.pyplot(fig1)
+    else:
+            st.write(noDatosDisponibles)
 
 with chartHotel:
     fig2, ax2 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[1]].value_counts()
+    ax2.set_facecolor('none')  # Or use 'white' for a white background
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax2, color=custom_colors)
         
@@ -234,12 +255,17 @@ with chartHotel:
         ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right', fontsize=8)
         # Set the title and labels
         ax2.set_ylabel("Count")
-        ax2.set_title(graficos[1])
+        ax2.set_title(
+            graficos[1],
+            fontdict={'fontsize': 14, 'fontweight': 'bold','color': azul} 
+        )
         st.pyplot(fig2)
-    
+    else:
+            st.write(noDatosDisponibles)
 with chartEstudio:
     fig3, ax3 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[2]].value_counts()
+    ax3.set_facecolor('none')
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax3, color=custom_colors)
         
@@ -249,12 +275,17 @@ with chartEstudio:
         ax3.set_xticklabels(ax3.get_xticklabels(), rotation=45, ha='right', fontsize=8)
         # Set the title and labels
         ax3.set_ylabel("Count")
-        ax3.set_title(graficos[2])
+        ax3.set_title(
+            graficos[2],
+            fontdict={'fontsize': 14, 'fontweight': 'bold','color': azul} 
+        )
         st.pyplot(fig3)
-
+    else:
+            st.write(noDatosDisponibles)
 with chartZona:
     fig4, ax4 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[3]].value_counts()
+    ax4.set_facecolor('none')
     if not value_counts.empty and value_counts.sum() > 0:
         value_counts.plot.bar(ax=ax4, color=custom_colors)
         
@@ -264,9 +295,13 @@ with chartZona:
 
         # Set the title and labels
         ax4.set_ylabel("Count")
-        ax4.set_title(graficos[3])
+        ax4.set_title(
+            graficos[3],
+            fontdict={'fontsize': 14, 'fontweight': 'bold','color': azul} 
+        )
         st.pyplot(fig4)
-
+    else:
+            st.write(noDatosDisponibles)
 st.divider()
 def getRotationInfo():
     rotacion = get_sheets(connectionUsuarios, [rotationSheet])
@@ -540,7 +575,39 @@ with st.expander(detalleFeedbackTitle):
             else:
                 st.write(noDatosDisponibles)
 
+with st.container():
+    st.write(referenciaColores)
+    cols = st.columns(3)
 
+    with cols[0]:
+        st.markdown(
+            f"""
+            <div style="background-color: rgba(0, 40, 85, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: {azul}; font-size: 16px; font-weight: bold;">Mejora puntos.</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with cols[1]:
+        st.markdown(
+            f"""
+            <div style="background-color: rgba(254, 202, 29, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: {amarillo}; font-size: 16px; font-weight: bold;">Ajusta detalles.</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with cols[2]:
+        st.markdown(
+            f"""
+            <div style="background-color: rgba(58, 165, 151, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: {aquamarine}; font-size: 16px; font-weight: bold;">Potencia logros.</span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 with st.container():
     st.subheader('**Estado Respuestas**')
     tabs = st.tabs(feedback_types)
@@ -575,7 +642,7 @@ with st.container():
                     f"""
                     <div style="display: flex; justify-content: center; align-items: center; text-align: center;padding-top:30px">
                         <span style="font-size: 24px; font-weight: bold; color: {aquamarine}; margin-right: 8px;">{response_data['Feedback Enviado']}</span>
-                        <span style="color: black; font-size: 24px; font-weight: bold;">Feedback Enviados</span>
+                        <span style="color:  {azul}; font-size: 24px; font-weight: bold;">Feedback Enviados</span>
                     </div>
                     """,
                     unsafe_allow_html=True
@@ -585,7 +652,7 @@ with st.container():
                     f"""
                     <div style="display: flex; justify-content: center; align-items: center; text-align: center;padding-top:30px">
                         <span style="font-size: 24px; font-weight: bold; color: {aquamarine}; margin-right: 8px;">{response_data['Respuestas Recibidas']}</span>
-                        <span style="color: black; font-size: 24px; font-weight: bold;">Respuestas Recibidas</span>
+                        <span style="color: {azul}; font-size: 24px; font-weight: bold;">Respuestas Recibidas</span>
                         
                     </div>
                     """,
@@ -596,12 +663,12 @@ with st.container():
                     f"""
                     <div style="display: flex; justify-content: center; align-items: center; text-align: center;padding-top:30px">
                         <span style="font-size: 24px; font-weight: bold; color: {aquamarine}; margin-right: 8px;">{response_data['Feedback Sin responder']}</span>
-                        <span style="color: black; font-size: 24px; font-weight: bold;">Feedback Sin responder</span>
+                        <span style="color:  {azul}; font-size: 24px; font-weight: bold;">Feedback Sin responder</span>
                         
                     </div>
                     """,
                     unsafe_allow_html=True
                 )
-            
-            st.dataframe(getColumns(candidatos_feedback_inprogress,[columnaCandidatos, columnaCorreoCandidato, 'Feedback Respondido']))
-  
+            with st.expander("Detalle Feedback"):
+                    st.dataframe(getColumns(candidatos_feedback_inprogress,[columnaCandidatos, columnaCorreoCandidato, 'Feedback Respondido']))
+        
