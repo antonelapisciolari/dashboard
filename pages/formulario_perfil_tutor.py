@@ -71,7 +71,7 @@ def save_to_google_sheet(data):
     conn = create_gsheets_connection()
     existing_data = conn.read(worksheet=worksheetPerfilTutor)
     new_row = pd.DataFrame([responses_only], columns=existing_data.columns)  # Ensure column names match
-
+    
     # Concatenate the new row with existing data
     updated_data = pd.concat([existing_data, new_row], ignore_index=True)
 
@@ -141,11 +141,13 @@ else:
         )
         
         if question_item['id'] == 'q2':
-            if response and not is_valid_email(response):
-                st.error("Por favor, ingresa un correo electrónico válido.")
-                email_valid = False
-            else:
-                email_valid = True
+            if response:
+                    response = response.upper()  # Convert the user's input to uppercase
+                    if not is_valid_email(response):
+                        st.error("Por favor, ingresa un correo electrónico válido.")
+                        email_valid = False
+                    else:
+                        email_valid = True
         
         if response:
             submit_answer(question_item["id"], response)
