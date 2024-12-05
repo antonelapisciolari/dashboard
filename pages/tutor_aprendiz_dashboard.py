@@ -7,7 +7,7 @@ from sheet_connection import get_google_sheet, get_sheets
 from feedback_utils import getFeedbackPulse1Semana,getFeedbackPromedioCambioArea,getFeedbackPromedioPrimerMes,getFeedbackPromedioCuartoMes,getFeedbackPromedioAprendizCierrePrimerCiclo,getFeedbackPromedioAprendizCierreSegundoCiclo,calcularEstadoRespuestas
 import pandas as pd
 import matplotlib.pyplot as plt
-from variables import registroAprendices,referenciaColores, azul,feedbackTitle,detalleFeedbackTitle,feedbackSubtitle, amarillo, aquamarine,worksheetPulse1Semana, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,primerSemana, primerMes, cuartoMes,primerCierre,segundoCierre,cambioArea,dondeEstanMisAprendices
+from variables import registroAprendices,resultadoVerde, semaforoFeedback, resultadosFeedback, resultadoAmarillo,resultadoAzul,resultadoAmarilloDetalle,resultadoAzulDetalle,resultadoVerdeDetalle, azul,feedbackTitle,detalleFeedbackTitle,feedbackSubtitle, amarillo, aquamarine,worksheetPulse1Semana, connectionGeneral, connectionFeedbacks,connectionUsuarios, rotationSheet,orange, errorRedirection, worksheetCambioArea,noDatosDisponibles, worksheetFormulario1Mes, worksheetFormulario4Mes, worksheetFormularioAprendizCierre1Ciclo, worksheetFormularioAprendizCierre2Ciclo,feedback_types,colorPulse, colorCambioArea, colorPrimerMes, colorAprendizCierrePrimerCiclo,colorAprendizCierreSegundoCiclo,colorCuartoMes,pulse1SemanaPromedio, primerMesPromedio, cuartoMesPromedio, cambioAreaPromedio, aprendizCierrePrimerCicloPromedio, aprendizCierreSegundoCicloPromedio,primerSemana, primerMes, cuartoMes,primerCierre,segundoCierre,cambioArea,dondeEstanMisAprendices
 from datetime import datetime, timedelta
 from streamlit_carousel import carousel
 
@@ -131,78 +131,112 @@ if feedbackAprendizSegundoCierreDf is not None and not feedbackAprendizSegundoCi
 #feedback details 
 
 with st.container():
-    st.header(feedbackTitle)
-    st.write(feedbackSubtitle)
-    metricaPulse, metricaCambioArea, metrica1Mes, metrica4Mes, metrica1Cierre, metrica2Cierrre = st.columns(6)
-    with metricaPulse:
-     with st.container():
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
-                        <span style="color:{colorLetraPrimerSemana}; font-size: 16px;font-weight: bold;">{primerSemana}</span><br>
-                        <span style="color:{colorLetraPrimerSemana};font-size: 20px;font-weight: bold;">{pulse1SemanaPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metricaCambioArea:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
-                        <span style="color:{colorLetraCambioArea};font-size: 16px;font-weight: bold;">{cambioArea}</span><br>
-                        <span style="color:{colorLetraCambioArea};font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica1Mes:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
-                        <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">{primerMes}</span><br>
-                        <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica4Mes:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
-                        <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">{cuartoMes}</span><br>
-                        <span style="color:{colorLetraCuartoMes};font-size: 20px;font-weight: bold;">{cuartoMesPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica1Cierre:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
-                        <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">{primerCierre}</span><br>
-                        <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
-    with metrica2Cierrre:
-        with st.container():
-            st.markdown(
-                f"""
-                    <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
-                        <span style="color: {colorLetraSegundoCierre}; font-size: 16px;font-weight: bold;">{segundoCierre}</span><br>
-                        <span style="color: {colorLetraSegundoCierre}; font-size: 20px;font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
-                    </div>
-                """,
-                unsafe_allow_html=True
-            )
+    st.markdown(
+    f"""
+    <h3 style="text-align: center; color: {azul};">
+        {feedbackTitle}
+    </h3>
+    <p style="text-align: center; color: {azul};">{feedbackSubtitle}</p>
+    """,
+    unsafe_allow_html=True,
+)
+referencia, spacer, metricas, spacer2= st.columns([1,0.5,1,0.5])
+with metricas:
+        st.subheader(resultadosFeedback)
+        col1,col2 = st.columns(2)
+        with col1:
+            with st.container():
+                    st.markdown(
+                        f"""
+                            <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPulse};">
+                                <span style="color:{colorLetraPrimerSemana}; font-size: 16px;font-weight: bold;">{primerSemana}</span><br>
+                                <span style="color:{colorLetraPrimerSemana};font-size: 20px;font-weight: bold;">{pulse1SemanaPromedio}</span>
+                            </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCambioArea};">
+                            <span style="color:{colorLetraCambioArea};font-size: 16px;font-weight: bold;">{cambioArea}</span><br>
+                            <span style="color:{colorLetraCambioArea};font-size: 20px; font-weight: bold;">{cambioAreaPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
+                            <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">{primerMes}</span><br>
+                            <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        with col2:
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
+                            <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">{cuartoMes}</span><br>
+                            <span style="color:{colorLetraCuartoMes};font-size: 20px;font-weight: bold;">{cuartoMesPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
+                            <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">{primerCierre}</span><br>
+                            <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierreSegundoCiclo};">
+                            <span style="color: {colorLetraSegundoCierre}; font-size: 16px;font-weight: bold;">{segundoCierre}</span><br>
+                            <span style="color: {colorLetraSegundoCierre}; font-size: 20px;font-weight: bold;">{aprendizCierreSegundoCicloPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
-
+with referencia:
+    with st.container():
+        st.subheader(semaforoFeedback)
+        st.markdown(
+            f"""
+            <div style="background-color:{aquamarine}; border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: white; font-size: 16px; font-weight: bold;">{resultadoVerde}</span></br>
+                <span style="color: white; font-size: 12px;">{resultadoVerdeDetalle}</span>
+            </div></br>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"""
+            <div style="background-color:{amarillo};; border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: {azul}; font-size: 16px; font-weight: bold;">{resultadoAmarillo}</span></br>
+                <span style="color: {azul}; font-size: 12px;">{resultadoAmarilloDetalle}</span>
+            </div></br>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            f"""
+            <div style="background-color: {azul}; border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: white; font-size: 16px; font-weight: bold;">{resultadoAzul}</span></br>
+                <span style="color:white; font-size: 12px;">{resultadoAzulDetalle}</span></br>
+            </div></br>
+            """,
+            unsafe_allow_html=True,
+        )
 with st.expander(detalleFeedbackTitle):
     with st.container():
         tabs = st.tabs(feedback_types)
@@ -238,39 +272,6 @@ with st.expander(detalleFeedbackTitle):
             else:
                 st.write(noDatosDisponibles)
 
-with st.container():
-    st.write(referenciaColores)
-    cols = st.columns(3)
-
-    with cols[0]:
-        st.markdown(
-            f"""
-            <div style="background-color: rgba(0, 40, 85, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
-                <span style="color: {azul}; font-size: 16px; font-weight: bold;">Mejora puntos.</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with cols[1]:
-        st.markdown(
-            f"""
-            <div style="background-color: rgba(254, 202, 29, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
-                <span style="color: {amarillo}; font-size: 16px; font-weight: bold;">Ajusta detalles.</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-    with cols[2]:
-        st.markdown(
-            f"""
-            <div style="background-color: rgba(58, 165, 151, 0.1); border-radius: 10px; padding: 10px; text-align: center;">
-                <span style="color: {aquamarine}; font-size: 16px; font-weight: bold;">Potencia logros.</span>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
 with st.container():
     st.subheader('**Estado Respuestas**')

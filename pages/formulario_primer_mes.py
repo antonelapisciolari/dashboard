@@ -113,7 +113,7 @@ else:
             start, end = map(int, question_item["slider"].split(","))
             my_range = range(start,end)
             response = st.select_slider(
-            "Seleccione una opción",
+            "Siendo 4 el mejor puntaje, y 1 el más bajo.",
             options=my_range,
             key=f"response_{idx}",
             value=previous_response if previous_response is not None else my_range[0],

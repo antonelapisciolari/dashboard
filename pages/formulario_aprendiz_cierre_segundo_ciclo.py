@@ -111,11 +111,14 @@ else:
         previous_response = st.session_state.responses.get(idx, None)
         question_item = quiz_data["text_form"]["questions"][idx]
         st.subheader(question_item['question'])
+        mensaje="Siendo 4 el mejor puntaje, y 1 el más bajo."
+        if question_item['id'] == 'q10':
+            mensaje = "Siendo 10 el mejor puntaje, y 1 el más bajo."
         if "slider" in question_item and question_item["slider"]:
             start, end = map(int, question_item["slider"].split(","))
             my_range = range(start,end)
             response = st.select_slider(
-            "Seleccione un valor",
+                mensaje,
             options=my_range,
             key=f"response_{idx}",
             value=previous_response if previous_response is not None else my_range[0],

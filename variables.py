@@ -56,7 +56,7 @@ title= vars.title
 tituloOrganizacion="Planifica el camino!"
 tituloCalendario="Mantente al Día con los Próximos Pasos"
 feedbackTitle="¿Cómo van tus aprendices?"
-feedbackSubtitle="Usa sus feedbacks y reflexiones para conocer sus avances, inquietudes y seguir apoyándolos en cada etapa"
+feedbackSubtitle="Usa sus feedbacks y reflexiones para conocer sus avances, inquietudes y seguir apoyándolos en cada etapa. Ten en cuenta los colores para tomar acciones:"
 detalleFeedbackTitle="¡Accede aquí al detalle completo de sus comentarios!"
 dondeEstanMisAprendices="¿En dónde se encuentran hoy mis aprendices?"
 primerSemana="1° Semana"
@@ -84,7 +84,7 @@ tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
-preOnboardingLinks = ["Guía Exprés!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0"]
+preOnboardingLinks = ["Guía Exprés!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0", "Rol Tutor y Rol Aprendiz","https://drive.google.com/file/d/1eGZOMTg3xmEsAwivsvvQFrl2QQhcX32D/view"]
 onboardingLinks = ["Manual 1: Consejos Claves Primer día", "https://drive.google.com/file/d/1RVP5B_-coA6BOipl_KzMIi460wuGIREW/view?usp=drive_link"]
 seguimientoLinks = ["Manual 2: Consejos Claves Cambio de área", "https://drive.google.com/file/d/1JrxQ1ruBPBVJ5Fg5MKzi6beufi4ciNRq/view?usp=drive_link","Manual 3: Claves para el Seguimiento","https://drive.google.com/file/d/1LuzFXXaxn2YnAB8LUwdhnMRteriXiy2-/view?usp=drive_link"]
 cierreLinks = ["Manual 4: Claves para el Cierre", "https://drive.google.com/file/d/10JNaBsRVVU1ihtL7AKXn_LTUjChlrChA/view?usp=drive_link"]
@@ -126,3 +126,13 @@ colorPrimerCierre='white'
 colorSegundoCierre='white'
 colorAprendizCierrePrimerCiclo='white'
 colorAprendizCierreSegundoCiclo='white'
+
+#referenciasFeedback
+resultadoAzul="¡Hay oportunidades de mejora en varios puntos!"
+resultadoAzulDetalle="¡Es importante que te detengas y analices con detalle el feedback para mejorar su experiencia!"
+resultadoAmarillo="¡Van bien, pero hay puntos que se pueden mejorar!"
+resultadoAmarilloDetalle="Revisa el feedback de tu aprendiz y ajusta lo que sea necesario para fortalecer su experiencia."
+resultadoVerde="¡Todo marcha perfecto!"
+resultadoVerdeDetalle="Tu aprendiz está feliz con su progreso. Reafirma sus logros y sigue celebrando sus avances."
+semaforoFeedback="Semáforo de Feedback"
+resultadosFeedback="Resultados de los Formularios"

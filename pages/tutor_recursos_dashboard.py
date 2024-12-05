@@ -83,6 +83,7 @@ with resources:
     with tabs[0]:
         st.write("¡Prepárate para acompañar a tus aprendices en su camino!:")
         st.write(f"[{preOnboardingLinks[0]}]({preOnboardingLinks[1]})")
+        st.write(f"[{preOnboardingLinks[2]}]({preOnboardingLinks[3]}) 🚀")
     # Onboarding Tab
     with tabs[1]:
         st.write("Usa estos consejos para recibir a tu Aprendiz:")
