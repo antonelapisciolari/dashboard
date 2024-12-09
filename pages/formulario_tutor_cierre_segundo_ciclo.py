@@ -46,12 +46,16 @@ page1Questions = range(0, 6)  # Questions for page 1
 page2Questions = range(6,10)  # Questions for page 2
 page3Questions = range(10,14)  # Questions for page 2
 page4Questions = range(14, 16)  # Questions for page 2
-pages = [page1Questions, page2Questions,page3Questions,page4Questions]
+page5Questions = range(16, 21)  # Questions for page 2
+pages = [page1Questions, page2Questions,page3Questions,page4Questions,page5Questions]
 
 # Total number of questions
 total_questions = len(quiz_data["text_form"]["questions"])
 subtitles = quiz_data["text_form"]["subtitles"]
 def submit_answer(question_index, response):
+    if question_index == 'q11':
+        if response is None or response == "":
+            response = "n/a" 
     st.session_state.responses[question_index] = response  # Use the index to maintain order
 
 def next_question():
