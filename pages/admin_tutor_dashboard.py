@@ -48,7 +48,7 @@ colorLetraSegundoCierre='blacks'
 #feedback
 columnaEmail='Email'
 columnaCorreoCandidato='CORREO DE CONTACTO'
-topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin,columnaTutor,columnStatus]
+topFilters = [columnaFechaInicio,columnaCandidatos,columnaHotel,columnaFPDualFCT, columnaFechaFin,columnaTutor,columnStatus,columnaZona,columnaPosicion]
 columnaEnvio1Semana='Envío 1er Feedback'
 columnaEnvio1Mes='Envío 2do Feedback'
 columnaEnvio4Mes='Envío 3er Feedback'
@@ -77,7 +77,7 @@ df= df.drop_duplicates(subset=[columnaCorreoCandidato])
 active_candidates = df[df[topFilters[6]].str.upper() == 'ACTIVO']
 #filter containers
 with st.container():
-    col1, col2, col3, col4,col5, col6 = st.columns(6)
+    col1, col2, col3, col4,col5, col6,col7,col8 = st.columns(8)
     with st.container():
         programa_options = sorted(df[topFilters[3]].unique().tolist())
         programa = col1.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options, index=2)
@@ -93,9 +93,14 @@ with st.container():
         hotel = col4.selectbox(f"**{topFilters[2]}**", options=["Todos"] + hotel_options)
     with st.container():
         fecha_inicio = col5.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
-
     with st.container():
         status = col6.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
+    with st.container():
+        zona_options = sorted(df[topFilters[7]].unique().tolist())
+        zona = col7.selectbox("**ZONA**", options=["Todos"] + zona_options)
+    with st.container():
+        depto_options = sorted(df[topFilters[8]].unique().tolist())
+        departamento = col8.selectbox("**DEPTO**", options=["Todos"] + depto_options)
 # Filter DataFrame based on selected values
 filtered_df = df[
     ((df[topFilters[5]] == tutor) | (tutor == "Todos")) &
@@ -103,7 +108,9 @@ filtered_df = df[
     ((df[topFilters[2]] == hotel) | (hotel == "Todos")) &
     (df[topFilters[0]] >= pd.to_datetime(fecha_inicio)) &  
     ((df[topFilters[3]] == programa) | (programa == "Todos")) &  
-    ((df[topFilters[6]] == status) | (status == "Todos"))
+    ((df[topFilters[6]] == status) | (status == "Todos"))&
+    ((df[topFilters[7]] == zona) | (zona == "Todos"))&
+    ((df[topFilters[8]] == departamento) | (departamento == "Todos"))
 ]
 #pie chart container and aprendiz data
 graficos = [columnaPosicion,columnaHotel,columnaEstudios,columnaZona]
@@ -163,9 +170,9 @@ with containerBajas:
         unsafe_allow_html=True,
     )
     if baja < 40:
-        color = 'blue'
-    elif 40 <= finalizado <= 70:
         color = 'yellow'
+    elif 40 <= baja <= 70:
+        color = 'blue'
     else:
         color = 'green'
     baja_chart = create_donut_chart(baja, "Bajas", color)
@@ -189,9 +196,9 @@ with containerFinalizados:
     st.markdown("<div style='text-align: center;font-weight: bold;'>Finalizados %</div>", unsafe_allow_html=True)
     # Use columns to place the donut chart and "Cantidad" side-by-side
     if finalizado < 40:
-        color = 'blue'
-    elif 40 <= finalizado <= 70:
         color = 'yellow'
+    elif 40 <= finalizado <= 70:
+        color = 'blue'
     else:
         color = 'green'
     finalizado_chart = create_donut_chart(finalizado, "Finalizados", color)
@@ -630,9 +637,9 @@ with st.container():
             with graficosRespuestas:
                 percentage = response_data['% Respuestas']
                 if percentage < 40:
-                    color = 'blue'
-                elif 40 <= percentage <= 70:
                     color = 'yellow'
+                elif 40 <= percentage <= 70:
+                    color = 'blue'
                 else:
                     color = 'green'
                 chart = create_donut_chart(response_data['% Respuestas'], "Respuestas", color)

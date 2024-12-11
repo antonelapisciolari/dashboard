@@ -221,18 +221,18 @@ with referencia:
         )
         st.markdown(
             f"""
-            <div style="background-color:{amarillo};; border-radius: 10px; padding: 10px; text-align: center;">
-                <span style="color: {azul}; font-size: 16px; font-weight: bold;">{resultadoAmarillo}</span></br>
-                <span style="color: {azul}; font-size: 12px;">{resultadoAmarilloDetalle}</span>
+            <div style="background-color:{azul};; border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: white; font-size: 16px; font-weight: bold;">{resultadoAmarillo}</span></br>
+                <span style="color: white; font-size: 12px;">{resultadoAmarilloDetalle}</span>
             </div></br>
             """,
             unsafe_allow_html=True,
         )
         st.markdown(
             f"""
-            <div style="background-color: {azul}; border-radius: 10px; padding: 10px; text-align: center;">
-                <span style="color: white; font-size: 16px; font-weight: bold;">{resultadoAzul}</span></br>
-                <span style="color:white; font-size: 12px;">{resultadoAzulDetalle}</span></br>
+            <div style="background-color: {amarillo}; border-radius: 10px; padding: 10px; text-align: center;">
+                <span style="color: {azul}; font-size: 16px; font-weight: bold;">{resultadoAzul}</span></br>
+                <span style="color:{azul}; font-size: 12px;">{resultadoAzulDetalle}</span></br>
             </div></br>
             """,
             unsafe_allow_html=True,
@@ -413,7 +413,13 @@ with containerBajas:
         f"<div style='text-align: center; color: {azul}; font-size: 16px; font-weight: bold;'>Bajas %</div>",
         unsafe_allow_html=True,
     )
-    baja_chart = create_donut_chart(baja, "Bajas", 'blue')
+    if baja < 40:
+        color = 'yellow'
+    elif 40 <= baja <= 70:
+        color = 'blue'
+    else:
+        color = 'green'
+    baja_chart = create_donut_chart(baja, "Bajas", color)
     st.altair_chart(baja_chart, use_container_width=True)
 with containerBajasCantidad:
         st.markdown(
@@ -432,7 +438,13 @@ with containerBajasCantidad:
 with containerFinalizados:
     st.markdown("<div style='text-align: center;font-weight: bold;'>Finalizados %</div>", unsafe_allow_html=True)
     # Use columns to place the donut chart and "Cantidad" side-by-side
-    finalizado_chart = create_donut_chart(finalizado, "Finalizados", 'yellow')
+    if finalizado < 40:
+        colorFin = 'yellow'
+    elif 40 <= finalizado <= 70:
+        colorFin = 'blue'
+    else:
+        colorFin = 'green'
+    finalizado_chart = create_donut_chart(finalizado, "Finalizados", colorFin)
     st.altair_chart(finalizado_chart, use_container_width=True)
 with containerFinalizadosCant:
     st.markdown(

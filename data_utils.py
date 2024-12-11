@@ -171,11 +171,11 @@ def feedbackColor(value):
         color = "white"
         letraColor = "black"
     elif 1 <= value < 4:  # Less than 4
-        color = azul
-        letraColor = "white"
-    elif 4 <= value <= 7:  # Between 4 and 7, inclusive
         color = amarillo
         letraColor = "black"
+    elif 4 <= value <= 7:  # Between 4 and 7, inclusive
+        color = azul
+        letraColor = "white"
     else:  # Greater than 7
         color = aquamarine
         letraColor = "black"
