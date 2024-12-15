@@ -44,9 +44,9 @@ email_valid = True
 # Define pages and their questions
 page1Questions = range(0, 6)  # Questions for page 1
 page2Questions = range(6,10)  # Questions for page 2
-page3Questions = range(10,14)  # Questions for page 2
-page4Questions = range(14, 16)  # Questions for page 2
-page5Questions = range(16, 21)  # Questions for page 2
+page3Questions = range(10,13)  # Questions for page 2
+page4Questions = range(13, 16)  # Questions for page 2
+page5Questions = range(16, 19)  # Questions for page 2
 pages = [page1Questions, page2Questions,page3Questions,page4Questions,page5Questions]
 
 # Total number of questions

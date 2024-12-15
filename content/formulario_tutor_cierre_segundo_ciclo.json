@@ -7,28 +7,26 @@
       "questions": [
         {"id": "q1", "question": "Email:", "email":true},
         {"id": "q2", "question": "Nombre Aprendiz:"},
-        {"id": "q3", "question": "¿Cómo evaluarías el desempeño del aprendiz?","options": ["Aplicó sus conocimientos correctamente y aportó ideas de valor.","Aplicó correctamente lo aprendido, aunque sin aportar ideas nuevas", "Le costó aplicar lo aprendido, pero mostró interés y preguntó activamente.", "Requirió apoyo extra para aplicarlo y mostró baja motivación para mejorar."]},
+        {"id": "q3", "question": "¿Cómo evaluarías el desempeño del aprendiz?","options": ["Aplicó sus conocimientos correctamente, los resultados de aprendizaje fueron totalmente entendidos y aportó ideas de valor al departamento","Aplicó correctamente lo aprendido, aunque sin aportar ideas nuevas", "Le costó aplicar lo aprendido, pero mostró interés y preguntó activamente.", "Requirió apoyo extra para aplicarlo y mostró baja motivación para mejorar."]},
         {"id": "q4", "question": "¿Cómo evaluarías la capacidad del aprendiz para trabajar en equipo?","options": ["Participa activamente y contribuye al equipo con ideas y apoyo constante.", " Se integra bien y cumple con su rol en el equipo.", "Participa, pero necesita más apoyo para colaborar de forma efectiva.","Le cuesta integrarse y trabajar en equipo; requiere orientación para mejorar"]},
         {"id": "q5", "question": "¿Qué destacarías del aprendiz?"},
         {"id": "q6", "question": "¿En qué crees que necesita más apoyo y supervisión?"},
         {"id": "q7", "question": "¿Cómo evalúas su desempeño en cuanto a la Experiencia con el Cliente?","options": ["Siempre atento y comprometido con aportar valor.", "Cumplió con lo esperado, aunque sin destacarse.", "Mostró interés por mejorar en la relación con el cliente, pero necesita más apoyo y guía.","Se enfocó más en sus tareas técnicas que en la atención al cliente."]},
         {"id": "q8", "question": "¿Y en temas de Sostenibilidad, cómo lo viste?","options": ["Súper comprometido, aplicó todo lo que aprendió, y nos compartió ideas","Involucrado, pero con áreas de mejora en su compromiso.","No estuvo muy comprometido con la Sostenibilidad"]},
         {"id": "q9", "question": "Según tus reuniones con el aprendiz, ¿en qué área podría desempeñarse mejor?"},
-        {"id": "q10", "question": "¿Crees que el aprendiz sería una buena incorporación al hotel como empleado/a? (Piensa en su desempeño, actitud y cómo encajaría en el equipo)","options": ["¡Sí, definitivamente sería una buena incorporación!","Quizás, aunque necesitaría más desarrollo.","No creo que esté listo/a aún."]},
-        {"id": "q11", "question": "¿Por qué crees que sería una buena incorporación? (Responder solo si respondio positivamente la pregunta anterior, sino ingrese N/A)"},
-        {"id": "q12", "question": "¿Se le ha ofrecido un contrato laboral al aprendiz?","options": ["Sí, ya tiene una oferta","Todavía estamos evaluándolo/a.","No, no hemos considerado esta opción."]},
-        {"id": "q13", "question": "¿Por qué se le ha ofrecido contrato?","options": ["Había una vacante que cubrir en el hotel","Queremos que forme parte del equipo de Iberostar.","Otro"]},
-        {"id": "q14", "question": "¿Por qué crees que no sería una buena incorporación?"},
-        {"id": "q15", "question": "¿Alguna otra sugerencia o comentario?"},
+        {"id": "q10", "question": "¿Consideras que el aprendiz tiene buen potencial para convertirse en un/a excelente empleado/a en la empresa?(Ten en cuenta su desempeño, actitud e integración en el equipo)","options": ["Sí, tiene todas las cualidades necesarias para destacar como empleado/a","Posiblemente, pero aún necesita desarrollarse más en ciertos aspectos.","No, aún no reúne las condiciones necesarias."]},
+        {"id": "q11", "question": "¿Se le ha ofrecido al aprendiz un contrato laboral tras su periodo de formación? (Sólo si seleccionaste la opción 1 en la pregunta anterior)","options": ["Sí, ya cuenta con una oferta formal y carta de compromiso de contratación","Estamos en proceso de evaluación para decidir","No, no hemos considerado esta posibilidad."]},
+        {"id": "q12", "question": "¿Cuál es la razón principal por la que se le ha ofrecido un contrato al aprendiz?"},
+        {"id": "q13", "question": "¿Alguna otra sugerencia o comentario?"},
 
 
-        {"id": "q16", "question": "¿Te gustó haber sido parte de este programa?","options": ["¡Sí, ha sido una gran experiencia!","Me gustó, aunque fue desafiante","Preferiría no repetirlo"]},
-        {"id": "q17", "question": "¿Cómo ha sido el apoyo recibido por parte del centro educativo durante este proceso?","options": ["Siempre disponibles y con un apoyo constante. La información compartida del aprendiz ha sido muy útil.","En general, me he sentido respaldado.","Ha habido apoyo, pero en algunos momentos he necesitado más información y guía","En general he sentido que necesitaba más soporte y apoyo del centro educativo."]},
+        {"id": "q14", "question": "¿Te gustó haber sido parte de este programa?","options": ["¡Sí, ha sido una gran experiencia!","Me gustó, aunque fue desafiante","Preferiría no repetirlo"]},
+        {"id": "q15", "question": "¿Cómo ha sido el apoyo recibido por parte del centro educativo durante este proceso?","options": ["Siempre disponibles y con un apoyo constante. La información compartida del aprendiz ha sido muy útil.","En general, me he sentido respaldado.","Ha habido apoyo, pero en algunos momentos he necesitado más información y guía","En general he sentido que necesitaba más soporte y apoyo del centro educativo."]},
 
-        {"id": "q18", "question": "¿Qué crees que te aportó esta experiencia como tutor/a? (Piensa en si te dió una nueva perspectiva, si hubo algún momento que te marcó o algún valor agregado que te gustaría destacar)"},
-        {"id": "q19", "question": "¿Te sirvió el material que te brindamos (tips, agenda, preguntas guías)?","options": ["Sí, fue súper útil y lo apliqué en todo","Algo útil, aunque no lo usé tanto","No, no me sirvió mucho"]},
-        {"id": "q20", "question": "Si no fué útil, ¿qué mejorarías en las herramientas brindadas?"},
-        {"id": "q21", "question": "¿Tienes alguna sugerencia sobre el programa o algo que mejorarías?"}
+        {"id": "q16", "question": "¿Qué crees que te aportó esta experiencia como tutor/a? (Piensa en si te dió una nueva perspectiva, si hubo algún momento que te marcó o algún valor agregado que te gustaría destacar)"},
+        {"id": "q17", "question": "¿Te sirvió el material que te brindamos (tips, agenda, preguntas guías)?","options": ["Sí, fue súper útil y lo apliqué en todo","Algo útil, aunque no lo usé tanto","No, no me sirvió mucho"]},
+        {"id": "q18", "question": "Si no fué útil, ¿qué mejorarías en las herramientas brindadas?"},
+        {"id": "q19", "question": "¿Tienes alguna sugerencia sobre el programa o algo que mejorarías?"}
       ]
     }
 }
