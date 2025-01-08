@@ -155,6 +155,28 @@ with metricas:
                         """,
                         unsafe_allow_html=True
                     )
+
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
+                            <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">{primerMes}</span><br>
+                            <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            with st.container():
+                st.markdown(
+                    f"""
+                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
+                            <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">{primerCierre}</span><br>
+                            <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
+                        </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        with col2:
             with st.container():
                 st.markdown(
                     f"""
@@ -168,30 +190,9 @@ with metricas:
             with st.container():
                 st.markdown(
                     f"""
-                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorPrimerMes};">
-                            <span style="color:{colorLetraPrimerMes}; font-size: 16px;font-weight: bold;">{primerMes}</span><br>
-                            <span style="color:{colorLetraPrimerMes};font-size: 20px; font-weight: bold;">{primerMesPromedio}</span>
-                        </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-        with col2:
-            with st.container():
-                st.markdown(
-                    f"""
                         <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorCuartoMes};">
                             <span style="color:{colorLetraCuartoMes}; font-size: 16px;font-weight: bold;">{cuartoMes}</span><br>
                             <span style="color:{colorLetraCuartoMes};font-size: 20px;font-weight: bold;">{cuartoMesPromedio}</span>
-                        </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            with st.container():
-                st.markdown(
-                    f"""
-                        <div style="padding-block: 10px; border-radius: 10px; text-align: center; margin-bottom: 10px; background-color: {colorAprendizCierrePrimerCiclo};">
-                            <span style="color: {colorLetraPrimerCierre}; font-size: 16px;font-weight: bold;">{primerCierre}</span><br>
-                            <span style="color: {colorLetraPrimerCierre};font-size: 20px; font-weight: bold;">{aprendizCierrePrimerCicloPromedio}</span>
                         </div>
                     """,
                     unsafe_allow_html=True
