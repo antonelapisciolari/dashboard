@@ -88,7 +88,7 @@ with resources:
     with tabs[2]:
         st.write("Links relevantes para Seguimiento:")
         st.write(f"[{seguimientoLinks[0]}]({seguimientoLinks[1]})")
-
+        st.write(f"[{seguimientoLinks[2]}]({seguimientoLinks[3]})")
     # Cierre Tab
     with tabs[3]:
         st.write("Links relevantes para Cierre:")

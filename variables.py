@@ -84,10 +84,10 @@ tutorDashboard=vars.tutorDashboard
 aprendizDashboard=vars.aprendizDashaboard
 adminRecursosTutorDashboard=vars.adminRecursosTutorDashboard
 adminTutorDashboard=vars.adminTutorDashboard
-preOnboardingLinks = ["Guía Exprés!", "https://docs.google.com/document/d/1XB9LdMoVHBC5zxhtQE38S6cnUMw_1LAUYg-qTcKhjMI/edit?tab=t.0", "Rol Tutor y Rol Aprendiz","https://drive.google.com/file/d/1eGZOMTg3xmEsAwivsvvQFrl2QQhcX32D/view"]
-onboardingLinks = ["Manual 1: Consejos Claves Primer día", "https://drive.google.com/file/d/1RVP5B_-coA6BOipl_KzMIi460wuGIREW/view?usp=drive_link"]
-seguimientoLinks = ["Manual 2: Consejos Claves Cambio de área", "https://drive.google.com/file/d/1JrxQ1ruBPBVJ5Fg5MKzi6beufi4ciNRq/view?usp=drive_link","Manual 3: Claves para el Seguimiento","https://drive.google.com/file/d/1LuzFXXaxn2YnAB8LUwdhnMRteriXiy2-/view?usp=drive_link"]
-cierreLinks = ["Manual 4: Claves para el Cierre", "https://drive.google.com/file/d/10JNaBsRVVU1ihtL7AKXn_LTUjChlrChA/view?usp=drive_link"]
+preOnboardingLinks = ["Guía Exprés!", "https://drive.google.com/file/d/1H3kedcqZrhP_LpwXTcKco2s3Ah1Or41a/view", "Rol Tutor y Rol Aprendiz","https://drive.google.com/file/d/1eGZOMTg3xmEsAwivsvvQFrl2QQhcX32D/view"]
+onboardingLinks = ["Manual 1: Claves para los 'Primeros días'", "https://drive.google.com/file/d/1669aN0jlGRAs-WEI2PsoBbY1LmcvYZDG/view?usp=drive_link"]
+seguimientoLinks = ["Manual 2: Claves para el 'Cambio de área'", "https://drive.google.com/file/d/1PvP_YfgIVrN68C66I_CZqYIoLuabJRQa/view?usp=drive_link","Manual 3: Claves para el 'Seguimiento' (Tutor/a c/Aprendiz)","https://drive.google.com/file/d/1HqqPLTFyse3KHheTJAbv0-g4v8J2MWVR/view?usp=drive_link"]
+cierreLinks = ["Manual 4: Claves para el 'Cierre 1º ciclo y 2° Ciclo'", "https://drive.google.com/file/d/1vlGd4VSIik8NxOLf162Cqi5dXW18S7ec/view?usp=drive_link"]
 formsLinks = ["Primera Semana", "https://fpdual-dashboard.streamlit.app/pulse_primera_semana",
 "Cambio Area","https://fpdual-dashboard.streamlit.app/formulario_cambio_area",
 "Primer Mes", "https://fpdual-dashboard.streamlit.app/formulario_primer_mes",
