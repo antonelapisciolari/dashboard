@@ -518,6 +518,7 @@ def getRotationInfo():
 with st.container():
     st.header(dondeEstanMisAprendices)
     graficoHotel, tablaAprendicesHoy  = st.columns([1.6,1.4])
+    rotacion = pd.DataFrame() 
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
             rotacionUnfiltered= getRotationInfo()
@@ -579,30 +580,31 @@ with st.container():
     mes_actual = hoy.replace(day=1)
     prox_mes = hoy.replace(day=1) + timedelta(days=31)
     prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
-    rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
-    result_df = rotacion.groupby(
-    ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
-        ).agg(
-            {
-                "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
-            }
-        ).reset_index()
-    result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
-    with tablaAprendicesHoy:
-        col1, col2 = st.columns(2)
-        with st.container():
-            hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
-            hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
-        with st.container():
-            depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
-            depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
-    # Filter DataFrame based on selected values
-        filtered_df = result_df[
-            ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
-            ((result_df[columnaDeptoDestino] == depto) | (depto == "Todos"))]
-        if filtered_df is not None and not filtered_df.empty:
-            st.dataframe(filtered_df, hide_index="true")
-        else:
-            st.write(noDatosDisponibles)
+    if rotacion is not None and not rotacion.empty:
+        rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
+        result_df = rotacion.groupby(
+        ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
+            ).agg(
+                {
+                    "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
+                }
+            ).reset_index()
+        result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
+        with tablaAprendicesHoy:
+            col1, col2 = st.columns(2)
+            with st.container():
+                hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
+                hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
+            with st.container():
+                depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
+                depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
+        # Filter DataFrame based on selected values
+            filtered_df = result_df[
+                ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
+                ((result_df[columnaDeptoDestino] == depto) | (depto == "Todos"))]
+            if filtered_df is not None and not filtered_df.empty:
+                st.dataframe(filtered_df, hide_index="true")
+            else:
+                st.write(noDatosDisponibles)
       
 

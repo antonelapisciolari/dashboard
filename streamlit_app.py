@@ -20,8 +20,9 @@ with cent_co:
 st.title("Bienvenido a FP Dual - Iberostar")
 
 user_dict = {user['username']: user for user in credentials['users']}
-username = st.text_input(username)
-password = st.text_input(password, type="password")
+username = st.text_input("Email",placeholder="Ingrese email")
+password = st.text_input("Contraseña", type="password", placeholder="Ingrese contraseña")
+
 st.markdown(
     f'<div style="text-align: right;"><a href="mailto:support@embatconsultora.com">{forgotPassword}</a></div>',
     unsafe_allow_html=True

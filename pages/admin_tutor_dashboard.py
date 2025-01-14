@@ -79,27 +79,31 @@ active_candidates = df[df[topFilters[6]].str.upper() == 'ACTIVO']
 with st.container():
     col1, col2, col3, col4,col5, col6,col7,col8 = st.columns(8)
     with st.container():
-        programa_options = sorted(df[topFilters[3]].unique().tolist())
+        programa_options = sorted(df[topFilters[3]].dropna().unique().tolist()) if topFilters[3] in df.columns and not df[topFilters[3]].isnull().all() else []
         programa = col1.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options, index=2)
     with st.container():
-        tutor_options =[value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip() != ""]
+        tutor_options = sorted(value for value in df[topFilters[5]].unique() if pd.notna(value) and str(value).strip()) 
         tutor_options = sorted(tutor_options)
         tutor = col2.selectbox("**TUTOR**", options=["Todos"] + tutor_options)
     with st.container():
-        candidato_options = sorted(df[topFilters[1]].unique().tolist())
+        candidato_options = sorted(df[topFilters[1]].unique().tolist()) if topFilters[1] in df.columns and not df[topFilters[1]].isnull().all() else []
         candidato = col3.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
     with st.container():
-        hotel_options = sorted(df[topFilters[2]].unique().tolist())
+        hotel_options = (
+        sorted(str(value).strip() for value in df[topFilters[2]].dropna().unique() if str(value).strip())
+        if topFilters[2] in df.columns and not df[topFilters[2]].isnull().all()
+        else []
+        )   
         hotel = col4.selectbox(f"**{topFilters[2]}**", options=["Todos"] + hotel_options)
     with st.container():
         fecha_inicio = col5.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
     with st.container():
         status = col6.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
     with st.container():
-        zona_options = sorted(df[topFilters[7]].unique().tolist())
+        zona_options = sorted(df[topFilters[7]].dropna().unique().tolist()) if topFilters[7] in df.columns and not df[topFilters[7]].isnull().all() else []
         zona = col7.selectbox("**ZONA**", options=["Todos"] + zona_options)
     with st.container():
-        depto_options = sorted(df[topFilters[8]].unique().tolist())
+        depto_options = sorted(df[topFilters[8]].dropna().unique().tolist()) if topFilters[8] in df.columns and not df[topFilters[8]].isnull().all() else []
         departamento = col8.selectbox("**DEPTO**", options=["Todos"] + depto_options)
 # Filter DataFrame based on selected values
 filtered_df = df[

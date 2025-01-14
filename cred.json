@@ -151,7 +151,7 @@
       "role": "tutor"
     },
     {
-      "username": "lltcoc@iberostar.com",
+      "username": "lltoc@iberostar.com",
       "password": "LLTCOC25",
       "role": "tutor"
     },
@@ -293,6 +293,56 @@
     {
       "username": "lansdi@iberostar.com",
       "password": "LANSDI25",
+      "role": "tutor"
+    },
+    {
+      "username": "anpfro@iberostar.com",
+      "password": "ANPFRO25",
+      "role": "tutor"
+    },
+    {
+      "username": "crifro@iberostar.com",
+      "password": "CRIFRO25",
+      "role": "tutor"
+    },
+    {
+      "username": "gsprec@iberostar.com",
+      "password": "GSPREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "jose.fernandez@iberostar.com",
+      "password": "JOSE.FERNANDEZ25",
+      "role": "tutor"
+    },
+    {
+      "username": "mircoc@iberostar.com",
+      "password": "MIRCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "mirrec@iberostar.com",
+      "password": "MIRREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ottcoc@olehotels.com",
+      "password": "OTTCOC25",
+      "role": "tutor"
+    },
+    {
+      "username": "ottrec@olehotels.com",
+      "password": "OTTREC25",
+      "role": "tutor"
+    },
+    {
+      "username": "pdpfro@iberostar.com",
+      "password": "PDPFRO25",
+      "role": "tutor"
+    },
+    {
+      "username": "xanrs1@iberostar.com",
+      "password": "XANRS125",
       "role": "tutor"
     }
   ]
