@@ -6,6 +6,11 @@
       "role": "admin"
     },
     {
+      "username": "xandir@iberostar.com",
+      "password": "xandir25",
+      "role": "director"
+    },
+    {
       "username": "sandra.serrano@grupoiberostar.com",
       "password": "sandra.s",
       "role": "admin"

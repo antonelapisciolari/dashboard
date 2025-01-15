@@ -112,6 +112,36 @@ def make_sidebar_tutor():
             # If anyone tries to access a secret page without being logged in,
             # redirect them to the login page
             st.switch_page("streamlit_app.py")
+
+def make_sidebar_director():
+    with st.sidebar:
+        st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            width: 200px;  /* Adjust the width to your preference */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+        st.title("Menu")
+        st.write("")
+        st.write("")
+
+        if st.session_state.get("logged_in", False):
+            st.page_link("pages/director_aprendiz_dashboard.py", label=adminTutorDashboard)
+
+            st.write("")
+            st.write("")
+
+            if st.button(logoutButton):
+                logout()
+
+        elif get_current_page_name() != "streamlit_app":
+            # If anyone tries to access a secret page without being logged in,
+            # redirect them to the login page
+            st.switch_page("streamlit_app.py")
 def logout():
     st.session_state.logged_in = False
     st.info(logoutMessage)

@@ -147,26 +147,39 @@ def getFeedbackPromedioAprendizCierreSegundoCiclo(feedback):
 
 
 def calcularEstadoRespuestas(active_candidates,columnaEnvio1Feedback,hoy, feedbackPulseDf,columnaCorreoCandidato ):
-    active_candidates[columnaEnvio1Feedback] = pd.to_datetime(active_candidates[columnaEnvio1Feedback], format='%d/%m/%Y')
-    candidatos_feedback_inprogress = active_candidates[active_candidates[columnaEnvio1Feedback] < hoy]
-    feedback_emails = feedbackPulseDf['Email'].unique()
-    feedback_emails_normalized = [email.lower() for email in feedback_emails]
+    in_feedback_count=0
+    total_candidates=0
+    percentage_in_feedback=0
+    not_in_feedback_count=0
+    candidatos_feedback_inprogress=None
+    if feedbackPulseDf is not None and not feedbackPulseDf.empty:
+        active_candidates[columnaEnvio1Feedback] = pd.to_datetime(active_candidates[columnaEnvio1Feedback], format='%d/%m/%Y')
+        candidatos_feedback_inprogress = active_candidates[active_candidates[columnaEnvio1Feedback] < hoy]
+        feedback_emails = feedbackPulseDf['Email'].unique()
+        feedback_emails_normalized = [email.lower() for email in feedback_emails]
 
-    candidatos_feedback_inprogress['Normalized Email'] = candidatos_feedback_inprogress[columnaCorreoCandidato].str.lower()
-    candidatos_feedback_inprogress['Feedback Respondido'] = candidatos_feedback_inprogress['Normalized Email'].isin(feedback_emails_normalized)
+        candidatos_feedback_inprogress['Normalized Email'] = candidatos_feedback_inprogress[columnaCorreoCandidato].str.lower()
+        candidatos_feedback_inprogress['Feedback Respondido'] = candidatos_feedback_inprogress['Normalized Email'].isin(feedback_emails_normalized)
 
-    # Drop the temporary normalized email column (optional)
-    candidatos_feedback_inprogress.drop(columns=['Normalized Email'], inplace=True)
+        # Drop the temporary normalized email column (optional)
+        candidatos_feedback_inprogress.drop(columns=['Normalized Email'], inplace=True)
 
-    total_candidates = len(candidatos_feedback_inprogress)
-    in_feedback_count = candidatos_feedback_inprogress['Feedback Respondido'].sum()
-    not_in_feedback_count = total_candidates - in_feedback_count
-    percentage_in_feedback = (in_feedback_count / total_candidates) * 100 if total_candidates > 0 else 0
+        total_candidates = len(candidatos_feedback_inprogress)
+        in_feedback_count = candidatos_feedback_inprogress['Feedback Respondido'].sum()
+        not_in_feedback_count = total_candidates - in_feedback_count
+        percentage_in_feedback = (in_feedback_count / total_candidates) * 100 if total_candidates > 0 else 0
 
-    results = {
-        'Respuestas Recibidas': in_feedback_count,
-        'Feedback Enviado': total_candidates,
-        '% Respuestas': round(percentage_in_feedback, 2),
-        'Feedback Sin responder': not_in_feedback_count
-    }
+        results = {
+            'Respuestas Recibidas': in_feedback_count,
+            'Feedback Enviado': total_candidates,
+            '% Respuestas': round(percentage_in_feedback, 2),
+            'Feedback Sin responder': not_in_feedback_count
+        }
+    else:
+        results = {
+            'Respuestas Recibidas': in_feedback_count,
+            'Feedback Enviado': total_candidates,
+            '% Respuestas': round(percentage_in_feedback, 2),
+            'Feedback Sin responder': not_in_feedback_count
+        }
     return results,candidatos_feedback_inprogress

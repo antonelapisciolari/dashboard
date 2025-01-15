@@ -39,8 +39,8 @@ if st.button(loginButton, type="primary"):
         sleep(0.5)
         if st.session_state.role == 'admin':
             st.switch_page("pages/admin_tutor_dashboard.py")
-        if st.session_state.role == 'superadmin':
-            st.switch_page("pages/admin_tutor_dashboard.py")    
+        if st.session_state.role == 'director':
+            st.switch_page("pages/director_aprendiz_dashboard.py")    
         if st.session_state.role == 'tutor':
             st.switch_page("pages/tutor_recursos_dashboard.py")
     else:

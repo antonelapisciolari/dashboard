@@ -76,56 +76,60 @@ def getFeebackDetails():
     return feedbacks
 
 feedbacks= getFeebackDetails()
+feedbackPulseDf = None
+feedbackCambioAreaDf = None
+feedback1MesDf = None
+feedback4MesDf = None
+feedbackAprendizPrimerCierreDf = None
+feedbackAprendizSegundoCierreDf = None
+if feedbacks and isinstance(feedbacks, list):
+        for i, feedback in enumerate(feedbacks):
+            # Ensure feedback is a valid DataFrame
+            if feedback is not None and isinstance(feedback, pd.DataFrame) and not feedback.empty:
+                # Apply filters for each feedback category based on index
+                filtered_feedback = feedback[feedback[columnaEmail].apply(
+                    lambda x: x.lower() if isinstance(x, str) else None
+                ).isin(
+                    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else None)
+                )]
 
-feedbackPulseDf = feedbacks[0][feedbacks[0][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackPulseDf = feedbackPulseDf.drop_duplicates(subset=[columnaEmail])
-if feedbackPulseDf is not None and not feedbackPulseDf.empty:
-    pulse1SemanaPromedio = getFeedbackPulse1Semana(feedbackPulseDf)
-    colorPulse, colorLetraPrimerSemana= feedbackColor(pulse1SemanaPromedio)
-
-feedbackCambioAreaDf= feedbacks[1][feedbacks[1][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackCambioAreaDf = feedbackCambioAreaDf.drop_duplicates(subset=[columnaEmail])
-if feedbackCambioAreaDf is not None and not feedbackCambioAreaDf.empty:
-    cambioAreaPromedio = getFeedbackPromedioCambioArea(feedbackCambioAreaDf)
-    colorCambioArea,colorLetraCambioArea= feedbackColor(cambioAreaPromedio)
-
-
-feedback1MesDf= feedbacks[2][feedbacks[2][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedback1MesDf = feedback1MesDf.drop_duplicates(subset=[columnaEmail])
-if feedback1MesDf is not None and not feedback1MesDf.empty:
-    primerMesPromedio = getFeedbackPromedioPrimerMes(feedback1MesDf)
-    colorPrimerMes,colorLetraPrimerMes= feedbackColor(primerMesPromedio)
-
-feedback4MesDf= feedbacks[3][feedbacks[3][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedback4MesDf = feedback4MesDf.drop_duplicates(subset=[columnaEmail])
-if feedback4MesDf is not None and not feedback4MesDf.empty:
-    cuartoMesPromedio = getFeedbackPromedioCuartoMes(feedback4MesDf)
-    colorCuartoMes,colorLetraCuartoMes= feedbackColor(cuartoMesPromedio)
-
-
-feedbackAprendizPrimerCierreDf= feedbacks[4][feedbacks[4][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackAprendizPrimerCierreDf = feedbackAprendizPrimerCierreDf.drop_duplicates(subset=[columnaEmail])
-if feedbackAprendizPrimerCierreDf is not None and not feedbackAprendizPrimerCierreDf.empty:
-    aprendizCierrePrimerCicloPromedio = getFeedbackPromedioAprendizCierrePrimerCiclo(feedbackAprendizPrimerCierreDf)
-    colorAprendizCierrePrimerCiclo,colorLetraPrimerCierre= feedbackColor(aprendizCierrePrimerCicloPromedio)
-
-feedbackAprendizSegundoCierreDf= feedbacks[5][feedbacks[5][columnaEmail].apply(lambda x: x.lower() if isinstance(x, str) else x).isin(
-    df[columnaCorreoCandidato].apply(lambda x: x.lower() if isinstance(x, str) else x)
-)]
-feedbackAprendizSegundoCierreDf = feedbackAprendizSegundoCierreDf.drop_duplicates(subset=[columnaEmail])
-if feedbackAprendizSegundoCierreDf is not None and not feedbackAprendizSegundoCierreDf.empty:
-    aprendizCierreSegundoCicloPromedio = getFeedbackPromedioAprendizCierreSegundoCiclo(feedbackAprendizSegundoCierreDf)
-    colorAprendizCierreSegundoCiclo,colorLetraSegundoCierre= feedbackColor(aprendizCierreSegundoCicloPromedio)
+                # Drop duplicates if filtered_feedback is valid
+                if filtered_feedback is not None and not filtered_feedback.empty:
+                    filtered_feedback = filtered_feedback.drop_duplicates(subset=[columnaEmail])
+                
+                # Handle feedback categories based on index
+                if i == 0:
+                    feedbackPulseDf = filtered_feedback
+                    if feedbackPulseDf is not None and not feedbackPulseDf.empty:
+                        pulse1SemanaPromedio = getFeedbackPulse1Semana(feedbackPulseDf)
+                        colorPulse, colorLetraPrimerSemana = feedbackColor(pulse1SemanaPromedio)
+                elif i == 1:
+                    feedbackCambioAreaDf = filtered_feedback
+                    if feedbackCambioAreaDf is not None and not feedbackCambioAreaDf.empty:
+                        cambioAreaPromedio = getFeedbackPromedioCambioArea(feedbackCambioAreaDf)
+                        colorCambioArea, colorLetraCambioArea = feedbackColor(cambioAreaPromedio)
+                elif i == 2:
+                    feedback1MesDf = filtered_feedback
+                    if feedback1MesDf is not None and not feedback1MesDf.empty:
+                        primerMesPromedio = getFeedbackPromedioPrimerMes(feedback1MesDf)
+                        colorPrimerMes, colorLetraPrimerMes = feedbackColor(primerMesPromedio)
+                elif i == 3:
+                    feedback4MesDf = filtered_feedback
+                    if feedback4MesDf is not None and not feedback4MesDf.empty:
+                        cuartoMesPromedio = getFeedbackPromedioCuartoMes(feedback4MesDf)
+                        colorCuartoMes, colorLetraCuartoMes = feedbackColor(cuartoMesPromedio)
+                elif i == 4:
+                    feedbackAprendizPrimerCierreDf = filtered_feedback
+                    if feedbackAprendizPrimerCierreDf is not None and not feedbackAprendizPrimerCierreDf.empty:
+                        aprendizCierrePrimerCicloPromedio = getFeedbackPromedioAprendizCierrePrimerCiclo(feedbackAprendizPrimerCierreDf)
+                        colorAprendizCierrePrimerCiclo, colorLetraPrimerCierre = feedbackColor(aprendizCierrePrimerCicloPromedio)
+                elif i == 5:
+                    feedbackAprendizSegundoCierreDf = filtered_feedback
+                    if feedbackAprendizSegundoCierreDf is not None and not feedbackAprendizSegundoCierreDf.empty:
+                        aprendizCierreSegundoCicloPromedio = getFeedbackPromedioAprendizCierreSegundoCiclo(feedbackAprendizSegundoCierreDf)
+                        colorAprendizCierreSegundoCiclo, colorLetraSegundoCierre = feedbackColor(aprendizCierreSegundoCicloPromedio)
+else:
+    st.write("No valid feedback data available for processing.")
 
 
 #feedback details 
@@ -246,7 +250,6 @@ with st.expander(detalleFeedbackTitle):
                 st.dataframe(feedbackPulseDf, hide_index="true")
             else:
                 st.write(noDatosDisponibles)
-
         with tabs[1]:
             if feedbackCambioAreaDf is not None and not feedbackCambioAreaDf.empty:
                 st.dataframe(feedbackCambioAreaDf, hide_index="true")
@@ -335,8 +338,11 @@ with st.container():
                     """,
                     unsafe_allow_html=True
                 )
-            with st.expander("Ver detalle de feedback"):
-                st.dataframe(getColumns(candidatos_feedback_inprogress,[columnaCandidatos, columnaCorreoCandidato, 'Feedback Respondido']))
+            with st.expander("Detalle Feedback"):
+                    if candidatos_feedback_inprogress is not None and not candidatos_feedback_inprogress.empty:
+                        st.dataframe(getColumns(candidatos_feedback_inprogress,[columnaCandidatos, columnaCorreoCandidato, 'Feedback Respondido']))
+                    else:
+                        st.write(noDatosDisponibles)
   
 
 st.divider()

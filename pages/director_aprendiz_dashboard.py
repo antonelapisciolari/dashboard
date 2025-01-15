@@ -1,8 +1,8 @@
-from navigation import make_sidebar_admin
+from navigation import make_sidebar_director
 import streamlit as st
 import plotly.express as px
 from page_utils import apply_page_config
-from data_utils import calcularPorcentajesStatus,create_donut_chart,generate_color_map,feedbackColor,getColumns
+from data_utils import filter_dataframe, calcularPorcentajesStatus,create_donut_chart,generate_color_map,feedbackColor,getColumns
 from sheet_connection import get_google_sheet, get_sheets
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -20,8 +20,8 @@ if "logged_in" not in st.session_state or not st.session_state.logged_in:
     st.session_state.redirected = True 
     st.switch_page("streamlit_app.py")
 else:
-    if st.session_state.role == 'admin':
-        make_sidebar_admin()
+    if st.session_state.role == 'director':
+        make_sidebar_director()
 
 #leer el style.css 
 with open("style.css") as f:
@@ -62,14 +62,17 @@ columnaDeptoOrigen="Departamento de Origen"
 columnaHotelDestino="Hotel destino"
 columnaNombre="Nombre"
 columnaFechaInicioRotacion="Fecha de Inicio"
+columnaDirectorEmail="Email Director Hotel"
+columnaEmailAprendiz="MAIL APRENDIZ"
+hoy = datetime.today()
 #trae todos los datos filtrados por Tutor 
 def getInfo():
     sheet_id = registroAprendices
     df = get_google_sheet(connectionGeneral,sheet_id)
-    return df
-
+    filters = {columnaDirectorEmail: [st.session_state.username.lower()]}
+    filtered_df = filter_dataframe(df, filters)
+    return filtered_df
 df = getInfo()
-
 #parseando las fechas
 df[topFilters[0]] = pd.to_datetime(df[topFilters[0]], format='%d/%m/%Y')
 df[topFilters[4]] = pd.to_datetime(df[topFilters[4]], format='%d/%m/%Y')
@@ -77,7 +80,7 @@ df= df.drop_duplicates(subset=[columnaCorreoCandidato])
 active_candidates = df[df[topFilters[6]].str.upper() == 'ACTIVO']
 #filter containers
 with st.container():
-    col1, col2, col3, col4,col5, col6,col7,col8 = st.columns(8)
+    col1, col2, col3, col4,col5, col6,col7 = st.columns(7)
     with st.container():
         programa_options = sorted(df[topFilters[3]].dropna().unique().tolist()) if topFilters[3] in df.columns and not df[topFilters[3]].isnull().all() else []
         programa = col1.selectbox("**TIPO DE PROGRAMA**", options=["Todos"] + programa_options, index=2)
@@ -89,27 +92,19 @@ with st.container():
         candidato_options = sorted(df[topFilters[1]].unique().tolist()) if topFilters[1] in df.columns and not df[topFilters[1]].isnull().all() else []
         candidato = col3.selectbox("**APRENDIZ**", options=["Todos"] + candidato_options)
     with st.container():
-        hotel_options = (
-        sorted(str(value).strip() for value in df[topFilters[2]].dropna().unique() if str(value).strip())
-        if topFilters[2] in df.columns and not df[topFilters[2]].isnull().all()
-        else []
-        )   
-        hotel = col4.selectbox(f"**{topFilters[2]}**", options=["Todos"] + hotel_options)
+        fecha_inicio = col4.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
     with st.container():
-        fecha_inicio = col5.date_input(f"**FECHA INICIO**", value=pd.to_datetime('01/01/2024'))
-    with st.container():
-        status = col6.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
+        status = col5.selectbox("**STATUS**", options=["Todos"] + df[topFilters[6]].unique().tolist())
     with st.container():
         zona_options = sorted(df[topFilters[7]].dropna().unique().tolist()) if topFilters[7] in df.columns and not df[topFilters[7]].isnull().all() else []
-        zona = col7.selectbox("**ZONA**", options=["Todos"] + zona_options)
+        zona = col6.selectbox("**ZONA**", options=["Todos"] + zona_options)
     with st.container():
         depto_options = sorted(df[topFilters[8]].dropna().unique().tolist()) if topFilters[8] in df.columns and not df[topFilters[8]].isnull().all() else []
-        departamento = col8.selectbox("**DEPTO**", options=["Todos"] + depto_options)
+        departamento = col7.selectbox("**DEPTO**", options=["Todos"] + depto_options)
 # Filter DataFrame based on selected values
 filtered_df = df[
     ((df[topFilters[5]] == tutor) | (tutor == "Todos")) &
     ((df[topFilters[1]] == candidato) | (candidato == "Todos")) &
-    ((df[topFilters[2]] == hotel) | (hotel == "Todos")) &
     (df[topFilters[0]] >= pd.to_datetime(fecha_inicio)) &  
     ((df[topFilters[3]] == programa) | (programa == "Todos")) &  
     ((df[topFilters[6]] == status) | (status == "Todos"))&
@@ -222,7 +217,7 @@ with containerFinalizadosCant:
     )
 st.write("**Gráficos**")
 custom_colors = [aquamarine, amarillo, azul, orange] 
-chartHotel, chartDepto, chartEstudio, chartZona  = st.columns(4)
+chartDepto, chartEstudio, chartZona  = st.columns(3)
 fig_size = (4, 4)
 
 with chartDepto:
@@ -253,26 +248,6 @@ with chartDepto:
     else:
             st.write(noDatosDisponibles)
 
-with chartHotel:
-    fig2, ax2 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
-    value_counts = filtered_df[graficos[1]].value_counts()
-    ax2.set_facecolor('none')  # Or use 'white' for a white background
-    if not value_counts.empty and value_counts.sum() > 0:
-        value_counts.plot.bar(ax=ax2, color=custom_colors)
-        
-                # Add the amounts on top of each bar
-        for index, value in enumerate(value_counts):
-            ax2.text(index, value, str(value), ha='center', va='bottom', fontsize=10) 
-        ax2.set_xticklabels(ax2.get_xticklabels(), rotation=45, ha='right', fontsize=8)
-        # Set the title and labels
-        ax2.set_ylabel("Count")
-        ax2.set_title(
-            graficos[1],
-            fontdict={'fontsize': 14, 'fontweight': 'bold','color': azul} 
-        )
-        st.pyplot(fig2)
-    else:
-            st.write(noDatosDisponibles)
 with chartEstudio:
     fig3, ax3 = plt.subplots(figsize=fig_size, facecolor='#F0F0F0')  
     value_counts = filtered_df[graficos[2]].value_counts()
@@ -326,9 +301,9 @@ with st.container():
     with graficoHotel:
         if active_candidates is not None and not active_candidates.empty:
             rotacion= getRotationInfo()
+            rotacion = rotacion[rotacion[columnaEmailAprendiz].isin(active_candidates[columnaCorreoCandidato])]
             rotacion[columnaMesesActivos] = pd.to_datetime(rotacion[columnaMesesActivos], format='%d/%m/%Y')
             # Filtrar datos para el próximo mes en adelante y agrupar por hotel, mes y departamento
-            hoy = datetime.today()
             mes_actual = hoy.replace(day=1)
             prox_mes = hoy.replace(day=1) + timedelta(days=31)
             prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
@@ -380,39 +355,41 @@ with st.container():
 
         else:
             st.write(noDatosDisponibles)
-
-    hoy = datetime.today()
-    mes_actual = hoy.replace(day=1)
-    prox_mes = hoy.replace(day=1) + timedelta(days=31)
-    prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
-    rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
-    result_df = rotacion.groupby(
-    ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
-        ).agg(
-            {
-                "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
-            }
-        ).reset_index()
-    desired_position = 3  # Assuming 0-based indexing
-    column_to_move = result_df.pop("Meses Activos")  # Remove 'Meses Activos' temporarily
-    result_df.insert(desired_position, "Meses Activos", column_to_move) 
-    result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
-    with tablaAprendicesHoy:
-        col1, col2 = st.columns(2)
-        with st.container():
-            hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
-            hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
-        with st.container():
-            depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
-            depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
-    # Filter DataFrame based on selected values
-        filtered_df = result_df[
-            ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
-            ((result_df[columnaDeptoDestino] == depto) | (depto == "Todos"))]
-        if filtered_df is not None and not filtered_df.empty:
-            st.dataframe(filtered_df, hide_index="true")
-        else:
-            st.write(noDatosDisponibles)
+    if active_candidates is not None and not active_candidates.empty:   
+            rotacion= getRotationInfo()
+            rotacion = rotacion[rotacion[columnaEmailAprendiz].isin(active_candidates[columnaCorreoCandidato])]
+            hoy = datetime.today()
+            mes_actual = hoy.replace(day=1)
+            prox_mes = hoy.replace(day=1) + timedelta(days=31)
+            prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
+            rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
+            result_df = rotacion.groupby(
+            ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
+                ).agg(
+                    {
+                        "Meses Activos": lambda x: ", ".join(sorted(x.astype(str).unique()))
+                    }
+                ).reset_index()
+            desired_position = 3  # Assuming 0-based indexing
+            column_to_move = result_df.pop("Meses Activos")  # Remove 'Meses Activos' temporarily
+            result_df.insert(desired_position, "Meses Activos", column_to_move) 
+            result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
+            with tablaAprendicesHoy:
+                col1, col2 = st.columns(2)
+                with st.container():
+                    hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
+                    hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
+                with st.container():
+                    depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
+                    depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
+            # Filter DataFrame based on selected values
+                filtered_df = result_df[
+                    ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
+                    ((result_df[columnaDeptoDestino] == depto) | (depto == "Todos"))]
+                if filtered_df is not None and not filtered_df.empty:
+                    st.dataframe(filtered_df, hide_index="true")
+                else:
+                    st.write(noDatosDisponibles)
         
 st.divider()
 #Container Feedback
