@@ -362,6 +362,7 @@ with st.container():
             mes_actual = hoy.replace(day=1)
             prox_mes = hoy.replace(day=1) + timedelta(days=31)
             prox_mes = prox_mes.replace(day=1)  # Primer día del próximo mes
+            rotacion[columnaMesesActivos] = pd.to_datetime(rotacion[columnaMesesActivos], errors='coerce')
             rotacion = rotacion[rotacion[columnaMesesActivos] >= mes_actual]
             result_df = rotacion.groupby(
             ["Nombre", "Departamento de Destino", "Hotel destino", "Fecha de Inicio"]
@@ -375,13 +376,9 @@ with st.container():
             result_df.insert(desired_position, "Meses Activos", column_to_move) 
             result_df= result_df.sort_values(by=columnaFechaInicioRotacion,ascending=[False])
             with tablaAprendicesHoy:
-                col1, col2 = st.columns(2)
-                with st.container():
-                    hotel_options = sorted(result_df[columnaHotelDestino].unique().tolist())
-                    hotel = col1.selectbox(f"**{columnaHotelDestino}**", options=["Todos"] + hotel_options,key='hotelDestino')
                 with st.container():
                     depto_options = sorted(result_df[columnaDeptoDestino].unique().tolist())
-                    depto = col2.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
+                    depto = st.selectbox(f"**{columnaDeptoDestino}**", options=["Todos"] + depto_options,key='deptoDestino')
             # Filter DataFrame based on selected values
                 filtered_df = result_df[
                     ((result_df[columnaHotelDestino] == hotel) | (hotel == "Todos")) &
