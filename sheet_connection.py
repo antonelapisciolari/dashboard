@@ -14,7 +14,6 @@ def get_google_sheet(connection, sheet_id):
     """
     try:
         url=f"https://docs.google.com/spreadsheets/d/{sheet_id}/edit?usp=sharing"
-        print(url)
         conn = st.connection(connection, type=GSheetsConnection)
         df = conn.read(spreadsheet=url)  
         if df is not None and not df.empty:
